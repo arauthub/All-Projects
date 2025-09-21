@@ -1,0 +1,10 @@
+{
+  "name": "theme",
+  "version": "1.0.0",
+  "devDependencies": {
+    "tailwindcss": "^3.0.0"
+  },
+  "scripts": {
+    "build": "tailwindcss -i ./static/theme/css/base.css -o ./static/theme/css/tailwind.css --minify"
+  }
+}
