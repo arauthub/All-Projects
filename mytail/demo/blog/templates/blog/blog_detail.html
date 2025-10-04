@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-8">
+      <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+          <h2 class="card-title text-primary">{{ post.title }}</h2>
+          <p class="text-muted">By {{ post.author.username }} • {{ post.created_at|date:"M d, Y H:i" }}</p>
+          <hr>
+          <p class="lead">{{ post.content }}</p>
+          <div class="d-flex gap-2 mt-3">
+            <form method="post" action="{% url 'like_post' post.pk %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-outline-primary">{% if liked %}Unlike{% else %}Like{% endif %} ({{ post.total_likes }})</button>
+            </form>
+            <form method="post" action="{% url 'bookmark_blog' post.pk %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-outline-warning">{% if user.is_authenticated and post in user.userprofile.bookmarks.all %}Unbookmark{% else %}Bookmark{% endif %}</button>
+            </form>
+            <div class="ms-auto d-flex gap-2">
+              <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank" class="btn btn-sm btn-primary">Share</a>
+              <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}" target="_blank" class="btn btn-sm btn-info text-white">Tweet</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5 class="mb-3">Comments</h5>
+          {% for comment in comments %}
+            <div class="mb-3">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <strong>{{ comment.author.username }}</strong>
+                  <div class="text-muted small">{{ comment.created_at|date:"M d, Y H:i" }}</div>
+                </div>
+              </div>
+              <p class="mt-2">{{ comment.content }}</p>
+              <hr>
+            </div>
+          {% empty %}
+            <p class="text-muted">No comments yet.</p>
+          {% endfor %}
+
+          <form method="post" action="{% url 'add_comment' post.pk %}" class="mt-4">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="comment_content" class="form-label">Add a comment</label>
+              <textarea id="comment_content" name="content" class="form-control" rows="3" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-success">Post Comment</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

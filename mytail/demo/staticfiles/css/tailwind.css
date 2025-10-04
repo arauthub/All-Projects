@@ -1,0 +1,12 @@
+/* This project no longer uses Tailwind. Keep a small helper stylesheet for Bootstrap overrides. */
+:root {
+	--brand-blue: #0d6efd;
+	--brand-green: #198754;
+}
+.gradient-btn {
+	background: linear-gradient(90deg, var(--brand-blue), var(--brand-green));
+	color: #fff;
+}
+.text-brand {
+	color: var(--brand-blue) !important;
+}

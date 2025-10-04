@@ -1,0 +1,115 @@
+// blog.scss - Materialize-inspired, fluid, responsive blog styles
+$primary: #1976d2;
+$surface: #fff;
+$card-radius: 14px;
+$shadow: 0 4px 16px rgba($primary, 0.08);
+
+.blog-list-container {
+  padding-top: 32px;
+  .card-panel {
+    border-radius: $card-radius;
+    box-shadow: $shadow;
+    transition: box-shadow 0.2s;
+    &:hover {
+      box-shadow: 0 8px 32px rgba($primary, 0.15);
+    }
+    h5 {
+      color: $primary;
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+    .btn {
+      margin-top: 12px;
+    }
+  }
+}
+
+.blog-detail-container {
+  padding-top: 32px;
+  .card-panel {
+    border-radius: $card-radius;
+    box-shadow: $shadow;
+    margin-bottom: 24px;
+    h4 {
+      color: $primary;
+      font-weight: 600;
+      margin-bottom: 18px;
+    }
+    p {
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+    }
+    .btn, .btn-small {
+      border-radius: 8px;
+      font-weight: 500;
+      margin-right: 8px;
+      margin-bottom: 8px;
+    }
+    .bi {
+      vertical-align: middle;
+      margin-right: 6px;
+      font-size: 1.05rem;
+    }
+  }
+  .comment-section {
+    .card-panel {
+      background: lighten($surface, 2%);
+      h5 {
+        color: $primary;
+        font-size: 1.3rem;
+        margin-bottom: 18px;
+      }
+      .input-field {
+        margin-bottom: 18px;
+      }
+      button {
+        margin-top: 8px;
+      }
+    }
+    .comment {
+      margin-bottom: 18px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #eee;
+      b {
+        color: $primary;
+      }
+      .grey-text {
+        font-size: 0.95rem;
+      }
+    }
+  }
+}
+
+.blog-form-container {
+  padding-top: 32px;
+  .card-panel {
+    border-radius: $card-radius;
+    box-shadow: $shadow;
+    h4 {
+      color: $primary;
+      font-weight: 600;
+      margin-bottom: 18px;
+    }
+    .input-field {
+      margin-bottom: 24px;
+    }
+    button {
+      width: 100%;
+      font-size: 1.1rem;
+      border-radius: 8px;
+      padding: 14px 0;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .blog-list-container, .blog-detail-container, .blog-form-container {
+    padding-top: 12px;
+    .card-panel {
+      padding: 16px 8px;
+      h4, h5 {
+        font-size: 1.2rem;
+      }
+    }
+  }
+}

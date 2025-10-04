@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static wagtailcore_tags %}
+
+{% block body_class %}template-searchresults{% endblock %}
+
+{% block title %}Search{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h2 class="h4 text-center text-brand mb-4">Search</h2>
+          <form method="get">
+            <div class="mb-3">
+              <label for="search_query" class="form-label">Search Query</label>
+              <input type="text" name="q" id="search_query" class="form-control" value="{{ request.GET.q|default_if_none:'' }}" required>
+            </div>
+            <button type="submit" class="btn gradient-btn w-100">Search</button>
+          </form>
+          {% if results %}
+            <div class="mt-4">
+              <h3 class="h6 text-brand mb-3">Results</h3>
+              <ul class="list-group">
+                {% for result in results %}
+                  <li class="list-group-item">{{ result }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

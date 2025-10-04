@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-8">
+        <div class="card mb-4 shadow-sm">
+          <div class="card-body">
+            <div class="d-flex align-items-center gap-3">
+              <i class="bi bi-person-circle fs-2 text-primary"></i>
+              <div>
+                <h5 class="card-title mb-0">{{ profile.user.username }}'s Profile</h5>
+                <p class="mb-0 text-muted">{{ profile.user.email }}</p>
+                <small class="text-muted">Theme: {{ profile.default_theme|title }}</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card shadow-sm">
+          <div class="card-header">
+            <h6 class="mb-0">Bookmarked Blogs</h6>
+          </div>
+          <ul class="list-group list-group-flush">
+            {% if bookmarks %}
+              {% for blog in bookmarks %}
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+                  <div>
+                    <div class="fw-semibold text-primary">{{ blog.title }}</div>
+                    <div class="text-muted small">{{ blog.content|truncatewords:20 }}</div>
+                    <div class="text-muted small">By: {{ blog.author.username }}</div>
+                  </div>
+                  <a href="/blog/post/{{ blog.pk }}/" class="btn btn-sm btn-outline-primary">Open</a>
+                </li>
+              {% endfor %}
+            {% else %}
+              <li class="list-group-item">No bookmarks yet.</li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

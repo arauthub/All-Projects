@@ -1,0 +1,113 @@
+/* Bootstrap helper utilities (created by repo sweep)
+   Replaces the old tailwind helper file. */
+:root {
+	--brand-blue: #0d6efd;
+	--brand-green: #198754;
+}
+.gradient-btn {
+	background: linear-gradient(90deg, var(--brand-blue), var(--brand-green));
+	color: #fff;
+}
+.text-brand {
+	color: var(--brand-blue) !important;
+}
+
+/* Dark mode variables */
+body.dark {
+	--bs-body-bg: #121212;
+	--bs-body-color: #e6e6e6;
+	background-color: var(--bs-body-bg) !important;
+	color: var(--bs-body-color) !important;
+}
+
+/* Simple overrides for common elements in dark mode */
+body.dark .card {
+	background-color: #1e1e1e;
+	color: var(--bs-body-color);
+}
+body.dark .navbar, body.dark .bg-light {
+	background-color: #161616 !important;
+}
+body.dark .dropdown-menu {
+	background-color: #1c1c1c;
+	color: var(--bs-body-color);
+}
+body.dark .list-group-item {
+	background-color: #181818;
+	color: var(--bs-body-color);
+}
+body.dark a { color: #9ecbff; }
+body.dark .btn-outline-secondary { color: #ddd; border-color: #333; }
+body.dark .btn-primary { background-color: #0d6efd; border-color: #0d6efd; }
+body.dark .badge.bg-light { background-color: #2a2a2a; color: #ddd; }
+
+/* Avatar initials */
+.user-initials {
+	width: 36px;
+	height: 36px;
+	border-radius: 50%;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	background: linear-gradient(135deg, var(--brand-blue), #5bc0de);
+	color: white;
+	font-weight: 600;
+}
+
+/* Avatar image */
+.user-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: inline-block;
+}
+
+/* Avatar wrapper and online indicator */
+.avatar-wrapper {
+	position: relative;
+	display: inline-block;
+	line-height: 0;
+}
+.avatar-wrapper .user-avatar {
+	border: 2px solid #ffffff;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+}
+.online-dot {
+	position: absolute;
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background-color: #28a745; /* green */
+	border: 2px solid #ffffff;
+	right: -2px;
+	bottom: -2px;
+	box-shadow: 0 0 0 2px rgba(40,167,69,0.12);
+}
+
+/* Dark mode adjustments */
+body.dark .avatar-wrapper .user-avatar {
+	border-color: #1c1c1c;
+}
+body.dark .online-dot {
+	border-color: #1c1c1c;
+}
+
+/* Dark-mode form controls */
+body.dark .form-control, body.dark .form-select, body.dark .form-control:focus {
+	background-color: #1b1b1b;
+	color: var(--bs-body-color);
+	border-color: #333;
+}
+
+/* Modal background in dark mode */
+body.dark .modal-content {
+	background-color: #1c1c1c;
+	color: var(--bs-body-color);
+}
+
+/* Toast in dark mode */
+body.dark .toast, body.dark .toast-header, body.dark .toast-body {
+	background-color: #1e1e1e;
+	color: var(--bs-body-color);
+}
