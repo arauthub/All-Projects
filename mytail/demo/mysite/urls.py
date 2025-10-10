@@ -17,7 +17,7 @@ urlpatterns = [
     path("accounts/", include("accounts.urls")),
     path("accounts/", include("allauth.urls")),
     path("blog/", include("blog.urls")),
-    path("home/", include("home.urls")),
+    path("", include("home.urls")),
 ]
 
 
