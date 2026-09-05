@@ -48,7 +48,7 @@ In the top-right corner of the Extensions page, toggle the **Developer mode** sw
 1. Click the **Load unpacked** button in the top-left action toolbar.
 2. Select the directory:
    ```text
-   /Users/abhijeetraut/Documents/All-Projects/link-inspector-extension
+   /Users/abhijeetraut/Documents/All-Projects/extensions/link-inspector-extension
    ```
 3. Click **Select Folder** / **Open**.
 

@@ -1,0 +1,229 @@
+.erp-sidenav-container {
+    height: calc(100vh - 64px);
+    background-color: var(--deep-charcoal);
+}
+
+.erp-sidenav {
+    width: 280px;
+    background: rgba(18, 18, 18, 0.95) !important;
+    border-right: 1px solid var(--glass-border) !important;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidenav-header {
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.erp-nav-list {
+    flex: 1;
+    padding: 1rem 0 !important;
+}
+
+.erp-nav-list a {
+    margin: 0.2rem 1rem !important;
+    border-radius: 8px !important;
+    color: var(--matte-silver) !important;
+    opacity: 0.7;
+    transition: all 0.3s ease;
+}
+
+.erp-nav-list a:hover {
+    background: rgba(0, 163, 255, 0.05) !important;
+    opacity: 1;
+    color: var(--nitrous-blue) !important;
+}
+
+.active-nav {
+    background: rgba(0, 163, 255, 0.1) !important;
+    opacity: 1 !important;
+    color: var(--nitrous-blue) !important;
+}
+
+.nav-subheader {
+    padding: 1.5rem 2rem 0.5rem;
+    font-size: 0.7rem;
+    color: var(--matte-silver);
+    opacity: 0.4;
+    letter-spacing: 2px;
+}
+
+.sidenav-footer {
+    padding: 1.5rem 2rem;
+    border-top: 1px solid var(--glass-border);
+}
+
+.shop-status {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-size: 0.75rem;
+    opacity: 0.6;
+}
+
+.pulse-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--nitrous-blue);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--nitrous-blue);
+}
+
+/* Content Area */
+.erp-content {
+    padding: 0;
+    background: var(--deep-charcoal);
+}
+
+.content-header {
+    height: 64px;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(18, 18, 18, 0.5);
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.breadcrumb {
+    font-size: 0.8rem;
+    opacity: 0.5;
+    letter-spacing: 1px;
+}
+
+.header-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.section-container {
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Stats Cards */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    padding: 1.5rem;
+}
+
+.stat-value {
+    font-size: 2.5rem;
+    font-weight: 900;
+    font-family: 'Rajdhani', sans-serif;
+    color: var(--nitrous-blue);
+    margin: 1rem 0 0.5rem;
+}
+
+.stat-trend {
+    font-size: 0.8rem;
+    opacity: 0.6;
+}
+
+/* Main Grid */
+.main-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+}
+
+.main-card {
+    padding: 1.5rem;
+}
+
+.technical-table {
+    width: 100%;
+    background: transparent !important;
+}
+
+.technical-table th {
+    color: var(--nitrous-blue) !important;
+    font-size: 0.75rem !important;
+    letter-spacing: 1px;
+    border-bottom: 1px solid var(--glass-border) !important;
+}
+
+.technical-table td {
+    color: var(--matte-silver) !important;
+    border-bottom: 1px solid var(--glass-border) !important;
+    padding: 1rem 0 !important;
+}
+
+.status-chip {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+}
+
+.status-chip.received { color: #ffa726; border-color: #ffa726; }
+.status-chip.working { color: #29b6f6; border-color: #29b6f6; }
+.status-chip.ready { color: #66bb6a; border-color: #66bb6a; }
+
+.bg-nitrous {
+    background-color: var(--nitrous-blue);
+    color: white;
+}
+
+.staff-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.staff-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    border: 1px solid var(--glass-border);
+}
+
+.staff-name {
+    font-weight: 600;
+    display: block;
+}
+
+.staff-spec {
+    font-size: 0.7rem;
+    opacity: 0.5;
+}
+
+.attendance-dot {
+    width: 10px;
+    height: 10px;
+    background: #333;
+    border-radius: 50%;
+}
+
+.attendance-dot.online {
+    background: var(--nitrous-blue);
+    box-shadow: 0 0 8px var(--nitrous-blue);
+}
+
+/* Animations */
+.animate-fade {
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}

@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  backend:
+    build: 
+      context: ../../apps/flashapps/backend
+    container_name: flashapps-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mount the local SQLite database into the container to persist data
+      - ../../apps/flashapps/backend/db.sqlite3:/app/db.sqlite3
+      - ../../apps/flashapps/backend/media:/app/media
+    restart: unless-stopped
+    environment:
+      - DJANGO_SETTINGS_MODULE=flashapps_backend.settings.dev
+
+  frontend:
+    build:
+      context: ../../apps/flashapps/frontend
+    container_name: flashapps-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+    restart: unless-stopped

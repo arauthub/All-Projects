@@ -1,0 +1,287 @@
+<mat-sidenav-container class="erp-sidenav-container">
+  <!-- Sidebar (Left) -->
+  <mat-sidenav mode="side" opened class="erp-sidenav glass-panel">
+    <div class="sidenav-header">
+      <mat-icon class="accent-blue">settings_suggest</mat-icon>
+      <span class="technical-text">SYSTEM_NAV</span>
+    </div>
+    
+    <mat-nav-list class="erp-nav-list">
+      <a mat-list-item (click)="currentSection.set('overview')" [class.active-nav]="currentSection() === 'overview'">
+        <mat-icon matListItemIcon>dashboard</mat-icon>
+        <span matListItemTitle class="technical-text">OVERVIEW</span>
+      </a>
+      <a mat-list-item (click)="currentSection.set('jobs')" [class.active-nav]="currentSection() === 'jobs'">
+        <mat-icon matListItemIcon>engineering</mat-icon>
+        <span matListItemTitle class="technical-text">WORK_ORDERS</span>
+      </a>
+      <a mat-list-item (click)="currentSection.set('register')" [class.active-nav]="currentSection() === 'register'">
+        <mat-icon matListItemIcon>app_registration</mat-icon>
+        <span matListItemTitle class="technical-text">NEW_ADMISSION</span>
+      </a>
+      <mat-divider></mat-divider>
+      <div class="nav-subheader technical-text">FINANCIALS</div>
+      <a mat-list-item (click)="currentSection.set('billing')" [class.active-nav]="currentSection() === 'billing'">
+        <mat-icon matListItemIcon>account_balance</mat-icon>
+        <span matListItemTitle class="technical-text">INVOICING</span>
+      </a>
+      <a mat-list-item (click)="currentSection.set('analytics')" [class.active-nav]="currentSection() === 'analytics'">
+        <mat-icon matListItemIcon>analytics</mat-icon>
+        <span matListItemTitle class="technical-text">REPORTS</span>
+      </a>
+      <mat-divider></mat-divider>
+      <div class="nav-subheader technical-text">PERSONNEL</div>
+      <a mat-list-item (click)="currentSection.set('staff')" [class.active-nav]="currentSection() === 'staff'">
+        <mat-icon matListItemIcon>badge</mat-icon>
+        <span matListItemTitle class="technical-text">STAFF_MGMT</span>
+      </a>
+      <a mat-list-item (click)="currentSection.set('community')" [class.active-nav]="currentSection() === 'community'">
+        <mat-icon matListItemIcon>groups</mat-icon>
+        <span matListItemTitle class="technical-text">COMMUNITY</span>
+      </a>
+    </mat-nav-list>
+
+    <div class="sidenav-footer">
+      <div class="shop-status">
+        <div class="pulse-dot"></div>
+        <span class="technical-text">{{ currentShop()?.shop_name || 'STABLE_NODE' }}</span>
+      </div>
+    </div>
+  </mat-sidenav>
+
+  <!-- Main Content (Right) -->
+  <mat-sidenav-content class="erp-content">
+    <div class="content-header">
+      <div class="breadcrumb technical-text">
+        SYSTEM // <span class="accent-blue">{{ currentSection() | uppercase }}</span>
+      </div>
+      <div class="header-actions">
+        <button mat-icon-button matTooltip="Search Records">
+          <mat-icon>search</mat-icon>
+        </button>
+        <button mat-flat-button class="bg-nitrous technical-text" (click)="currentSection.set('register')">
+          <mat-icon>add</mat-icon> NEW_JOB
+        </button>
+      </div>
+    </div>
+
+    <!-- Section: Overview -->
+    <div *ngIf="currentSection() === 'overview'" class="section-container animate-fade">
+      <div class="stats-grid">
+        <mat-card class="glass-panel stat-card hover-lift">
+          <mat-card-header>
+            <mat-icon mat-card-avatar class="accent-blue">pending_actions</mat-icon>
+            <mat-card-title class="technical-text">ACTIVE_JOBS</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="stat-value">{{ jobs().length }}</div>
+            <div class="stat-trend">+12% from yesterday</div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="glass-panel stat-card hover-lift">
+          <mat-card-header>
+            <mat-icon mat-card-avatar class="accent-blue">account_balance_wallet</mat-icon>
+            <mat-card-title class="technical-text">DAILY_REVENUE</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="stat-value">₹{{ getFilteredRevenue() | number:'1.0-0' }}</div>
+            <div class="stat-trend text-success">Within projected target</div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="glass-panel stat-card hover-lift">
+          <mat-card-header>
+            <mat-icon mat-card-avatar class="accent-blue">groups</mat-icon>
+            <mat-card-title class="technical-text">ON_DUTY</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="stat-value">{{ mechanics().length }}</div>
+            <div class="stat-trend">All technicians synced</div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <div class="main-grid">
+        <mat-card class="glass-panel main-card">
+          <mat-card-header>
+            <mat-card-title class="technical-text">RECENT_ADMISSIONS</mat-card-title>
+          </mat-card-header>
+          <table mat-table [dataSource]="jobs().slice(0, 5)" class="technical-table">
+            <ng-container matColumnDef="job_id">
+              <th mat-header-cell *matHeaderCellDef class="technical-text"> ID </th>
+              <td mat-cell *matCellDef="let job" class="accent-blue"> {{job.job_id}} </td>
+            </ng-container>
+            <ng-container matColumnDef="vehicle">
+              <th mat-header-cell *matHeaderCellDef class="technical-text"> VEHICLE </th>
+              <td mat-cell *matCellDef="let job"> {{job.vehicle_display}} </td>
+            </ng-container>
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef class="technical-text"> STATUS </th>
+              <td mat-cell *matCellDef="let job"> 
+                <span class="status-chip {{job.status}}">{{job.status | uppercase}}</span>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="['job_id', 'vehicle', 'status']"></tr>
+            <tr mat-row *matRowDef="let row; columns: ['job_id', 'vehicle', 'status'];"></tr>
+          </table>
+        </mat-card>
+
+        <mat-card class="glass-panel main-card">
+          <mat-card-header>
+            <mat-card-title class="technical-text">STAFF_ATTENDANCE</mat-card-title>
+          </mat-card-header>
+          <div class="staff-list">
+            <div *ngFor="let m of mechanics()" class="staff-item">
+              <div class="staff-info">
+                <span class="staff-name">{{m.name}}</span>
+                <span class="staff-spec technical-text">{{m.specialty}}</span>
+              </div>
+              <div class="attendance-dot" [class.online]="getAttendanceForMechanic(m.id!).length > 0"></div>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+
+    <!-- Section: Jobs -->
+    <div *ngIf="currentSection() === 'jobs'" class="section-container animate-fade">
+      <mat-card class="glass-panel main-card">
+        <div class="card-header-row">
+          <h2 class="technical-text">WORK_ORDER_LOG</h2>
+          <div class="filter-group">
+            <mat-button-toggle-group>
+              <mat-button-toggle value="all">ALL</mat-button-toggle>
+              <mat-button-toggle value="active">ACTIVE</mat-button-toggle>
+              <mat-button-toggle value="ready">READY</mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
+        </div>
+        
+        <table mat-table [dataSource]="jobs()" class="technical-table">
+          <ng-container matColumnDef="job_id">
+            <th mat-header-cell *matHeaderCellDef class="technical-text"> JOB_ID </th>
+            <td mat-cell *matCellDef="let job"> <strong class="accent-blue">{{job.job_id}}</strong> </td>
+          </ng-container>
+
+          <ng-container matColumnDef="vehicle">
+            <th mat-header-cell *matHeaderCellDef class="technical-text"> VEHICLE_UNIT </th>
+            <td mat-cell *matCellDef="let job"> {{job.vehicle_display}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="mechanic">
+            <th mat-header-cell *matHeaderCellDef class="technical-text"> ASSIGNED_TECH </th>
+            <td mat-cell *matCellDef="let job">
+              <span class="tech-tag">{{job.assigned_mechanic_display || 'UNASSIGNED'}}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef class="technical-text"> TELEMETRY_STATUS </th>
+            <td mat-cell *matCellDef="let job">
+              <span class="status-chip {{job.status}}">{{job.status | uppercase}}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="created">
+            <th mat-header-cell *matHeaderCellDef class="technical-text"> TIMESTAMP </th>
+            <td mat-cell *matCellDef="let job"> {{job.created_at | date:'short'}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef class="technical-text"> CMD </th>
+            <td mat-cell *matCellDef="let job">
+              <button mat-icon-button [matMenuTriggerFor]="menu">
+                <mat-icon>terminal</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu" class="technical-menu">
+                <button mat-menu-item (click)="updateJobStatus(job, 'working')">
+                  <mat-icon>play_arrow</mat-icon> <span>INITIATE_WORK</span>
+                </button>
+                <button mat-menu-item (click)="updateJobStatus(job, 'ready')">
+                  <mat-icon>done_all</mat-icon> <span>FINAL_CHECK</span>
+                </button>
+                <button mat-menu-item (click)="generateInvoice(job)">
+                  <mat-icon>receipt</mat-icon> <span>GEN_INVOICE</span>
+                </button>
+              </mat-menu>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="jobColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: jobColumns;" class="interactive-row" (click)="openJobModal(row)"></tr>
+        </table>
+      </mat-card>
+    </div>
+
+    <!-- Other sections (Register, Billing, Staff, Community, Analytics) would follow similar patterns -->
+    <div *ngIf="currentSection() === 'register'" class="section-container animate-fade">
+      <!-- Stepper implementation here -->
+       <mat-card class="glass-panel registration-card">
+         <h2 class="technical-text">ADMISSION_WIZARD</h2>
+         <mat-stepper linear="true" class="technical-stepper">
+           <mat-step [stepControl]="basicInfoForm">
+             <form [formGroup]="basicInfoForm">
+               <ng-template matStepLabel>VEHICLE_SPECS</ng-template>
+               <div class="form-grid">
+                 <mat-form-field appearance="outline">
+                   <mat-label>UNIT_TYPE</mat-label>
+                   <mat-select formControlName="vehicle_type">
+                     <mat-option value="bike">BIKE</mat-option>
+                     <mat-option value="car">CAR</mat-option>
+                   </mat-select>
+                 </mat-form-field>
+                 <mat-form-field appearance="outline">
+                   <mat-label>LICENSE_PLATE</mat-label>
+                   <input matInput formControlName="license_plate">
+                 </mat-form-field>
+               </div>
+               <div class="stepper-actions">
+                 <button mat-flat-button class="bg-nitrous" matStepperNext>NEXT</button>
+               </div>
+             </form>
+           </mat-step>
+           <!-- Add other steps similarly -->
+         </mat-stepper>
+       </mat-card>
+    </div>
+
+    <div *ngIf="currentSection() === 'billing'" class="section-container animate-fade">
+      <!-- Billing implementation -->
+      <mat-card class="glass-panel main-card">
+        <h2 class="technical-text">FINANCIAL_LEDGER</h2>
+        <table mat-table [dataSource]="invoices()" class="technical-table">
+          <!-- Column definitions for invoices -->
+          <ng-container matColumnDef="number">
+            <th mat-header-cell *matHeaderCellDef class="technical-text"> INV_ID </th>
+            <td mat-cell *matCellDef="let inv"> {{inv.invoice_number}} </td>
+          </ng-container>
+          <ng-container matColumnDef="job">
+            <th mat-header-cell *matHeaderCellDef class="technical-text"> JOB_REF </th>
+            <td mat-cell *matCellDef="let inv"> {{inv.service_job_display}} </td>
+          </ng-container>
+          <ng-container matColumnDef="amount">
+            <th mat-header-cell *matHeaderCellDef class="technical-text"> TOTAL_VAL </th>
+            <td mat-cell *matCellDef="let inv"> ₹{{inv.total_amount | number}} </td>
+          </ng-container>
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef class="technical-text"> PAYMENT_STATUS </th>
+            <td mat-cell *matCellDef="let inv">
+              <span class="status-chip {{inv.is_paid ? 'ready' : 'received'}}">{{inv.is_paid ? 'PAID' : 'PENDING'}}</span>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef class="technical-text"> CMD </th>
+            <td mat-cell *matCellDef="let inv">
+              <button mat-icon-button (click)="payInvoice(inv)" *ngIf="!inv.is_paid"><mat-icon>payment</mat-icon></button>
+              <button mat-icon-button (click)="printInvoice(inv)"><mat-icon>print</mat-icon></button>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="['number', 'job', 'amount', 'status', 'actions']"></tr>
+          <tr mat-row *matRowDef="let row; columns: ['number', 'job', 'amount', 'status', 'actions'];"></tr>
+        </table>
+      </mat-card>
+    </div>
+
+  </mat-sidenav-content>
+</mat-sidenav-container>

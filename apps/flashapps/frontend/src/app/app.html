@@ -1,0 +1,34 @@
+<mat-toolbar class="material-header glass-panel">
+  <div class="header-left" routerLink="/">
+    <mat-icon class="logo-icon accent-blue">precision_manufacturing</mat-icon>
+    <div class="logo-group">
+      <span class="technical-text logo-text">FLASH_ERP</span>
+      <span class="version-tag">v2.4.0_PRO</span>
+    </div>
+  </div>
+
+  <div class="nav-links">
+    <button mat-button routerLink="/erp" routerLinkActive="active-link" class="technical-text nav-btn">COMMAND_CENTER</button>
+    <button mat-button routerLink="/inventory" routerLinkActive="active-link" class="technical-text nav-btn">INVENTORY</button>
+    <button mat-button routerLink="/payroll" routerLinkActive="active-link" class="technical-text nav-btn">HR_PAYROLL</button>
+    <button mat-button routerLink="/showcase" routerLinkActive="active-link" class="technical-text nav-btn">UI_GUIDES</button>
+  </div>
+
+  <span class="spacer"></span>
+
+  <div class="header-right">
+    <button mat-icon-button class="accent-blue header-action">
+      <mat-icon>notifications_none</mat-icon>
+    </button>
+    <button mat-button class="user-profile">
+      <span class="technical-text">ABHIJEET_R</span>
+      <mat-icon>account_circle</mat-icon>
+    </button>
+  </div>
+</mat-toolbar>
+
+<main class="app-container">
+  <router-outlet></router-outlet>
+</main>
+
+<app-footer></app-footer>
