@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Link Inspector Pro - Link Auditor & Broken Link Checker</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-icon">🔍</div>
+        <div>
+          <h1>Link Inspector Pro</h1>
+          <span class="brand-subtitle">Link Auditor, SEO & Broken Link Checker</span>
+        </div>
+      </div>
+      <button id="btn-refresh" class="icon-button" title="Refresh Page Summary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M23 4v6h-6M1 20v-6h6"></path>
+          <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+        </svg>
+      </button>
+    </header>
+
+    <!-- Interactive Toggles & Controls Bar -->
+    <div class="controls-section">
+      <div class="toggle-card">
+        <div class="toggle-label">
+          <span class="toggle-title">Interactive Inspector</span>
+          <span class="toggle-desc">Hover over links to inspect and use quick controls</span>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="toggle-inspector" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="toggle-card">
+        <div class="toggle-label">
+          <span class="toggle-title">Visual Highlighting</span>
+          <span class="toggle-desc">Highlight internal, external, and nofollow links</span>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="toggle-highlights">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="toggle-card pointer-select-card">
+        <div class="toggle-label">
+          <span class="toggle-title">Hover Pointer Style</span>
+          <span class="toggle-desc">Cursor style for link inspection</span>
+        </div>
+        <select id="select-pointer-style" class="pointer-select">
+          <option value="default">Default Pointer</option>
+          <option value="magnifier">Magnifier 🔍</option>
+          <option value="crosshair">Crosshair ✛</option>
+          <option value="target">Target 🎯</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Summary Metrics Cards (5 columns) -->
+    <div class="metrics-grid">
+      <div class="metric-card metric-total">
+        <span class="metric-value" id="metric-total">0</span>
+        <span class="metric-label">Total</span>
+      </div>
+      <div class="metric-card metric-internal">
+        <span class="metric-value" id="metric-internal">0</span>
+        <span class="metric-label">Internal</span>
+      </div>
+      <div class="metric-card metric-external">
+        <span class="metric-value" id="metric-external">0</span>
+        <span class="metric-label">External</span>
+      </div>
+      <div class="metric-card metric-redirects">
+        <span class="metric-value" id="metric-redirects">0</span>
+        <span class="metric-label">3xx Redir</span>
+      </div>
+      <div class="metric-card metric-broken">
+        <span class="metric-value" id="metric-broken">0</span>
+        <span class="metric-label">Broken</span>
+      </div>
+    </div>
+
+    <!-- Actions & Health Scan -->
+    <div class="action-bar">
+      <button id="btn-scan" class="primary-button">
+        <span class="btn-icon">⚡</span>
+        <span>Scan Link Health</span>
+      </button>
+      <div class="export-group">
+        <button id="btn-export-csv" class="secondary-button" disabled title="Export as CSV">
+          <span>CSV</span>
+        </button>
+        <button id="btn-export-json" class="secondary-button" disabled title="Export as JSON">
+          <span>JSON</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Progress Indicator -->
+    <div id="scan-progress-container" class="progress-container hidden">
+      <div class="progress-header">
+        <span id="progress-text">Checking HTTP status codes...</span>
+        <span id="progress-percent">0%</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div id="progress-bar-fill" class="progress-bar-fill"></div>
+      </div>
+    </div>
+
+    <!-- Filter & Search Toolbar -->
+    <div class="toolbar">
+      <input type="text" id="input-search" placeholder="Search URL, anchor text, domain..." class="search-input">
+      <select id="select-filter" class="filter-select">
+        <option value="all">All Links</option>
+        <option value="internal">Internal Only</option>
+        <option value="external">External Only</option>
+        <option value="nofollow">Nofollow / Sponsored</option>
+        <option value="redirects">Redirects (3xx)</option>
+        <option value="broken">Broken (4xx/5xx)</option>
+        <option value="insecure">Insecure HTTP</option>
+        <option value="weak-seo">Weak SEO / Empty</option>
+        <option value="tracked">Tracked / UTM</option>
+      </select>
+    </div>
+
+    <!-- Link Details List -->
+    <div id="links-container" class="links-list-container">
+      <div class="empty-state">
+        <div class="empty-icon">🔗</div>
+        <p>Click <strong>"Refresh"</strong> or <strong>"Scan Link Health"</strong> to analyze page links.</p>
+      </div>
+    </div>
+
+    <!-- Footer with Keyboard Shortcut -->
+    <footer class="app-footer">
+      <span class="kbd-hint">Toggle: <kbd>Cmd+Shift+L</kbd></span>
+      <span class="status-indicator">● Active Tab</span>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
