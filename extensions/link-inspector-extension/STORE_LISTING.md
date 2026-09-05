@@ -89,7 +89,26 @@ Press Cmd+Shift+L or click the extension icon to start auditing links today!
 
 ---
 
-## 4. Permission Justifications (Copy & Paste for Store Reviewers)
+## 4. Privacy Practices Tab (Store Review Questionnaire)
+
+When filling out the **Privacy Practices** tab in the Chrome Web Store Developer Console, select the following options:
+
+### ⚡ Remote Code Declaration
+* **Question**: **"Are you using remote code?"**
+* **Answer**: Select **`No, I am not using remote code`**
+* **Rationale**: Under Manifest V3, Google Chrome Web Store strictly bans remotely hosted code. Link Inspector Pro packages 100% of its scripts (`background.js`, `content.js`, `popup.js`), HTML, and CSS directly inside the extension archive (`.zip`). It does not load external CDN scripts, fetch dynamic code, or use `eval()`.
+
+### 🛡️ Data Usage / Data Collection Declaration
+* **Question**: **"Do you collect or transmit any user data?"**
+* **Answer**: Select **`No, I do not collect or transmit user data`** (or check **`I certify that my extension doesn't collect or transmit any user data`**).
+* **Data categories**: Leave **all data category checkboxes unchecked** (No Personally Identifiable Information, No Health info, No Financial info, No Authentication info, No Personal communications, No Location, No Web history, No User activity, No Website content).
+* **Compliance Checkboxes**:
+  - [x] *I confirm that my item complies with the Chrome Web Store Developer Program Policies.*
+  - [x] *I confirm that my item complies with the Limited Use policy.*
+
+---
+
+## 5. Permission Justifications (Copy & Paste for Store Reviewers)
 
 Google Chrome Web Store requires clear justifications for each requested permission:
 
@@ -110,7 +129,7 @@ Google Chrome Web Store requires clear justifications for each requested permiss
 
 ---
 
-## 5. Ready-to-Upload Graphic Assets (Generated in `store_assets/`)
+## 6. Ready-to-Upload Graphic Assets (Generated in `store_assets/`)
 
 All required and recommended graphic assets have been generated at pixel-perfect resolutions and are ready in [`store_assets/`](store_assets/):
 
