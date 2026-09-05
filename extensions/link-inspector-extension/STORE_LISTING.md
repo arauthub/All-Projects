@@ -110,24 +110,27 @@ Google Chrome Web Store requires clear justifications for each requested permiss
 
 ---
 
-## 5. Graphic Assets Requirements for Store Submission
+## 5. Ready-to-Upload Graphic Assets (Generated in `store_assets/`)
 
-When uploading to the developer dashboard, prepare the following graphic assets:
+All required and recommended graphic assets have been generated at pixel-perfect resolutions and are ready in [`store_assets/`](store_assets/):
 
-1. **Extension Icons** *(Already generated and packaged)*:
-   * `16x16 px`: `assets/icon16.png`
-   * `48x48 px`: `assets/icon48.png`
-   * `128x128 px`: `assets/icon128.png`
+### 📸 Store Screenshots (1280 x 800 px)
+* **Screenshot 1**: [store_assets/screenshot_1_interactive_hover.png](store_assets/screenshot_1_interactive_hover.png)  
+  *Feature*: Real-time Interactive Hover Popup with live HTTP 200 OK latency, Clean URL, Copy Markdown, and action controls.
+* **Screenshot 2**: [store_assets/screenshot_2_link_highlighter.png](store_assets/screenshot_2_link_highlighter.png)  
+  *Feature*: Page-wide Visual Link Highlighter color-coding Internal (Green), External (Blue), Nofollow (Orange), and Broken (Red).
+* **Screenshot 3**: [store_assets/screenshot_3_popup_dashboard.png](store_assets/screenshot_3_popup_dashboard.png)  
+  *Feature*: Full-page Link Auditor Dashboard with 5-column metrics, live status code scan, search/filter, and CSV/JSON export.
+* **Screenshot 4**: [store_assets/screenshot_4_broken_link_recovery.png](store_assets/screenshot_4_broken_link_recovery.png)  
+  *Feature*: 404 Broken Link Detection with 1-Click Wayback Machine Recovery on `web.archive.org`.
 
-2. **Screenshots** *(Minimum 1, recommended 3 to 5)*:
-   * Resolution: **1280 x 800 px** (or 640 x 400 px), 24-bit PNG or JPEG without alpha channel.
-   * Suggested screenshots:
-     - Screenshot 1: Interactive Hover Popup on a webpage displaying URL, status, and action buttons.
-     - Screenshot 2: Visual Link Highlighting (green, blue, orange, red outlines on a live site).
-     - Screenshot 3: Popup Dashboard with 5-column metrics and link search/filtering.
-     - Screenshot 4: 1-Click Wayback Machine recovery on a 404 broken link.
-     - Screenshot 5: Clean URL utility stripping UTM tracking parameters.
+### 🎨 Promotional Tiles
+* **Small Promo Tile (440 x 280 px)**: [store_assets/promo_tile_small_440x280.png](store_assets/promo_tile_small_440x280.png)  
+  *(Mandatory for Chrome Web Store)*: Featuring dark cyan brand badge, headline, and core feature tags.
+* **Marquee Promo Tile (1400 x 560 px)**: [store_assets/promo_tile_marquee_1400x560.png](store_assets/promo_tile_marquee_1400x560.png)  
+  *(Featured carousel banner)*: Large widescreen promotional graphic with 3D card preview and feature highlights.
 
-3. **Small Promotional Tile** *(Required by Chrome Web Store)*:
-   * Resolution: **440 x 280 px**, PNG or JPEG.
-   * Concept: Dark slate background `#0b0f19`, 128px icon, title "Link Inspector Pro" and subtitle "Real-Time Link Auditor & Broken Link Checker".
+### 🔍 App Icons
+* **16x16 px**: [assets/icon16.png](assets/icon16.png)
+* **48x48 px**: [assets/icon48.png](assets/icon48.png)
+* **128x128 px**: [assets/icon128.png](assets/icon128.png)
