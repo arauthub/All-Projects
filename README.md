@@ -2,7 +2,7 @@
 
 Welcome to the **All-Projects** repository — a curated monorepo containing browser extensions, fullstack web applications, CMS platforms, AI agent architectures, and containerized deployment configurations.
 
-📄 **Curriculum Vitae**: [View Professional CV (12 Years Experience)](CV_Abhijeet_Raut.md)
+📄 **Profile & CV**: [Developer Profile](PROFILE.md) • [Curriculum Vitae (12 Years Experience)](CV_Abhijeet_Raut.md)
 
 ---
 
