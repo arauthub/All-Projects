@@ -11,6 +11,7 @@ Welcome to the **All-Projects** repository — a curated monorepo containing bro
 ```text
 All-Projects/
 ├── extensions/                         # 🧩 Browser Extensions
+│   ├── diagram-image-lens/             # Diagram & Image Lens Pro (Magnifier, Deep-Zoom & Screenshots)
 │   └── link-inspector-extension/       # Link Inspector Pro & Broken Link Checker (Manifest V3)
 │
 ├── apps/                               # 🌐 Fullstack Web Apps & Content Management
@@ -32,6 +33,7 @@ All-Projects/
 
 | Project | Category | Primary Tech Stack | Description |
 | :--- | :--- | :--- | :--- |
+| [**Diagram & Image Lens Pro**](extensions/diagram-image-lens/) | Browser Extension | JavaScript (ES6+), Manifest V3, HTML5 Canvas, CSS3 | HD hover loupe (2x–16x), fullscreen blueprint deep-zoom lightbox with schematic invert mode, 1-click PNG/SVG clipboard copying, and Retina area snipping tool. |
 | [**Link Inspector Pro**](extensions/link-inspector-extension/) | Browser Extension | JavaScript (ES6+), Manifest V3, CSS3 | Real-time link inspector, broken link auditor (404/5xx), redirect tracker, Wayback Machine recovery, UTM parameter stripper, and CSV/JSON exporter. |
 | [**Flashapps**](apps/flashapps/) | Fullstack Web App | Django, Angular, SQLite, Docker | Fullstack web platform featuring a Django REST backend and Angular modern frontend with containerized deployment. |
 | [**Wagtailwind**](apps/wagtailwind/) | CMS Platform | Wagtail, Django, Tailwind CSS, Docker | Enterprise-grade Wagtail Content Management System integrated with Tailwind CSS utility styling. |
@@ -45,6 +47,21 @@ All-Projects/
 ## 🛠️ Category Quick Start Guides
 
 ### 1. 🧩 Browser Extensions (`extensions/`)
+
+#### **Diagram & Image Lens Pro**
+* **Location**: [`extensions/diagram-image-lens/`](extensions/diagram-image-lens/)
+* **Installation**:
+  1. Open Chrome / Edge / Brave and go to `chrome://extensions`.
+  2. Toggle **Developer mode** to **ON**.
+  3. Click **Load unpacked** and select the folder:
+     ```text
+     /Users/abhijeetraut/Documents/All-Projects/extensions/diagram-image-lens
+     ```
+  4. Shortcuts:
+     * `Cmd+Shift+M` (Mac) / `Alt+Shift+M` (Win): Toggle hover loupe magnifier.
+     * `Cmd+Shift+S` (Mac) / `Alt+Shift+S` (Win): Launch area screenshot snip tool.
+     * `Z`: Open currently hovered diagram in Deep-Zoom Lightbox.
+     * `C`: Copy image to clipboard as PNG.
 
 #### **Link Inspector Pro & Broken Link Checker**
 * **Location**: [`extensions/link-inspector-extension/`](extensions/link-inspector-extension/)

@@ -1,0 +1,510 @@
+/**
+ * Diagram & Image Lens Pro - Content Styles
+ * Premium Dark Glassmorphism Design System
+ */
+
+/* ==========================================================================
+   Base Reset & Variables
+   ========================================================================== */
+:root {
+  --dl-primary: #38bdf8;
+  --dl-primary-glow: rgba(56, 189, 248, 0.35);
+  --dl-accent: #6366f1;
+  --dl-bg-glass: rgba(15, 23, 42, 0.82);
+  --dl-bg-card: rgba(30, 41, 59, 0.88);
+  --dl-border: rgba(148, 163, 184, 0.2);
+  --dl-border-glow: rgba(56, 189, 248, 0.5);
+  --dl-text: #f8fafc;
+  --dl-text-muted: #94a3b8;
+  --dl-success: #10b981;
+  --dl-warning: #f59e0b;
+  --dl-danger: #f43f5e;
+  --dl-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.6), 0 0 20px rgba(56, 189, 248, 0.15);
+  --dl-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* ==========================================================================
+   Hover Target Highlight
+   ========================================================================== */
+.diagram-lens-target-hover {
+  outline: 2px dashed rgba(56, 189, 248, 0.6) !important;
+  outline-offset: 3px !important;
+  cursor: crosshair !important;
+  transition: outline 0.15s ease-in-out;
+}
+
+/* ==========================================================================
+   Interactive Hover Loupe (Magnifying Glass)
+   ========================================================================== */
+#diagram-lens-loupe {
+  position: fixed;
+  z-index: 2147483640;
+  pointer-events: none;
+  overflow: hidden;
+  box-sizing: border-box;
+  background-color: #090d16;
+  background-repeat: no-repeat;
+  border: 3px solid var(--dl-primary);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.7), 0 0 20px var(--dl-primary-glow);
+  transform: translate(-50%, -50%);
+  display: none;
+  opacity: 0;
+  transition: opacity 0.15s ease-out, border-color 0.2s ease, width 0.2s ease, height 0.2s ease;
+}
+
+#diagram-lens-loupe.dl-shape-circle {
+  border-radius: 50%;
+}
+
+#diagram-lens-loupe.dl-shape-square {
+  border-radius: 16px;
+}
+
+#diagram-lens-loupe.dl-visible {
+  display: block;
+  opacity: 1;
+}
+
+/* Internal Reticle Crosshair */
+#diagram-lens-loupe::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 14px;
+  height: 14px;
+  transform: translate(-50%, -50%);
+  border-left: 1.5px solid rgba(56, 189, 248, 0.7);
+  border-right: 1.5px solid rgba(56, 189, 248, 0.7);
+  border-top: 1.5px solid rgba(56, 189, 248, 0.7);
+  border-bottom: 1.5px solid rgba(56, 189, 248, 0.7);
+  border-radius: 50%;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+/* Zoom Level Badge on Loupe */
+#diagram-lens-loupe .dl-badge {
+  position: absolute;
+  bottom: 8px;
+  right: 12px;
+  background: rgba(15, 23, 42, 0.85);
+  color: var(--dl-primary);
+  font-family: var(--dl-font);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 999px;
+  border: 1px solid var(--dl-border);
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   Floating Quick Action Toolbar (Near Hovered Image)
+   ========================================================================== */
+#diagram-lens-toolbar {
+  position: fixed;
+  z-index: 2147483641;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 6px;
+  background: var(--dl-bg-glass);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--dl-border);
+  border-radius: 10px;
+  box-shadow: var(--dl-shadow);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-4px);
+  transition: opacity 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+  user-select: none;
+}
+
+#diagram-lens-toolbar.dl-active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+#diagram-lens-toolbar:hover {
+  border-color: var(--dl-border-glow);
+}
+
+.dl-tb-btn {
+  background: transparent;
+  border: none;
+  color: var(--dl-text);
+  padding: 5px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--dl-font);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  transition: all 0.15s ease;
+}
+
+.dl-tb-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--dl-primary);
+  transform: translateY(-1px);
+}
+
+.dl-tb-btn:active {
+  transform: scale(0.96);
+}
+
+.dl-tb-btn svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+}
+
+.dl-tb-btn-primary {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.25), rgba(99, 102, 241, 0.25));
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  color: #fff;
+}
+
+.dl-tb-btn-primary:hover {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.4), rgba(99, 102, 241, 0.4));
+  color: #fff;
+}
+
+/* ==========================================================================
+   Deep Zoom Blueprint Lightbox Modal
+   ========================================================================== */
+#diagram-lens-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483645;
+  background: rgba(8, 12, 22, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  display: none;
+  flex-direction: column;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  font-family: var(--dl-font);
+  color: var(--dl-text);
+  overflow: hidden;
+  user-select: none;
+}
+
+#diagram-lens-modal.dl-open {
+  display: flex;
+  opacity: 1;
+}
+
+/* Modal Top Dock Bar */
+.dl-modal-header {
+  height: 56px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(15, 23, 42, 0.7);
+  border-bottom: 1px solid var(--dl-border);
+  z-index: 10;
+}
+
+.dl-modal-title-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dl-brand-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--dl-primary);
+  letter-spacing: 0.3px;
+}
+
+.dl-modal-meta {
+  font-size: 12px;
+  color: var(--dl-text-muted);
+  background: rgba(255, 255, 255, 0.05);
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Controls Toolstrip */
+.dl-modal-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid var(--dl-border);
+  padding: 4px 8px;
+  border-radius: 999px;
+}
+
+.dl-ctrl-btn {
+  background: transparent;
+  border: none;
+  color: var(--dl-text);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.dl-ctrl-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--dl-primary);
+  transform: translateY(-1px);
+}
+
+.dl-ctrl-btn.active {
+  background: var(--dl-primary);
+  color: #0f172a;
+}
+
+.dl-ctrl-btn svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+.dl-ctrl-separator {
+  width: 1px;
+  height: 18px;
+  background: var(--dl-border);
+  margin: 0 4px;
+}
+
+.dl-zoom-val {
+  min-width: 48px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--dl-primary);
+}
+
+/* Action Group */
+.dl-modal-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dl-act-btn {
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid var(--dl-border);
+  color: var(--dl-text);
+  padding: 7px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.dl-act-btn:hover {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: var(--dl-primary);
+  color: var(--dl-primary);
+}
+
+.dl-act-btn-close {
+  background: rgba(244, 63, 94, 0.15);
+  border-color: rgba(244, 63, 94, 0.3);
+  color: var(--dl-danger);
+}
+
+.dl-act-btn-close:hover {
+  background: rgba(244, 63, 94, 0.3);
+  border-color: var(--dl-danger);
+  color: #fff;
+}
+
+/* Modal Viewport & Canvas Area */
+.dl-modal-viewport {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  /* Engineering blueprint grid background */
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.dl-modal-viewport:active {
+  cursor: grabbing;
+}
+
+.dl-modal-stage {
+  position: absolute;
+  transform-origin: center center;
+  transition: filter 0.2s ease;
+  will-change: transform;
+}
+
+.dl-modal-stage img,
+.dl-modal-stage svg,
+.dl-modal-stage canvas {
+  max-width: none;
+  max-height: none;
+  display: block;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+  border-radius: 4px;
+}
+
+/* Viewport Filter Classes */
+.dl-filter-invert {
+  filter: invert(1) hue-rotate(180deg) !important;
+}
+
+.dl-filter-grayscale {
+  filter: grayscale(1) contrast(1.2) !important;
+}
+
+.dl-filter-highcontrast {
+  filter: contrast(1.8) brightness(1.05) !important;
+}
+
+/* Bottom Hint Bar */
+.dl-modal-footer {
+  height: 36px;
+  background: rgba(15, 23, 42, 0.8);
+  border-top: 1px solid var(--dl-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: var(--dl-text-muted);
+  gap: 16px;
+}
+
+.dl-modal-footer kbd {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-family: monospace;
+  color: var(--dl-text);
+  font-size: 10px;
+}
+
+/* ==========================================================================
+   Area Snipping Tool Overlay
+   ========================================================================== */
+#diagram-lens-snip-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483646;
+  background: rgba(0, 0, 0, 0.45);
+  cursor: crosshair;
+  display: none;
+}
+
+#diagram-lens-snip-overlay.dl-active {
+  display: block;
+}
+
+/* Selection Box */
+#diagram-lens-snip-box {
+  position: absolute;
+  border: 2px solid var(--dl-primary);
+  background: rgba(56, 189, 248, 0.08);
+  box-shadow: 0 0 0 99999px rgba(0, 0, 0, 0.45);
+  pointer-events: none;
+  display: none;
+}
+
+/* Selection Dimensions Pill */
+#diagram-lens-snip-pill {
+  position: absolute;
+  top: -30px;
+  left: 0;
+  background: var(--dl-primary);
+  color: #0f172a;
+  font-family: var(--dl-font);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Post-Snip Action Bar */
+#diagram-lens-snip-actions {
+  position: absolute;
+  bottom: -48px;
+  right: 0;
+  display: none;
+  align-items: center;
+  gap: 6px;
+  background: var(--dl-bg-card);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--dl-border);
+  padding: 6px 8px;
+  border-radius: 10px;
+  box-shadow: var(--dl-shadow);
+  pointer-events: auto;
+  z-index: 100;
+}
+
+/* ==========================================================================
+   Toast Notification
+   ========================================================================== */
+#diagram-lens-toast {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 2147483647;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--dl-bg-card);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--dl-border-glow);
+  color: var(--dl-text);
+  font-family: var(--dl-font);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 10px 18px;
+  border-radius: 10px;
+  box-shadow: var(--dl-shadow);
+  transform: translateY(20px);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#diagram-lens-toast.dl-show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+#diagram-lens-toast.dl-toast-success {
+  border-color: var(--dl-success);
+}
+#diagram-lens-toast.dl-toast-success svg {
+  fill: var(--dl-success);
+}

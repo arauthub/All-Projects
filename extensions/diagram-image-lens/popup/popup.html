@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diagram & Image Lens Pro</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="brand">
+        <img src="../assets/icon48.png" alt="Logo" class="logo">
+        <div>
+          <div class="title-row">
+            <h1>Diagram Lens</h1>
+            <span class="version-badge">PRO</span>
+          </div>
+          <p class="subtitle">Image & Vector Magnifier</p>
+        </div>
+      </div>
+      <label class="switch" title="Toggle Magnifier Lens">
+        <input type="checkbox" id="master-toggle" checked>
+        <span class="slider"></span>
+      </label>
+    </header>
+
+    <!-- Quick Action Launchers -->
+    <section class="quick-actions">
+      <button class="btn-snip" id="btn-snip-tool">
+        <svg viewBox="0 0 24 24"><path d="M9.4 10.5l4.77-8.26C13.47 2.09 12.75 2 12 2c-2.4 0-4.6.85-6.32 2.25l3.66 6.35.06-.1zM21.54 9c-.92-2.92-3.15-5.26-6-6.34L11.88 9h9.66zm.26 1.34l-4.77 8.27.06.1c.71.16 1.45.29 2.21.29 2.4 0 4.6-.85 6.32-2.25l-3.82-6.41zM2.46 15c.92 2.92 3.15 5.26 6 6.34L12.12 15H2.46zm-.26-1.34l4.77-8.27-.06-.1C6.2 5.13 5.46 5 4.7 5c-2.4 0-4.6.85-6.32 2.25l3.82 6.41z"/></svg>
+        <span>Snip Area Screenshot</span>
+        <kbd>Cmd+Shift+S</kbd>
+      </button>
+    </section>
+
+    <!-- Configuration Options -->
+    <section class="settings-card">
+      <div class="setting-group">
+        <div class="setting-label">
+          <span>Zoom Power</span>
+          <span class="zoom-value-label" id="zoom-val-text">3x</span>
+        </div>
+        <div class="segmented-control" id="zoom-control">
+          <button class="seg-btn" data-zoom="2">2x</button>
+          <button class="seg-btn active" data-zoom="3">3x</button>
+          <button class="seg-btn" data-zoom="4">4x</button>
+          <button class="seg-btn" data-zoom="8">8x</button>
+        </div>
+      </div>
+
+      <div class="setting-group">
+        <div class="setting-label">
+          <span>Lens Shape & Size</span>
+        </div>
+        <div class="dual-row">
+          <div class="segmented-control" id="shape-control">
+            <button class="seg-btn active" data-shape="circle">Circle</button>
+            <button class="seg-btn" data-shape="square">Square</button>
+          </div>
+          <div class="segmented-control" id="size-control">
+            <button class="seg-btn" data-size="160">S</button>
+            <button class="seg-btn active" data-size="200">M</button>
+            <button class="seg-btn" data-size="250">L</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <span class="setting-title">Hover Quick Toolbar</span>
+          <span class="setting-desc">Show 🔍 Deep Zoom, Copy & Snap icons</span>
+        </div>
+        <label class="switch-small">
+          <input type="checkbox" id="toolbar-toggle" checked>
+          <span class="slider-small"></span>
+        </label>
+      </div>
+    </section>
+
+    <!-- Page Assets Scanner -->
+    <section class="assets-section">
+      <div class="assets-header">
+        <div class="assets-title-row">
+          <h3>Page Diagrams & Assets</h3>
+          <span class="asset-count" id="asset-count-badge">Scanning...</span>
+        </div>
+        <button class="btn-refresh" id="btn-refresh-assets" title="Re-scan Page">
+          <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        </button>
+      </div>
+
+      <div class="asset-grid" id="asset-grid-container">
+        <!-- Dynamically populated thumbnails -->
+      </div>
+    </section>
+
+    <!-- Footer / Keyboard Cheat Sheet -->
+    <footer class="app-footer">
+      <div class="shortcut-list">
+        <span><kbd>Cmd+Shift+M</kbd> Toggle Loupe</span>
+        <span><kbd>Z</kbd> Deep Zoom</span>
+        <span><kbd>C</kbd> Copy PNG</span>
+      </div>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

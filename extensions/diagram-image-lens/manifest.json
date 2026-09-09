@@ -1,0 +1,61 @@
+{
+  "manifest_version": 3,
+  "name": "Diagram & Image Lens Pro",
+  "version": "1.0.0",
+  "description": "Magnify images and diagrams with HD loupe, deep-zoom blueprints, copy high-res images to clipboard, and snip area screenshots.",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "contextMenus",
+    "clipboardWrite"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background/background.js"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "assets/icon16.png",
+      "48": "assets/icon48.png",
+      "128": "assets/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "assets/icon16.png",
+    "48": "assets/icon48.png",
+    "128": "assets/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "css": [
+        "content/content.css"
+      ],
+      "js": [
+        "content/content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "commands": {
+    "toggle-magnifier": {
+      "suggested_key": {
+        "default": "Alt+Shift+M",
+        "mac": "Command+Shift+M"
+      },
+      "description": "Toggle Magnifier Lens"
+    },
+    "launch-snipping": {
+      "suggested_key": {
+        "default": "Alt+Shift+S",
+        "mac": "Command+Shift+S"
+      },
+      "description": "Capture Area Screenshot"
+    }
+  }
+}

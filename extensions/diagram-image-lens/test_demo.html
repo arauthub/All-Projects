@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diagram & Image Lens Pro - Interactive Verification Playground</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary: #38bdf8;
+      --accent: #6366f1;
+      --border: rgba(148, 163, 184, 0.2);
+    }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      margin: 0;
+      padding: 40px;
+      line-height: 1.6;
+    }
+    .header {
+      max-width: 1000px;
+      margin: 0 auto 40px;
+      text-align: center;
+    }
+    .header h1 {
+      font-size: 32px;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+    .card-full {
+      grid-column: 1 / -1;
+    }
+    .card h2 {
+      font-size: 18px;
+      margin-bottom: 12px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .badge {
+      font-size: 11px;
+      background: rgba(56, 189, 248, 0.2);
+      color: var(--primary);
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--primary);
+    }
+    svg.test-diagram {
+      width: 100%;
+      height: 240px;
+      background: #0b1120;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    canvas#test-canvas {
+      width: 100%;
+      height: 240px;
+      background: #0b1120;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      display: block;
+    }
+    img.test-img {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    .instructions {
+      max-width: 1000px;
+      margin: 30px auto;
+      padding: 16px 20px;
+      background: rgba(99, 102, 241, 0.1);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: 8px;
+      font-size: 14px;
+      color: #cbd5e1;
+    }
+    .instructions kbd {
+      background: #334155;
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🔬 Diagram & Image Lens Pro</h1>
+    <p>Interactive Test Playground for Hover Loupe, Deep-Zoom Lightbox, PNG Copy, and Area Snipping</p>
+  </div>
+
+  <div class="instructions">
+    💡 <strong>How to Test:</strong>
+    1. Hover over any diagram/image below to see the <strong>HD Loupe</strong> & <strong>Quick Toolbar</strong>.<br>
+    2. Press <kbd>+</kbd> or <kbd>-</kbd> to change magnification dynamically.<br>
+    3. Click <strong>Deep Zoom</strong> or press <kbd>Z</kbd> for the full-screen pan & zoom lightbox (test Invert Schematic mode!).<br>
+    4. Click <strong>Copy</strong> or press <kbd>C</kbd> to copy as PNG directly to your clipboard.<br>
+    5. Press <kbd>Cmd+Shift+S</kbd> to test the <strong>Area Snipping Screenshot Tool</strong>!
+  </div>
+
+  <div class="container">
+    <!-- 1. Inline Vector SVG Diagram -->
+    <div class="card">
+      <h2>1. Vector SVG Architecture Diagram <span class="badge">SVG Vector</span></h2>
+      <svg class="test-diagram" viewBox="0 0 500 240" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.8"/>
+            <stop offset="100%" stop-color="#6366f1" stop-opacity="0.8"/>
+          </linearGradient>
+        </defs>
+        <!-- Grid lines -->
+        <line x1="50" y1="20" x2="50" y2="220" stroke="#1e293b" stroke-width="1"/>
+        <line x1="150" y1="20" x2="150" y2="220" stroke="#1e293b" stroke-width="1"/>
+        <line x1="250" y1="20" x2="250" y2="220" stroke="#1e293b" stroke-width="1"/>
+        <line x1="350" y1="20" x2="350" y2="220" stroke="#1e293b" stroke-width="1"/>
+        <line x1="450" y1="20" x2="450" y2="220" stroke="#1e293b" stroke-width="1"/>
+
+        <!-- Flow connecting arrows -->
+        <path d="M 100 120 L 210 60" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow)"/>
+        <path d="M 100 120 L 210 180" stroke="#38bdf8" stroke-width="2"/>
+        <path d="M 290 60 L 400 120" stroke="#6366f1" stroke-width="2"/>
+        <path d="M 290 180 L 400 120" stroke="#6366f1" stroke-width="2"/>
+
+        <!-- Microservice nodes -->
+        <rect x="30" y="95" width="90" height="50" rx="8" fill="url(#grad1)"/>
+        <text x="75" y="125" fill="#fff" font-size="12" font-weight="bold" text-anchor="middle">CLIENT</text>
+
+        <rect x="210" y="35" width="90" height="50" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+        <text x="255" y="65" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="middle">AUTH SRV</text>
+
+        <rect x="210" y="155" width="90" height="50" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+        <text x="255" y="185" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="middle">API GW</text>
+
+        <rect x="390" y="95" width="90" height="50" rx="8" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+        <text x="435" y="125" fill="#10b981" font-size="11" font-weight="bold" text-anchor="middle">CLUSTER</text>
+      </svg>
+    </div>
+
+    <!-- 2. HTML5 Canvas Chart -->
+    <div class="card">
+      <h2>2. Interactive HTML5 Canvas Plot <span class="badge">Canvas</span></h2>
+      <canvas id="test-canvas" width="500" height="240"></canvas>
+    </div>
+
+    <!-- 3. Technical Blueprint Schematic -->
+    <div class="card card-full">
+      <h2>3. Technical Schematic & Patent Blueprint <span class="badge">Schematic</span></h2>
+      <svg class="test-diagram" viewBox="0 0 1000 240" xmlns="http://www.w3.org/2000/svg">
+        <!-- Blueprint Grid -->
+        <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+          <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#1e293b" stroke-width="0.8"/>
+        </pattern>
+        <rect width="1000" height="240" fill="url(#grid)"/>
+
+        <!-- Schematic circuitry -->
+        <g stroke="#38bdf8" stroke-width="1.5" fill="none">
+          <circle cx="150" cy="120" r="40"/>
+          <path d="M 190 120 L 320 120 L 320 70 L 450 70"/>
+          <path d="M 320 120 L 320 170 L 450 170"/>
+          <rect x="450" y="50" width="100" height="40" rx="4"/>
+          <rect x="450" y="150" width="100" height="40" rx="4"/>
+          <path d="M 550 70 L 680 70 L 680 120 L 800 120"/>
+          <path d="M 550 170 L 680 170 L 680 120"/>
+          <circle cx="840" cy="120" r="40"/>
+        </g>
+        <!-- Text labels -->
+        <text x="150" y="125" fill="#38bdf8" font-size="12" text-anchor="middle" font-family="monospace">GENERATOR</text>
+        <text x="500" y="75" fill="#f8fafc" font-size="11" text-anchor="middle" font-family="monospace">AMPLIFIER A</text>
+        <text x="500" y="175" fill="#f8fafc" font-size="11" text-anchor="middle" font-family="monospace">FEEDBACK B</text>
+        <text x="840" y="125" fill="#10b981" font-size="12" text-anchor="middle" font-family="monospace">RECEIVER</text>
+      </svg>
+    </div>
+  </div>
+
+  <script>
+    // Draw on test canvas
+    const canvas = document.getElementById('test-canvas');
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#0b1120';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Draw sine wave / spectrogram
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      for (let x = 0; x < canvas.width; x++) {
+        const y = 120 + Math.sin(x * 0.03) * 45 + Math.cos(x * 0.08) * 20;
+        if (x === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      // Bars
+      ctx.fillStyle = 'rgba(99, 102, 241, 0.4)';
+      for (let x = 20; x < canvas.width - 20; x += 30) {
+        const h = Math.abs(Math.sin(x * 0.05)) * 90 + 20;
+        ctx.fillRect(x, 210 - h, 18, h);
+      }
+
+      ctx.fillStyle = '#f8fafc';
+      ctx.font = '12px monospace';
+      ctx.fillText('SIGNAL FFT FREQUENCY SPECTRUM (Hz)', 20, 30);
+    }
+  </script>
+</body>
+</html>
