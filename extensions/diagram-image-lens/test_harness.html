@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Verification Harness</title>
+  <link rel="stylesheet" href="content/content.css">
+  <style>
+    body { margin: 0; padding: 20px; background: #0b0f19; color: #fff; font-family: sans-serif; }
+    .test-box { margin: 20px 0; }
+  </style>
+</head>
+<body>
+  <h1>Test Harness</h1>
+  
+  <div class="test-box">
+    <img id="test-img" src="assets/icon128.png" width="128" height="128" alt="Icon Test">
+  </div>
+
+  <div class="test-box">
+    <svg id="test-svg" width="300" height="150" viewBox="0 0 300 150">
+      <rect width="300" height="150" fill="#1e293b"/>
+      <circle cx="75" cy="75" r="40" fill="#38bdf8"/>
+      <text x="75" y="80" fill="#fff" font-size="14" text-anchor="middle">API Node</text>
+      <circle cx="225" cy="75" r="40" fill="#6366f1"/>
+      <text x="225" y="80" fill="#fff" font-size="14" text-anchor="middle">DB Node</text>
+    </svg>
+  </div>
+
+  <div id="results">Running tests...</div>
+
+  <!-- Mock Chrome Extension API for Standalone Harness -->
+  <script>
+    window.chrome = {
+      storage: {
+        local: {
+          get: (keys, cb) => cb({ magnifierEnabled: true, zoomLevel: 3, lensShape: 'circle', lensSize: 200, showToolbar: true }),
+          set: (data, cb) => { if (cb) cb(); }
+        },
+        onChanged: {
+          addListener: () => {}
+        }
+      },
+      runtime: {
+        onMessage: {
+          addListener: (cb) => { window.__runtimeMsgListener = cb; }
+        },
+        sendMessage: (msg, cb) => { if (cb) cb({ success: true }); }
+      }
+    };
+  </script>
+
+  <script src="content/content.js"></script>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const results = [];
+      function assert(name, condition) {
+        if (condition) {
+          results.push(`PASS: ${name}`);
+        } else {
+          results.push(`FAIL: ${name}`);
+        }
+      }
+
+      // 1. Verify DOM Elements Injected
+      assert('Loupe element created', !!document.getElementById('diagram-lens-loupe'));
+      assert('Toolbar element created', !!document.getElementById('diagram-lens-toolbar'));
+      assert('Modal element created', !!document.getElementById('diagram-lens-modal'));
+      assert('Snip overlay created', !!document.getElementById('diagram-lens-snip-overlay'));
+      assert('Toast notification created', !!document.getElementById('diagram-lens-toast'));
+
+      // 2. Verify Toolbar Buttons
+      assert('Toolbar Deep Zoom button exists', !!document.getElementById('dl-tb-zoom'));
+      assert('Toolbar Copy PNG button exists', !!document.getElementById('dl-tb-copy'));
+      assert('Toolbar Copy Link button exists', !!document.getElementById('dl-tb-link'));
+      assert('Toolbar Open Tab button exists', !!document.getElementById('dl-tb-open'));
+      assert('Toolbar Snap button exists', !!document.getElementById('dl-tb-snap'));
+      assert('Toolbar Save button exists', !!document.getElementById('dl-tb-save'));
+
+      // 3. Verify Modal Controls & Actions
+      assert('Modal 1:1 button exists', !!document.getElementById('dl-m-zoom-actual'));
+      assert('Modal Fit button exists', !!document.getElementById('dl-m-zoom-fit'));
+      assert('Modal Copy Link button exists', !!document.getElementById('dl-m-copy-link'));
+      assert('Modal Copy Markdown button exists', !!document.getElementById('dl-m-copy-md'));
+      assert('Modal Extract Text button exists', !!document.getElementById('dl-m-copy-text'));
+      assert('Modal Open Tab button exists', !!document.getElementById('dl-m-open-tab'));
+      assert('Modal Save button exists', !!document.getElementById('dl-m-save'));
+
+      // 4. Test Runtime Message Interface
+      let msgHandled = false;
+      if (window.__runtimeMsgListener) {
+        window.__runtimeMsgListener({ action: 'GET_PAGE_VISUALS' }, {}, (response) => {
+          if (response && response.items && response.items.length >= 2) {
+            msgHandled = true;
+          }
+        });
+      }
+      assert('GET_PAGE_VISUALS finds image and SVG', msgHandled);
+
+      const resEl = document.getElementById('results');
+      resEl.innerHTML = '<pre>' + results.join('\n') + '</pre>';
+      window.__TEST_RESULTS__ = results;
+    });
+  </script>
+</body>
+</html>

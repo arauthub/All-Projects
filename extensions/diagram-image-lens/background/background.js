@@ -19,6 +19,24 @@ chrome.runtime.onInstalled.addListener(() => {
     });
 
     chrome.contextMenus.create({
+      id: 'lens-copy-link',
+      title: '🔗 Copy Image Link / URL',
+      contexts: ['image']
+    });
+
+    chrome.contextMenus.create({
+      id: 'lens-copy-markdown',
+      title: '📝 Copy as Markdown ![Image](url)',
+      contexts: ['image']
+    });
+
+    chrome.contextMenus.create({
+      id: 'lens-open-tab',
+      title: '↗ Open Image in New Tab',
+      contexts: ['image']
+    });
+
+    chrome.contextMenus.create({
       id: 'separator-1',
       type: 'separator',
       contexts: ['all']
@@ -64,6 +82,20 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
       action: 'COPY_IMAGE_URL',
       srcUrl: info.srcUrl
     }).catch(err => console.debug('Tab message failed:', err));
+  } else if (info.menuItemId === 'lens-copy-link') {
+    chrome.tabs.sendMessage(tab.id, {
+      action: 'COPY_IMAGE_LINK',
+      srcUrl: info.srcUrl
+    }).catch(err => console.debug('Tab message failed:', err));
+  } else if (info.menuItemId === 'lens-copy-markdown') {
+    chrome.tabs.sendMessage(tab.id, {
+      action: 'COPY_IMAGE_MARKDOWN',
+      srcUrl: info.srcUrl
+    }).catch(err => console.debug('Tab message failed:', err));
+  } else if (info.menuItemId === 'lens-open-tab') {
+    if (info.srcUrl) {
+      chrome.tabs.create({ url: info.srcUrl });
+    }
   } else if (info.menuItemId === 'lens-snip-area') {
     chrome.tabs.sendMessage(tab.id, {
       action: 'START_SNIP'

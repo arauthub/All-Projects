@@ -44,10 +44,12 @@ Ever struggled to read tiny schematics, intricate Mermaid diagrams, architecture
 • High Contrast & Grayscale Filters: Make faded document text and wireframe charts pop out.
 • 90° Rotation & Horizontal/Vertical Flip for inverted diagrams.
 
-⚡ ONE-CLICK COPY ENGINE
-• Copy any image or diagram directly to your system clipboard as a high-resolution PNG.
-• Native vector SVG copy support: exports clean, crisp vector code or SVG data URIs.
-• Never deal with disabled right-click or protected image elements again.
+⚡ ONE-CLICK COPY & EXPORT SUITE
+• Direct Image Link Copying: Copy clean, direct URLs for any image, SVG, or canvas with 1 click (L).
+• Copy as Markdown: Generates and copies ready-to-paste ![Alt](url) markdown syntax (M).
+• Open in New Tab: Instantly open full-resolution source graphics in a dedicated tab (O).
+• Direct Clipboard PNG Write: Copy any image, diagram, or canvas directly to your clipboard as a PNG (C).
+• SVG Text Extraction: Extract and copy all text labels and annotations embedded in SVG vector diagrams (T).
 
 ✂️ PRECISION AREA SNIPPING TOOL
 • Drag-to-select crosshair tool captures any region of the webpage or document (Cmd+Shift+S / Alt+Shift+S).
@@ -56,12 +58,18 @@ Ever struggled to read tiny schematics, intricate Mermaid diagrams, architecture
 
 📊 PAGE VISUAL ASSET SCANNER & GALLERY
 • Open the extension popup to view a live thumbnail gallery of every diagram, SVG vector, and chart on the active page.
-• 1-click inspection takes you directly into the full-screen Deep-Zoom viewer.
+• Filter assets by type (SVG Diagrams, Images, Canvas) and search by filename or dimensions.
+• Direct "Copy Link" and "Open in Tab" buttons on every thumbnail card.
 
 ⌨️ PRODUCTIVITY SHORTCUTS
-• Command+Shift+M (Mac) / Alt+Shift+M (Windows): Toggle hover loupe.
-• Command+Shift+S (Mac) / Alt+Shift+S (Windows): Launch area screenshot snip tool.
+• Command+Shift+M: Toggle hover loupe.
+• Command+Shift+S: Launch area screenshot snip tool.
 • Z: Open currently hovered image in Deep-Zoom Lightbox.
+• L: Copy Image Link / URL.
+• M: Copy Image as Markdown.
+• O: Open Image in New Tab.
+• T: Extract and copy SVG diagram text labels.
+• 1 / 0: 1:1 Actual Pixels / Fit to screen.
 • C: Copy image/diagram to clipboard as PNG.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━

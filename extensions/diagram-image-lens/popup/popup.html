@@ -91,6 +91,16 @@
         </button>
       </div>
 
+      <div class="asset-filters-row">
+        <div class="asset-filters" id="asset-filter-bar">
+          <button class="filter-pill active" data-filter="all">All</button>
+          <button class="filter-pill" data-filter="svg">SVG</button>
+          <button class="filter-pill" data-filter="img">Images</button>
+          <button class="filter-pill" data-filter="canvas">Charts</button>
+        </div>
+        <input type="text" id="asset-search-input" class="asset-search" placeholder="Filter...">
+      </div>
+
       <div class="asset-grid" id="asset-grid-container">
         <!-- Dynamically populated thumbnails -->
       </div>
@@ -99,9 +109,11 @@
     <!-- Footer / Keyboard Cheat Sheet -->
     <footer class="app-footer">
       <div class="shortcut-list">
-        <span><kbd>Cmd+Shift+M</kbd> Toggle Loupe</span>
-        <span><kbd>Z</kbd> Deep Zoom</span>
-        <span><kbd>C</kbd> Copy PNG</span>
+        <span><kbd>Cmd+Shift+M</kbd> Loupe</span>
+        <span><kbd>Cmd+Shift+S</kbd> Snip</span>
+        <span><kbd>Z</kbd> Zoom</span>
+        <span><kbd>L</kbd> Link</span>
+        <span><kbd>C</kbd> PNG</span>
       </div>
     </footer>
   </div>

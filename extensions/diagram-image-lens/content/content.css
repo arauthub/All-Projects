@@ -149,6 +149,7 @@
   font-weight: 500;
   line-height: 1;
   transition: all 0.15s ease;
+  white-space: nowrap;
 }
 
 .dl-tb-btn:hover {
@@ -178,6 +179,13 @@
   color: #fff;
 }
 
+.dl-tb-separator {
+  width: 1px;
+  height: 16px;
+  background: var(--dl-border);
+  margin: 0 2px;
+}
+
 /* ==========================================================================
    Deep Zoom Blueprint Lightbox Modal
    ========================================================================== */
@@ -185,7 +193,7 @@
   position: fixed;
   inset: 0;
   z-index: 2147483645;
-  background: rgba(8, 12, 22, 0.92);
+  background: rgba(8, 12, 22, 0.94);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   display: none;
@@ -205,20 +213,23 @@
 
 /* Modal Top Dock Bar */
 .dl-modal-header {
-  height: 56px;
-  padding: 0 20px;
+  min-height: 56px;
+  padding: 8px 18px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgba(15, 23, 42, 0.7);
+  gap: 12px;
+  background: rgba(15, 23, 42, 0.85);
   border-bottom: 1px solid var(--dl-border);
   z-index: 10;
+  flex-wrap: wrap;
 }
 
 .dl-modal-title-group {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
+  flex-shrink: 0;
 }
 
 .dl-brand-pill {
@@ -232,22 +243,25 @@
 }
 
 .dl-modal-meta {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--dl-text-muted);
-  background: rgba(255, 255, 255, 0.05);
-  padding: 3px 8px;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 4px 10px;
   border-radius: 6px;
   border: 1px solid rgba(255, 255, 255, 0.08);
+  font-family: monospace;
 }
 
 /* Controls Toolstrip */
 .dl-modal-controls {
   display: flex;
   align-items: center;
-  gap: 6px;
-  background: rgba(30, 41, 59, 0.7);
+  gap: 4px;
+  background: rgba(30, 41, 59, 0.8);
   border: 1px solid var(--dl-border);
   padding: 4px 8px;
+  border-radius: 999px;
+}
   border-radius: 999px;
 }
 
@@ -276,6 +290,16 @@
   color: #0f172a;
 }
 
+.dl-ctrl-btn-text {
+  width: auto;
+  min-width: 32px;
+  padding: 0 6px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: var(--dl-font);
+}
+
 .dl-ctrl-btn svg {
   width: 16px;
   height: 16px;
@@ -301,22 +325,24 @@
 .dl-modal-actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+  flex-wrap: wrap;
 }
 
 .dl-act-btn {
   background: rgba(30, 41, 59, 0.8);
   border: 1px solid var(--dl-border);
   color: var(--dl-text);
-  padding: 7px 12px;
+  padding: 6px 10px;
   border-radius: 8px;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   transition: all 0.15s ease;
+  white-space: nowrap;
 }
 
 .dl-act-btn:hover {
@@ -325,10 +351,23 @@
   color: var(--dl-primary);
 }
 
+.dl-act-btn svg {
+  width: 13px;
+  height: 13px;
+  fill: currentColor;
+}
+
+.dl-act-btn-primary {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(99, 102, 241, 0.2));
+  border-color: rgba(56, 189, 248, 0.4);
+  color: var(--dl-primary);
+}
+
 .dl-act-btn-close {
   background: rgba(244, 63, 94, 0.15);
   border-color: rgba(244, 63, 94, 0.3);
   color: var(--dl-danger);
+  padding: 6px 10px;
 }
 
 .dl-act-btn-close:hover {

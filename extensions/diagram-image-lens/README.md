@@ -26,10 +26,12 @@ Inspect tiny schematics, intricate Mermaid diagrams, architecture flowcharts, ma
 * **Filter Suite**: High-contrast mode and grayscale filters make faded technical documents pop out.
 * **Transform Controls**: Rotate 90° clockwise and flip horizontally/vertically.
 
-### ⚡ 3. One-Click Copy Engine
-* **Direct Clipboard Write**: Copies any image, diagram, or canvas directly to your clipboard as a PNG (`ClipboardItem`).
-* **Vector SVG Support**: Native handling for inline SVGs (Mermaid, D3, Excalidraw) ensuring infinite crispness.
-* **Bypass Restrictions**: Seamlessly copies images even when right-click is disabled or obscured.
+### ⚡ 3. One-Click Copy & Export Suite
+* **Direct Image Link Copying**: Copy clean, direct image or SVG URLs to your clipboard with 1 click (<kbd>L</kbd>).
+* **Copy as Markdown**: Instantly generates and copies `![Alt](url)` syntax ready for documentation, GitHub, and Notion (<kbd>M</kbd>).
+* **Open in New Tab**: Open full-resolution images or scalable vector blobs in a new tab (<kbd>O</kbd>).
+* **Direct Clipboard PNG Write**: Copies any image, diagram, or canvas directly to your clipboard as a PNG (`ClipboardItem`) (<kbd>C</kbd>).
+* **SVG Text Extraction**: 1-click extracts all embedded text labels (`<text>`, `<tspan>`) from complex SVG diagrams (<kbd>T</kbd>).
 
 ### ✂️ 4. Precision Area Snipping Tool
 * **Interactive Drag Selection**: Press `Cmd+Shift+S` (or `Alt+Shift+S`) to drag a crosshair box over any region.
@@ -38,7 +40,8 @@ Inspect tiny schematics, intricate Mermaid diagrams, architecture flowcharts, ma
 
 ### 📊 5. Page Visual Asset Scanner & Gallery
 * **Live Discovery**: The extension popup automatically scans the active tab for all images, vector SVGs, and HTML5 canvas charts.
-* **Thumbnail Gallery**: Displays dimensions, formats, and 1-click inspection into the Deep-Zoom viewer.
+* **Filter & Search**: Real-time filtering by asset type (All, SVG Diagrams, Images, Charts) and search by name or dimensions.
+* **Card Quick Actions**: Direct Copy Link (🔗) and Open Tab (↗) icons on every thumbnail card in the gallery.
 
 ---
 
@@ -50,10 +53,15 @@ Inspect tiny schematics, intricate Mermaid diagrams, architecture flowcharts, ma
 | **`Cmd+Shift+S`** / **`Alt+Shift+S`** | Launch Area Snipping Tool | Global / Active Tab |
 | **`Z`** | Open currently hovered image in Deep-Zoom Lightbox | While hovering over an image |
 | **`+` / `-`** | Increase / Decrease magnifier zoom power | While hovering over an image |
+| **`L`** | Copy Image Link / URL to clipboard | In Lightbox or hover |
+| **`M`** | Copy image as Markdown `![Alt](url)` | In Deep-Zoom Lightbox |
+| **`O`** | Open full-resolution image in new tab | In Lightbox or hover |
+| **`T`** | Extract and copy all diagram text labels | In Deep-Zoom Lightbox (SVG) |
+| **`1`** | 1:1 Actual pixel size view | In Deep-Zoom Lightbox |
+| **`0`** | Fit diagram to screen | In Deep-Zoom Lightbox |
 | **`C`** | Copy image / diagram to clipboard as PNG | In Lightbox or hover |
 | **`R`** | Rotate 90° clockwise | In Deep-Zoom Lightbox |
-| **`I`** | Invert colors (blueprint mode) | In Deep-Zoom Lightbox |
-| **`0`** | Reset zoom and pan | In Deep-Zoom Lightbox |
+| **`I`** | Invert colors (schematic blueprint mode) | In Deep-Zoom Lightbox |
 | **`Esc`** | Close Lightbox or cancel snipping | Modal / Overlay |
 
 ---

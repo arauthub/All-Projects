@@ -43,25 +43,7 @@
     }
   };
 
-  // Load preferences from chrome.storage
-  chrome.storage.local.get(['magnifierEnabled', 'zoomLevel', 'lensShape', 'lensSize', 'showToolbar'], (res) => {
-    if (res.magnifierEnabled !== undefined) state.enabled = res.magnifierEnabled;
-    if (res.zoomLevel !== undefined) state.zoomLevel = Number(res.zoomLevel);
-    if (res.lensShape !== undefined) state.lensShape = res.lensShape;
-    if (res.lensSize !== undefined) state.lensSize = Number(res.lensSize);
-    if (res.showToolbar !== undefined) state.showToolbar = res.showToolbar;
-    updateLoupeStyle();
-  });
 
-  // Listen for storage updates
-  chrome.storage.onChanged.addListener((changes) => {
-    if (changes.magnifierEnabled) state.enabled = changes.magnifierEnabled.newValue;
-    if (changes.zoomLevel) state.zoomLevel = Number(changes.zoomLevel.newValue);
-    if (changes.lensShape) state.lensShape = changes.lensShape.newValue;
-    if (changes.lensSize) state.lensSize = Number(changes.lensSize.newValue);
-    if (changes.showToolbar) state.showToolbar = changes.showToolbar.newValue;
-    updateLoupeStyle();
-  });
 
   // =========================================================================
   // DOM Elements Injection
@@ -85,15 +67,23 @@
       <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14zm.5-7H9v2H7v1h2v2h1v-2h2V9h-2z"/></svg>
       Deep Zoom
     </button>
-    <button class="dl-tb-btn" id="dl-tb-copy" title="Copy Image to Clipboard as PNG">
+    <button class="dl-tb-btn" id="dl-tb-copy" title="Copy Image to Clipboard as PNG (C)">
       <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
-      Copy
+      Copy PNG
     </button>
+    <button class="dl-tb-btn" id="dl-tb-link" title="Copy Image Link / URL (L)">
+      <svg viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
+      Link
+    </button>
+    <button class="dl-tb-btn" id="dl-tb-open" title="Open Full Image in New Tab (O)">
+      <svg viewBox="0 0 24 24"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+    </button>
+    <span class="dl-tb-separator"></span>
     <button class="dl-tb-btn" id="dl-tb-snap" title="Take Element Screenshot">
       <svg viewBox="0 0 24 24"><path d="M9.4 10.5l4.77-8.26C13.47 2.09 12.75 2 12 2c-2.4 0-4.6.85-6.32 2.25l3.66 6.35.06-.1zM21.54 9c-.92-2.92-3.15-5.26-6-6.34L11.88 9h9.66zm.26 1.34l-4.77 8.27.06.1c.71.16 1.45.29 2.21.29 2.4 0 4.6-.85 6.32-2.25l-3.82-6.41zM2.46 15c.92 2.92 3.15 5.26 6 6.34L12.12 15H2.46zm-.26-1.34l4.77-8.27-.06-.1C6.2 5.13 5.46 5 4.7 5c-2.4 0-4.6.85-6.32 2.25l3.82 6.41z"/></svg>
       Snap
     </button>
-    <button class="dl-tb-btn" id="dl-tb-save" title="Save / Download Image">
+    <button class="dl-tb-btn" id="dl-tb-save" title="Save / Download File">
       <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
     </button>
   `;
@@ -120,8 +110,11 @@
         <button class="dl-ctrl-btn" id="dl-m-zoom-in" title="Zoom In (+)">
           <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
         </button>
-        <button class="dl-ctrl-btn" id="dl-m-zoom-reset" title="Reset View (0)">
-          <svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
+        <button class="dl-ctrl-btn dl-ctrl-btn-text" id="dl-m-zoom-fit" title="Fit to Screen (0)">
+          Fit
+        </button>
+        <button class="dl-ctrl-btn dl-ctrl-btn-text" id="dl-m-zoom-actual" title="1:1 Actual Pixels (1)">
+          1:1
         </button>
 
         <span class="dl-ctrl-separator"></span>
@@ -135,7 +128,7 @@
 
         <span class="dl-ctrl-separator"></span>
 
-        <button class="dl-ctrl-btn" id="dl-m-invert" title="Invert Colors (Engineering Schematic Mode - I)">
+        <button class="dl-ctrl-btn" id="dl-m-invert" title="Invert Colors (Schematic Mode - I)">
           <svg viewBox="0 0 24 24"><path d="M12 22c5.52 0 10-4.48 10-10S17.52 2 12 2 2 6.48 2 12s4.48 10 10 10zm0-18c4.42 0 8 3.58 8 8s-3.58 8-8 8V4z"/></svg>
         </button>
         <button class="dl-ctrl-btn" id="dl-m-contrast" title="High Contrast Mode">
@@ -144,13 +137,27 @@
       </div>
 
       <div class="dl-modal-actions">
-        <button class="dl-act-btn" id="dl-m-copy">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+        <button class="dl-act-btn dl-act-btn-primary" id="dl-m-copy" title="Copy as PNG (C)">
+          <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
           Copy PNG
         </button>
-        <button class="dl-act-btn" id="dl-m-save">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-          Save
+        <button class="dl-act-btn" id="dl-m-copy-link" title="Copy Image URL / Link (L)">
+          <svg viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
+          Link
+        </button>
+        <button class="dl-act-btn" id="dl-m-copy-md" title="Copy as Markdown ![Alt](url) (M)">
+          <svg viewBox="0 0 24 24"><path d="M20.56 18H3.44C2.65 18 2 17.37 2 16.59V7.41C2 6.63 2.65 6 3.44 6h17.12c.79 0 1.44.63 1.44 1.41v9.18c0 .78-.65 1.41-1.44 1.41zM4 15.5h2v-4.66l2 2.33 2-2.33V15.5h2V8.5h-2l-2 2.33L6 8.5H4v7zm16-3.5h-2V8.5h-2V12h-2l3 3.5 3-3.5z"/></svg>
+          MD
+        </button>
+        <button class="dl-act-btn" id="dl-m-copy-text" title="Extract and Copy Diagram Text (T)" style="display: none;">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+          Extract Text
+        </button>
+        <button class="dl-act-btn" id="dl-m-open-tab" title="Open in New Tab (O)">
+          <svg viewBox="0 0 24 24"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+        </button>
+        <button class="dl-act-btn" id="dl-m-save" title="Save / Download (S)">
+          <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
         </button>
         <button class="dl-act-btn dl-act-btn-close" id="dl-m-close" title="Close Lightbox (Esc)">
           ✕
@@ -163,12 +170,16 @@
     </div>
 
     <div class="dl-modal-footer">
-      <span>Drag to <kbd>Pan</kbd></span>
-      <span>Scroll to <kbd>Zoom</kbd></span>
+      <span>Scroll: <kbd>Zoom</kbd></span>
+      <span>Drag: <kbd>Pan</kbd></span>
+      <span>Actual: <kbd>1</kbd></span>
+      <span>Fit: <kbd>0</kbd></span>
       <span>Rotate: <kbd>R</kbd></span>
       <span>Invert: <kbd>I</kbd></span>
-      <span>Copy: <kbd>C</kbd></span>
-      <span>Reset: <kbd>0</kbd></span>
+      <span>Copy PNG: <kbd>C</kbd></span>
+      <span>Copy Link: <kbd>L</kbd></span>
+      <span>Markdown: <kbd>M</kbd></span>
+      <span>Open Tab: <kbd>O</kbd></span>
       <span>Close: <kbd>Esc</kbd></span>
     </div>
   `;
@@ -231,6 +242,26 @@
     loupeBadge.textContent = `${state.zoomLevel}x`;
   }
   updateLoupeStyle();
+
+  // Load preferences from chrome.storage
+  chrome.storage.local.get(['magnifierEnabled', 'zoomLevel', 'lensShape', 'lensSize', 'showToolbar'], (res) => {
+    if (res.magnifierEnabled !== undefined) state.enabled = res.magnifierEnabled;
+    if (res.zoomLevel !== undefined) state.zoomLevel = Number(res.zoomLevel);
+    if (res.lensShape !== undefined) state.lensShape = res.lensShape;
+    if (res.lensSize !== undefined) state.lensSize = Number(res.lensSize);
+    if (res.showToolbar !== undefined) state.showToolbar = res.showToolbar;
+    updateLoupeStyle();
+  });
+
+  // Listen for storage updates
+  chrome.storage.onChanged.addListener((changes) => {
+    if (changes.magnifierEnabled) state.enabled = changes.magnifierEnabled.newValue;
+    if (changes.zoomLevel) state.zoomLevel = Number(changes.zoomLevel.newValue);
+    if (changes.lensShape) state.lensShape = changes.lensShape.newValue;
+    if (changes.lensSize) state.lensSize = Number(changes.lensSize.newValue);
+    if (changes.showToolbar) state.showToolbar = changes.showToolbar.newValue;
+    updateLoupeStyle();
+  });
 
   // Helper: Find target image, SVG, canvas, or background-image container
   function findEligibleVisualTarget(el) {
@@ -410,6 +441,35 @@
   const viewport = document.getElementById('dl-viewport');
   const metaInfo = document.getElementById('dl-meta-info');
   const zoomDisplay = document.getElementById('dl-m-zoom-display');
+  const copyTextBtn = document.getElementById('dl-m-copy-text');
+
+  function getAspectRatio(w, h) {
+    if (!w || !h) return '';
+    const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
+    const d = gcd(w, h);
+    const rw = w / d;
+    const rh = h / d;
+    if ((rw === 16 && rh === 9) || (rw === 4 && rh === 3) || (rw === 1 && rh === 1) || (rw === 3 && rh === 2) || (rw === 21 && rh === 9)) {
+      return `${rw}:${rh}`;
+    }
+    return `${(w / h).toFixed(2)}:1`;
+  }
+
+  function getFormatName(src, type) {
+    if (type === 'svg') return 'SVG Vector';
+    if (type === 'canvas') return 'HTML5 Canvas';
+    if (!src) return 'Image';
+    if (src.startsWith('data:image/svg')) return 'SVG Vector';
+    if (src.startsWith('data:image/png')) return 'PNG';
+    if (src.startsWith('data:image/jpeg')) return 'JPEG';
+    if (src.startsWith('data:image/webp')) return 'WebP';
+    const clean = src.split('?')[0].split('#')[0];
+    const ext = clean.split('.').pop().toUpperCase();
+    if (['PNG', 'JPG', 'JPEG', 'WEBP', 'SVG', 'GIF', 'AVIF'].includes(ext)) {
+      return ext === 'JPG' ? 'JPEG' : ext;
+    }
+    return 'Image';
+  }
 
   function openDeepZoomModal(element, type, src) {
     loupe.classList.remove('dl-visible');
@@ -417,6 +477,11 @@
 
     state.isModalOpen = true;
     modal.classList.add('dl-open');
+
+    // Store active modal element references
+    state.modal.currentElement = element;
+    state.modal.currentType = type;
+    state.modal.currentSrc = src;
 
     // Reset transform state
     state.modal.scale = 1;
@@ -430,6 +495,8 @@
     stage.innerHTML = '';
     stage.className = 'dl-modal-stage';
 
+    const format = getFormatName(src, type);
+
     let displayEl;
     if (type === 'svg' && element) {
       displayEl = element.cloneNode(true);
@@ -438,17 +505,33 @@
       displayEl.style.width = 'auto';
       displayEl.style.height = 'auto';
       stage.appendChild(displayEl);
-      metaInfo.textContent = `SVG Vector Diagram · Scalable HD`;
+
+      const natW = Math.round(element.clientWidth || 600);
+      const natH = Math.round(element.clientHeight || 400);
+      const ratio = getAspectRatio(natW, natH);
+      metaInfo.textContent = `${format} · ${natW} × ${natH} px ${ratio ? `(${ratio})` : ''} · Infinite Crispness`;
+
+      // Check if SVG has text labels
+      const hasText = element.querySelectorAll('text, tspan').length > 0;
+      if (copyTextBtn) copyTextBtn.style.display = hasText ? 'flex' : 'none';
     } else {
+      if (copyTextBtn) copyTextBtn.style.display = 'none';
+
       displayEl = document.createElement('img');
       displayEl.src = src;
       displayEl.onload = () => {
-        metaInfo.textContent = `${displayEl.naturalWidth} × ${displayEl.naturalHeight} px · 100%`;
+        const natW = displayEl.naturalWidth;
+        const natH = displayEl.naturalHeight;
+        const rendW = element ? Math.round(element.clientWidth) : natW;
+        const rendH = element ? Math.round(element.clientHeight) : natH;
+        const ratio = getAspectRatio(natW, natH);
+
+        metaInfo.textContent = `${format} · ${natW} × ${natH} px ${ratio ? `(${ratio})` : ''} · Rendered: ${rendW} × ${rendH}`;
       };
       displayEl.style.maxWidth = '85vw';
       displayEl.style.maxHeight = '75vh';
       stage.appendChild(displayEl);
-      metaInfo.textContent = `Loading asset...`;
+      metaInfo.textContent = `${format} · Loading asset...`;
     }
 
     applyStageTransform();
@@ -458,12 +541,29 @@
     state.isModalOpen = false;
     modal.classList.remove('dl-open');
     stage.innerHTML = '';
+    state.modal.currentElement = null;
+    state.modal.currentSrc = null;
   }
 
   function applyStageTransform() {
     const { scale, panX, panY, rotation, flipH, flipV } = state.modal;
     stage.style.transform = `translate(${panX}px, ${panY}px) scale(${scale * flipH}, ${scale * flipV}) rotate(${rotation}deg)`;
     zoomDisplay.textContent = `${Math.round(scale * 100)}%`;
+  }
+
+  function fitModalTargetToScreen() {
+    const stageChild = stage.firstElementChild;
+    if (!stageChild) return;
+    const vpRect = viewport.getBoundingClientRect();
+    const natW = stageChild.naturalWidth || stageChild.clientWidth || 800;
+    const natH = stageChild.naturalHeight || stageChild.clientHeight || 600;
+
+    const scaleW = (vpRect.width * 0.85) / natW;
+    const scaleH = (vpRect.height * 0.85) / natH;
+    state.modal.scale = Math.min(1.0, Math.min(scaleW, scaleH));
+    state.modal.panX = 0;
+    state.modal.panY = 0;
+    applyStageTransform();
   }
 
   // Drag to Pan
@@ -505,13 +605,12 @@
     applyStageTransform();
   });
 
-  document.getElementById('dl-m-zoom-reset').addEventListener('click', () => {
-    state.modal.scale = 1;
+  document.getElementById('dl-m-zoom-fit').addEventListener('click', fitModalTargetToScreen);
+
+  document.getElementById('dl-m-zoom-actual').addEventListener('click', () => {
+    state.modal.scale = 1.0;
     state.modal.panX = 0;
     state.modal.panY = 0;
-    state.modal.rotation = 0;
-    state.modal.flipH = 1;
-    state.modal.flipV = 1;
     applyStageTransform();
   });
 
@@ -537,36 +636,27 @@
 
   document.getElementById('dl-m-close').addEventListener('click', closeDeepZoomModal);
 
-  // Modal Keyboard Shortcuts
-  window.addEventListener('keydown', (e) => {
-    if (!state.isModalOpen) return;
+  // Modal Action Buttons (Copy PNG, Copy Link, Markdown, Extract Text, Open Tab, Save)
+  document.getElementById('dl-m-copy').addEventListener('click', copyModalTargetToClipboard);
 
-    if (e.key === 'Escape') {
-      closeDeepZoomModal();
-    } else if (e.key === '=' || e.key === '+') {
-      state.modal.scale = Math.min(10, state.modal.scale * 1.25);
-      applyStageTransform();
-    } else if (e.key === '-' || e.key === '_') {
-      state.modal.scale = Math.max(0.1, state.modal.scale * 0.8);
-      applyStageTransform();
-    } else if (e.key === '0') {
-      state.modal.scale = 1;
-      state.modal.panX = 0;
-      state.modal.panY = 0;
-      state.modal.rotation = 0;
-      applyStageTransform();
-    } else if (e.key.toLowerCase() === 'r') {
-      state.modal.rotation = (state.modal.rotation + 90) % 360;
-      applyStageTransform();
-    } else if (e.key.toLowerCase() === 'i') {
-      document.getElementById('dl-m-invert').click();
-    } else if (e.key.toLowerCase() === 'c') {
-      copyModalTargetToClipboard();
-    }
+  document.getElementById('dl-m-copy-link').addEventListener('click', () => {
+    copyImageLink(state.modal.currentSrc, state.modal.currentElement || stage.firstElementChild);
   });
 
-  // Modal Copy and Save Actions
-  document.getElementById('dl-m-copy').addEventListener('click', copyModalTargetToClipboard);
+  document.getElementById('dl-m-copy-md').addEventListener('click', () => {
+    copyImageMarkdown(state.modal.currentSrc, state.modal.currentElement || stage.firstElementChild);
+  });
+
+  if (copyTextBtn) {
+    copyTextBtn.addEventListener('click', () => {
+      copySvgText(state.modal.currentElement || stage.querySelector('svg'));
+    });
+  }
+
+  document.getElementById('dl-m-open-tab').addEventListener('click', () => {
+    openImageInNewTab(state.modal.currentSrc, state.modal.currentElement || stage.firstElementChild);
+  });
+
   document.getElementById('dl-m-save').addEventListener('click', saveModalTarget);
 
   function copyModalTargetToClipboard() {
@@ -587,6 +677,43 @@
     }
   }
 
+  // Modal Keyboard Shortcuts
+  window.addEventListener('keydown', (e) => {
+    if (!state.isModalOpen) return;
+
+    if (e.key === 'Escape') {
+      closeDeepZoomModal();
+    } else if (e.key === '=' || e.key === '+') {
+      state.modal.scale = Math.min(10, state.modal.scale * 1.25);
+      applyStageTransform();
+    } else if (e.key === '-' || e.key === '_') {
+      state.modal.scale = Math.max(0.1, state.modal.scale * 0.8);
+      applyStageTransform();
+    } else if (e.key === '0') {
+      fitModalTargetToScreen();
+    } else if (e.key === '1') {
+      state.modal.scale = 1.0;
+      state.modal.panX = 0;
+      state.modal.panY = 0;
+      applyStageTransform();
+    } else if (e.key.toLowerCase() === 'r') {
+      state.modal.rotation = (state.modal.rotation + 90) % 360;
+      applyStageTransform();
+    } else if (e.key.toLowerCase() === 'i') {
+      document.getElementById('dl-m-invert').click();
+    } else if (e.key.toLowerCase() === 'c') {
+      copyModalTargetToClipboard();
+    } else if (e.key.toLowerCase() === 'l') {
+      copyImageLink(state.modal.currentSrc, state.modal.currentElement || stage.firstElementChild);
+    } else if (e.key.toLowerCase() === 'm') {
+      copyImageMarkdown(state.modal.currentSrc, state.modal.currentElement || stage.firstElementChild);
+    } else if (e.key.toLowerCase() === 'o') {
+      openImageInNewTab(state.modal.currentSrc, state.modal.currentElement || stage.firstElementChild);
+    } else if (e.key.toLowerCase() === 't' && copyTextBtn && copyTextBtn.style.display !== 'none') {
+      copySvgText(state.modal.currentElement || stage.querySelector('svg'));
+    }
+  });
+
   // =========================================================================
   // Toolbar Buttons Actions
   // =========================================================================
@@ -599,6 +726,18 @@
   document.getElementById('dl-tb-copy').addEventListener('click', () => {
     if (state.currentTarget) {
       copyElementAsPng(state.currentTarget);
+    }
+  });
+
+  document.getElementById('dl-tb-link').addEventListener('click', () => {
+    if (state.currentTarget) {
+      copyImageLink(state.targetSrc, state.currentTarget);
+    }
+  });
+
+  document.getElementById('dl-tb-open').addEventListener('click', () => {
+    if (state.currentTarget) {
+      openImageInNewTab(state.targetSrc, state.currentTarget);
     }
   });
 
@@ -623,8 +762,109 @@
   });
 
   // =========================================================================
-  // Universal Image & Element Copying Engine
+  // Universal Image, Link & Element Copying Engine
   // =========================================================================
+  function getResolvedUrl(src, element) {
+    let targetSrc = src;
+    if (!targetSrc && element) {
+      if (element.tagName === 'IMG') targetSrc = element.currentSrc || element.src;
+      else if (element.tagName === 'svg' || element.tagName === 'SVG') targetSrc = getSvgDataUri(element);
+      else if (element.tagName === 'CANVAS') {
+        try { targetSrc = element.toDataURL(); } catch (e) {}
+      }
+    }
+    if (!targetSrc) return '';
+    if (targetSrc.startsWith('data:') || targetSrc.startsWith('blob:')) return targetSrc;
+    try {
+      return new URL(targetSrc, window.location.href).href;
+    } catch (e) {
+      return targetSrc;
+    }
+  }
+
+  function copyImageLink(src, element) {
+    const url = getResolvedUrl(src, element);
+    if (!url) {
+      showToast('No link available for this image', 'warning');
+      return;
+    }
+    navigator.clipboard.writeText(url).then(() => {
+      showToast('Image link copied to clipboard! 🔗');
+    }).catch(() => {
+      copyTextFallback(url, 'Image link copied to clipboard! 🔗');
+    });
+  }
+
+  function copyImageMarkdown(src, element) {
+    const url = getResolvedUrl(src, element);
+    if (!url) {
+      showToast('No link available for markdown', 'warning');
+      return;
+    }
+    const alt = (element && (element.alt || element.getAttribute('aria-label') || element.title)) || 'Image';
+    const md = `![${alt}](${url})`;
+    navigator.clipboard.writeText(md).then(() => {
+      showToast('Markdown ![Image](url) copied! 📝');
+    }).catch(() => {
+      copyTextFallback(md, 'Markdown copied! 📝');
+    });
+  }
+
+  function openImageInNewTab(src, element) {
+    const url = getResolvedUrl(src, element);
+    if (!url) {
+      showToast('No link available to open', 'warning');
+      return;
+    }
+    if (url.startsWith('data:image/svg+xml')) {
+      try {
+        const decoded = decodeURIComponent(url.split(',')[1]);
+        const blob = new Blob([decoded], { type: 'image/svg+xml' });
+        const blobUrl = URL.createObjectURL(blob);
+        window.open(blobUrl, '_blank');
+        return;
+      } catch (e) {}
+    }
+    window.open(url, '_blank');
+  }
+
+  function copySvgText(svgEl) {
+    if (!svgEl) {
+      showToast('No SVG diagram selected', 'warning');
+      return;
+    }
+    const nodes = svgEl.querySelectorAll('text, tspan, title, desc');
+    if (!nodes || nodes.length === 0) {
+      showToast('No text labels found in this diagram', 'warning');
+      return;
+    }
+    const texts = Array.from(nodes).map(n => n.textContent.trim()).filter(t => t.length > 0);
+    const uniqueTexts = Array.from(new Set(texts));
+    const output = uniqueTexts.join('\n');
+    navigator.clipboard.writeText(output).then(() => {
+      showToast(`Copied ${uniqueTexts.length} diagram text labels! 📄`);
+    }).catch(() => {
+      copyTextFallback(output, `Copied diagram text! 📄`);
+    });
+  }
+
+  function copyTextFallback(text, successMsg) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    try {
+      document.execCommand('copy');
+      showToast(successMsg);
+    } catch (e) {
+      showToast('Could not copy to clipboard', 'danger');
+    }
+    document.body.removeChild(ta);
+  }
+
   function copyElementAsPng(element) {
     elementToPngBlob(element, (blob) => {
       if (!blob) {
@@ -920,6 +1160,21 @@
       img.src = request.srcUrl;
       copyElementAsPng(img);
       sendResponse({ status: 'copying' });
+    }
+
+    if (request.action === 'COPY_IMAGE_LINK' && request.srcUrl) {
+      copyImageLink(request.srcUrl);
+      sendResponse({ status: 'copied_link' });
+    }
+
+    if (request.action === 'COPY_IMAGE_MARKDOWN' && request.srcUrl) {
+      copyImageMarkdown(request.srcUrl);
+      sendResponse({ status: 'copied_markdown' });
+    }
+
+    if (request.action === 'OPEN_IMAGE_TAB' && request.srcUrl) {
+      openImageInNewTab(request.srcUrl);
+      sendResponse({ status: 'opened_tab' });
     }
 
     // Page visual scan for popup gallery
