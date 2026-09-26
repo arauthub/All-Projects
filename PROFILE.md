@@ -66,6 +66,13 @@ Here are highlights from my public [**All-Projects**](https://github.com/theabhi
 
 ---
 
+
+### 🐍 [Wagtail Demo: Modular Django Extension Framework](https://github.com/theabhijeetraut/All-Projects/tree/main/apps/wagtaildemo)
+* **Stack**: Python, Django, Wagtail CMS
+* Specialized Django and Wagtail extension modules demonstrating custom model structures, streamfields, and decoupled service integrations.
+
+---
+
 ## 💼 Career Snapshot
 
 * **Lead Software Engineer / AI Architect** — *Persistent Systems* (2023 – Present)

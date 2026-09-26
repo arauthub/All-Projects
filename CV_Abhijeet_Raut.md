@@ -6,6 +6,8 @@ Pune, India • theabhijeetraut@gmail.com • [GitHub: github.com/theabhijeetrau
 
 ## Executive Summary
 
+> 📌 **Portfolio Monorepo Synchronization**: Verified up to date with repository on `2026-09-26 14:13 UTC` • Presubmit Suite Clean
+
 Accomplished **Lead Software Engineer and Solutions Architect** with **12 years of hands-on experience** architecting high-concurrency backend services, distributed systems, and modern AI/ML solutions. 
 - **3 years at Persistent Systems** driving enterprise AI adoption, autonomous agent architectures (Google ADK, LangChain), and cloud-native microservice backends.
 - **9 years at Cybage Software** designing scalable enterprise platforms, Django/Wagtail CMS ecosystems, and RESTful/event-driven API architectures.
@@ -52,7 +54,7 @@ Accomplished **Lead Software Engineer and Solutions Architect** with **12 years 
 
 ## Featured Engineering Projects
 
-### **1. ARNAS: Enterprise Distributed Cloud NAS & Zero-Knowledge E2EE Mobile Sync**
+### **1. ARNAS: Enterprise Distributed Cloud NAS & Zero-Knowledge E2EE Mobile Sync** ⚡ *(Active Architecture / Recently Updated)*
 *Repository*: [`apps/arnas/`](https://github.com/theabhijeetraut/All-Projects/tree/main/apps/arnas)  
 *Tech Stack*: Fastify (Node.js/TypeScript), React Native / Expo, PostgreSQL, Prisma ORM, Docker Compose, AWS S3 / MinIO, AES-256-GCM, PBKDF2
 * Architected a distributed, self-hosted enterprise cloud storage platform featuring multi-server storage clustering (local NVMe/NAS disks + S3-compatible object stores like MinIO, AWS S3, and Cloudflare R2).
@@ -96,6 +98,14 @@ Accomplished **Lead Software Engineer and Solutions Architect** with **12 years 
 *Tech Stack*: Python, Django, Wagtail CMS, Tailwind CSS, SCSS, Docker
 * Designed modern content platforms leveraging Wagtail CMS with Tailwind CSS design systems, supporting custom page trees, streamfields, dynamic image generation, and multi-app blog/account architectures.
 * Implemented query caching and static asset pipelines to deliver sub-second page rendering.
+
+---
+
+
+### **8. Wagtail Demo: Modular Django Extension Framework**
+*Repository*: [`apps/wagtaildemo/`](https://github.com/theabhijeetraut/All-Projects/tree/main/apps/wagtaildemo)  
+*Tech Stack*: Python, Django, Wagtail CMS
+* Specialized Django and Wagtail extension modules demonstrating custom model structures, streamfields, and decoupled service integrations.
 
 ---
 
