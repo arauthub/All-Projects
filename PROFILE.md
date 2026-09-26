@@ -53,8 +53,8 @@ Here are highlights from my public [**All-Projects**](https://github.com/theabhi
 * High-performance browser extension providing real-time hover inspection, async HTTP status validation (200, 301, 404, 500), 1-click **Wayback Machine** recovery, UTM tracking parameter stripping, and dual **CSV/JSON** audit reports.
 
 ### 🤖 [Autonomous AI Agent Orchestration (MyAgents)](https://github.com/theabhijeetraut/All-Projects/tree/main/agents/myagents)
-* **Stack**: Python, Google ADK (Agent Development Kit), Vector Stores
-* Modular multi-agent workflow implementations featuring autonomous task decomposition, tool calling, external API bindings, and conversational state retention.
+* **Stack**: Python, FastAPI, Google ADK, In-Memory Vector RAG, Docker, Google Cloud Run
+* Production-grade multi-agent orchestration swarm featuring autonomous task decomposition into a topological DAG, dual-engine local simulation / Gemini Live inference, vector knowledge retrieval, real-time SSE streaming UI, and automated executive presentation slide generation with 1-click GCP deployment.
 
 ### 🌐 [Flashapps Platform & Docker Deployment](https://github.com/theabhijeetraut/All-Projects/tree/main/apps/flashapps)
 * **Stack**: Django REST Framework, Angular, Docker Compose, SQLite

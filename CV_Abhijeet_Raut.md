@@ -6,7 +6,7 @@ Pune, India • theabhijeetraut@gmail.com • [GitHub: github.com/theabhijeetrau
 
 ## Executive Summary
 
-> 📌 **Portfolio Monorepo Synchronization**: Verified up to date with repository on `2026-09-26 14:13 UTC` • Presubmit Suite Clean
+> 📌 **Portfolio Monorepo Synchronization**: Verified up to date with repository on `2026-09-26 15:19 UTC` • Presubmit Suite Clean
 
 Accomplished **Lead Software Engineer and Solutions Architect** with **12 years of hands-on experience** architecting high-concurrency backend services, distributed systems, and modern AI/ML solutions. 
 - **3 years at Persistent Systems** driving enterprise AI adoption, autonomous agent architectures (Google ADK, LangChain), and cloud-native microservice backends.
@@ -62,11 +62,13 @@ Accomplished **Lead Software Engineer and Solutions Architect** with **12 years 
 * Designed a client-side Zero-Knowledge End-to-End Encryption (E2EE) cryptographic suite utilizing AES-256-GCM, 100,000-iteration PBKDF2 key derivation, and a 12-word recovery mnemonic.
 * Built an intelligent mobile Sentinel background sync engine adhering to adaptive battery thresholds and Wi-Fi policies, complete with an interactive onboarding walkthrough tutorial and compliance audit logging.
 
-### **2. Autonomous AI Agent Orchestration Framework (MyAgents)**
+### **2. Autonomous AI Agent Orchestration Framework (MyAgents)** ⚡ *(Active Architecture / Recently Updated)*
 *Repository*: [`agents/myagents/`](https://github.com/theabhijeetraut/All-Projects/tree/main/agents/myagents)  
-*Tech Stack*: Python, Google ADK (Agent Development Kit), Function Calling, Vector Stores
-* Designed modular AI agent architectures capable of multi-step task execution, autonomous tool selection, external API invocation, and conversational context retention.
-* Implemented strict schema validation and deterministic execution guardrails to ensure production-safe LLM outputs.
+*Tech Stack*: Python, FastAPI, Google ADK (Agent Development Kit), In-Memory Vector Store RAG, Docker, Google Cloud Run, Uvicorn, SSE
+* Architected an enterprise-grade multi-agent swarm platform featuring autonomous task decomposition into a topological Directed Acyclic Graph (DAG), coordinating 5 specialized agents (Nexus Commander, Scout Intelligence, Vanguard Architect, Sentinel Auditor, Aegis Synthesizer).
+* Engineered a dual-engine LLM adapter providing 100% zero-key offline reasoning simulation alongside native Google Gemini 1.5 Pro/Flash live API integration.
+* Implemented an in-memory TF-IDF semantic vector store for RAG grounding, deterministic tool execution (capacity calculators, syntax checkers, Mermaid diagrams), and blackboard shared memory state retention.
+* Designed a real-time Server-Sent Events (SSE) telemetry web UI with interactive DAG graph visualization and an automated **Executive Presentation Slide Deck Generator** with 1-click GCP Cloud Run deployment.
 
 ### **3. Link Inspector Pro & Broken Link Checker (Chrome Manifest V3)**
 *Repository*: [`extensions/link-inspector-extension/`](https://github.com/theabhijeetraut/All-Projects/tree/main/extensions/link-inspector-extension)  

@@ -42,8 +42,7 @@ All-Projects/
 | [**Flashapps**](apps/flashapps/) | Fullstack Web App | Django, Angular, SQLite, Docker | Fullstack web platform featuring a Django REST backend and Angular modern frontend with containerized deployment. |
 | [**Wagtailwind**](apps/wagtailwind/) | CMS Platform | Wagtail, Django, Tailwind CSS, Docker | Enterprise-grade Wagtail Content Management System integrated with Tailwind CSS utility styling. |
 | [**Mytail Blog**](apps/mytail/) | CMS Platform | Wagtail, Django, SCSS, Tailwind CSS | Feature-rich Wagtail CMS instance with custom blog architectures, accounts, and responsive layouts. |
-| [**Wagtail Demo**](apps/wagtaildemo/) | Backend Module | Python, Django | Specialized Django/Wagtail models and custom service components. |
-| [**MyAgents**](agents/myagents/) | AI & Agents | Python, Agent Development Kit (ADK) | Autonomous AI agent prototypes and integration pipelines built on the Google ADK. |
+| [**MyAgents Multi-Agent Orchestrator**](agents/myagents/) | AI & Multi-Agent Swarm | Python, FastAPI, Google ADK, Vector RAG, Cloud Run, SSE | Enterprise multi-agent orchestration framework with autonomous task DAG decomposition, zero-config local simulation reasoning, in-memory semantic vector store RAG, executive slide presentation generator, and 1-click Google Cloud Run deployment. |
 | [**Docker Orchestration**](devops/docker/) | DevOps & Infra | Docker Compose, Alpine Linux | Multi-container composition uniting backend APIs, frontend clients, and media storage. |
 
 ---
@@ -141,9 +140,24 @@ All-Projects/
 
 ### 3. 🤖 AI Agents & Workflows (`agents/`)
 
-#### **MyAgents (ADK Samples)**
+#### **Google ADK Multi-Agent Orchestrator (MyAgents)**
 * **Location**: [`agents/myagents/`](agents/myagents/)
-* Explores autonomous agent patterns, tool bindings, and intelligent orchestration.
+* **Features**: Autonomous task decomposition, 5-agent swarm (Nexus Commander, Scout Intelligence, Vanguard Architect, Sentinel Auditor, Aegis Synthesizer), in-memory semantic vector RAG, zero-key offline reasoning, live Google Gemini adapter, cyber-luxe glassmorphic UI, executive presentation slide generator, and 1-click GCP Cloud Run deployment.
+* **Run Locally**:
+  ```bash
+  cd agents/myagents
+  python3 -m venv .venv
+  source .venv/bin/activate
+  pip install -r requirements.txt
+  uvicorn app.main:app --host 127.0.0.1 --port 8080 --reload
+  ```
+  - Web UI: `http://localhost:8080`
+  - Swagger Docs: `http://localhost:8080/docs`
+* **1-Click Deploy to Google Cloud Run**:
+  ```bash
+  cd agents/myagents
+  ./deploy/deploy_to_gcp.sh
+  ```
 
 ---
 

@@ -1,0 +1,32 @@
+[
+  {
+    "id": "gcp-cloud-run-serverless",
+    "title": "Google Cloud Run Serverless Architecture",
+    "category": "Cloud Infrastructure",
+    "content": "Google Cloud Run is a fully managed compute platform that enables running stateless containers directly on top of Google's scalable infrastructure. It features automatic scaling from zero to thousands of instances in seconds, HTTP/2 and gRPC support, automatic TLS certificate management, and per-millisecond billing. Ideal for microservices, web applications, and autonomous agent backends."
+  },
+  {
+    "id": "gcp-zero-trust-security",
+    "title": "GCP BeyondCorp Zero-Trust & Identity-Aware Proxy",
+    "category": "Security & Identity",
+    "content": "Google Cloud BeyondCorp Enterprise implements context-aware access and Zero-Trust architecture. Identity-Aware Proxy (IAP) enables centralized access control for cloud applications without traditional VPNs. Secret Manager provides encrypted, auditable storage for API keys, database credentials, and certificates, with automatic versioning and IAM fine-grained access policies."
+  },
+  {
+    "id": "gcp-pubsub-event-driven",
+    "title": "Google Cloud Pub/Sub Distributed Messaging",
+    "category": "Event-Driven Systems",
+    "content": "Cloud Pub/Sub is a global, asynchronously decoupled messaging service delivering at-least-once messaging with low latency. Supports fan-out architectures, dead-letter topics for failed processing, ordering keys for sequential agent actions, and native integration with Cloud Run push subscriptions."
+  },
+  {
+    "id": "gcp-cloud-spanner-database",
+    "title": "Google Cloud Spanner Globally Distributed Database",
+    "category": "Data Storage",
+    "content": "Cloud Spanner provides global ACID transactions, 99.999% availability SLA, automatic multi-region sharding, and relational schema with SQL semantics. TrueTime API synchronizes atomic clocks across Google data centers to guarantee strict external consistency without read locks."
+  },
+  {
+    "id": "gcp-vertex-ai-agents",
+    "title": "Google Vertex AI & Gemini Foundation Models",
+    "category": "Artificial Intelligence",
+    "content": "Google Cloud Vertex AI provides managed enterprise hosting for Gemini 1.5 Pro and Gemini 1.5 Flash models. Features native multimodal processing, 1M+ token context windows, built-in function calling schemas, safety filter thresholds, and integration with Vertex AI Search for enterprise RAG."
+  }
+]

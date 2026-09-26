@@ -1,0 +1,20 @@
+[
+  {
+    "id": "sec-zero-trust-architecture",
+    "title": "Zero-Trust Architecture & Mutual TLS",
+    "category": "Enterprise Security",
+    "content": "Zero-Trust architecture enforces 'never trust, always verify'. Every microservice-to-microservice request must authenticate using Mutual TLS (mTLS) with short-lived cryptographically signed tokens. Secrets must never be stored in code or environment files directly, but accessed at runtime via Secret Manager with IAM role bindings."
+  },
+  {
+    "id": "sec-data-encryption-aes-gcm",
+    "title": "Data Protection with AES-256-GCM & Envelope Encryption",
+    "category": "Cryptography",
+    "content": "All data at rest is encrypted using AES-256 in Galois/Counter Mode (GCM), providing both confidentiality and integrity verification. Cloud KMS Customer-Managed Encryption Keys (CMEK) enable envelope encryption where data encryption keys (DEKs) are generated locally and encrypted with a master key stored in an HSM."
+  },
+  {
+    "id": "sec-soc2-compliance-logging",
+    "title": "SOC 2 Type II & Continuous Audit Logging",
+    "category": "Compliance & Audit",
+    "content": "SOC 2 Trust Services Criteria require comprehensive non-repudiation audit logging for all privileged user actions, automated agent decisions, data modifications, and API invocations. Cloud Audit Logs and Cloud Logging provide tamper-evident storage with configurable log retention, BigQuery log analysis, and automated alerting on anomalous access."
+  }
+]

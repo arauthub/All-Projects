@@ -1,0 +1,26 @@
+[
+  {
+    "id": "adk-orchestrator-supervisor",
+    "title": "Google ADK Orchestrator & Supervisor Pattern",
+    "category": "Multi-Agent Design",
+    "content": "In the Supervisor/Orchestrator pattern, a lead agent acts as the primary coordinator for incoming mission objectives. It breaks the mission into independent or dependent sub-tasks, constructs a directed acyclic graph (DAG), and assigns sub-tasks to specialized domain agents (Researcher, Coder, Critic). The Orchestrator aggregates results, arbitrates conflicting recommendations, and maintains overall mission state."
+  },
+  {
+    "id": "adk-blackboard-memory",
+    "title": "Blackboard Shared Memory Architecture",
+    "category": "Agent Memory",
+    "content": "The Blackboard pattern maintains a globally accessible, shared state repository where agents post intermediate observations, hypotheses, tool execution outputs, and final artifacts. Allows asynchronous collaboration without direct point-to-point agent communication, reducing coupling and preventing state corruption."
+  },
+  {
+    "id": "adk-reflection-critic-loop",
+    "title": "Reflection & Critic Verification Pattern",
+    "category": "Quality Assurance",
+    "content": "The Critic agent pattern introduces adversarial or constructive reflection into agent pipelines. The Critic audits proposals from producer agents against predetermined criteria: factual accuracy, code syntax, security vulnerabilities, latency, and compliance. If score is below threshold, it sends actionable critique back for revision before final synthesis."
+  },
+  {
+    "id": "adk-tool-calling-protocols",
+    "title": "Deterministic Tool Calling and Schema Guardrails",
+    "category": "Tool Protocols",
+    "content": "Autonomous agents interact with external environments via strictly typed JSON schema function declarations. Tool execution outputs (vector search results, bash execution stdout, API responses) are fed back into conversational context as Observation messages, enabling closed-loop reasoning and error self-correction."
+  }
+]

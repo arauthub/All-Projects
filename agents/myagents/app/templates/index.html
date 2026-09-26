@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google ADK Multi-Agent Orchestrator | Enterprise Cloud Architecture & RAG</title>
+  <meta name="description" content="Autonomous Multi-Agent Orchestration Framework with Zero-Config Local Reasoning, Semantic Vector Store RAG, Real-Time DAG Streaming, and Executive Slide Presentation Generator.">
+  
+  <!-- Modern Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="top-nav">
+    <div class="brand-wrapper">
+      <div class="brand-icon">⚡</div>
+      <div>
+        <div class="brand-title">Google ADK Multi-Agent Orchestrator</div>
+        <div style="font-size: 0.72rem; color: var(--text-muted);">Enterprise Autonomous Agent Swarm & RAG Engine</div>
+      </div>
+      <span class="brand-badge">v1.0 Production</span>
+    </div>
+
+    <div class="nav-actions">
+      <div class="status-badge" id="mode-badge">
+        <span class="status-indicator"></span> Autonomous Simulation (Zero-Key)
+      </div>
+      <button class="btn btn-secondary" id="btn-open-vector-store">
+        <span>🔍 Vector Store</span>
+      </button>
+      <button class="btn btn-secondary" id="btn-open-gcp-deploy">
+        <span>🚀 1-Click GCP Deploy</span>
+      </button>
+      <button class="btn btn-secondary" id="btn-open-config">
+        <span>⚙️ Settings</span>
+      </button>
+      <button class="btn btn-primary" id="btn-view-deck">
+        <span>📊 View Presentation</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Layout -->
+  <main class="main-layout">
+    
+    <!-- Hero & Mission Launch Section -->
+    <section class="hero-card">
+      <div class="hero-header">
+        <div>
+          <h1 class="hero-title">Autonomous Multi-Agent Swarm Orchestration</h1>
+          <p class="hero-subtitle">
+            Decomposes enterprise engineering missions into an asynchronous directed acyclic graph (DAG). 
+            Coordinates specialized domain agents utilizing semantic vector retrieval, mathematical capacity calculators, 
+            adversarial quality audits, and automatic executive slide presentation generation.
+          </p>
+        </div>
+      </div>
+
+      <!-- Quick-Launch Demo Scenarios -->
+      <div>
+        <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.65rem;">
+          ⚡ Select Enterprise Demo Scenario or Enter Custom Objective Below
+        </div>
+        <div class="scenarios-grid" id="scenarios-container">
+          <!-- Populated dynamically via app.js -->
+        </div>
+      </div>
+
+      <!-- Custom Mission Input Bar -->
+      <div class="input-group">
+        <input 
+          type="text" 
+          id="prompt-input" 
+          class="prompt-input" 
+          placeholder="Enter custom mission (e.g. 'Design a scalable multi-region microservice architecture for 10M users with SOC2 compliance on GCP')..."
+        >
+        <button class="btn btn-primary" id="btn-launch-mission">
+          <span>🚀 Launch Swarm</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Visual Multi-Agent DAG Pipeline -->
+    <section class="dag-section">
+      <div class="section-title-row">
+        <div class="section-title">
+          <span>🕸️ Multi-Agent Execution Pipeline (Topological DAG)</span>
+        </div>
+        <div style="font-size: 0.8rem; color: var(--text-muted);">
+          Click any agent node to filter live execution logs
+        </div>
+      </div>
+      <div class="dag-container" id="dag-pipeline">
+        <!-- Rendered by graph.js -->
+      </div>
+    </section>
+
+    <!-- Split-Screen Workspace Grid -->
+    <section class="workspace-grid">
+      
+      <!-- Left Column: Live Multi-Agent Execution Stream -->
+      <div class="console-card">
+        <div class="card-header-bar">
+          <div class="card-header-title">
+            <span>📡 Live Agent Reasoning & Tool Stream</span>
+          </div>
+          <div style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">
+            Real-time SSE Telemetry
+          </div>
+        </div>
+        <div class="console-stream" id="console-stream">
+          <div class="empty-placeholder">
+            <div class="empty-icon">🤖</div>
+            <div style="font-weight: 500;">Agent Swarm Ready</div>
+            <div style="font-size: 0.8rem;">Select a scenario above or enter a custom objective to begin autonomous orchestration.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Shared Blackboard State & Deliverables -->
+      <div class="console-card">
+        <div class="card-header-bar">
+          <div class="card-header-title">
+            <span>📋 Blackboard Memory & Artifacts</span>
+          </div>
+          <!-- Navigation Tabs -->
+          <div class="tabs-header">
+            <button class="tab-btn active" id="btn-tab-plan">Plan</button>
+            <button class="tab-btn" id="btn-tab-research">Research</button>
+            <button class="tab-btn" id="btn-tab-architecture">Architecture</button>
+            <button class="tab-btn" id="btn-tab-critique">Audit</button>
+            <button class="tab-btn" id="btn-tab-presentation">📊 Deck</button>
+          </div>
+        </div>
+        <div class="tab-content-area" id="tab-content-area">
+          <!-- Populated by app.js -->
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Fullscreen Slide Presentation Modal -->
+  <div class="modal-overlay" id="presentation-modal">
+    <div class="presentation-modal-container">
+      <div class="presentation-topbar">
+        <div style="display:flex; align-items:center; gap:0.75rem;">
+          <span style="font-size:1.2rem;">📊</span>
+          <span style="font-weight:700; font-size:1.05rem;">Executive Presentation Deck</span>
+          <span class="brand-badge" style="background:rgba(16,185,129,0.15); color:var(--accent-emerald); border-color:rgba(16,185,129,0.3);">Autonomous AI Generated</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:0.75rem;">
+          <button class="btn btn-secondary" id="btn-export-deck">📥 Download HTML</button>
+          <button class="btn btn-secondary" id="btn-close-presentation">✕ Close</button>
+        </div>
+      </div>
+
+      <div class="presentation-stage" id="presentation-stage">
+        <!-- Rendered by presentation.js -->
+      </div>
+
+      <div class="presentation-controls">
+        <button class="btn btn-secondary" id="btn-prev-slide">← Previous Slide</button>
+        <div class="slide-counter" id="slide-counter">Slide 1 of 6</div>
+        <button class="btn btn-primary" id="btn-next-slide">Next Slide →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Vector Store Knowledge Base Modal -->
+  <div class="modal-overlay" id="vector-modal">
+    <div class="standard-modal">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h2 style="font-size:1.25rem; font-weight:700;">🔍 In-Memory Vector Store Explorer</h2>
+        <button class="btn btn-secondary" id="btn-close-vector-modal">✕</button>
+      </div>
+      <p style="font-size:0.85rem; color:var(--text-secondary);">
+        The vector store indexes Google Cloud Well-Architected Framework, BeyondCorp Zero-Trust standards, and Multi-Agent Design Patterns with TF-IDF cosine similarity.
+      </p>
+      <div class="input-group">
+        <input type="text" id="vector-query-input" class="prompt-input" placeholder="Query knowledge base (e.g. 'Cloud Run serverless', 'Zero-Trust mTLS', 'Cloud Spanner')...">
+        <button class="btn btn-primary" id="btn-vector-search">Search</button>
+      </div>
+      <div id="vector-results-area" style="max-height:360px; overflow-y:auto; display:flex; flex-direction:column; gap:0.5rem;">
+        <!-- Populated via AJAX -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 1-Click GCP Deployment Guide Modal -->
+  <div class="modal-overlay" id="gcp-modal">
+    <div class="standard-modal" style="max-width:750px;">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h2 style="font-size:1.25rem; font-weight:700;">🚀 1-Click Google Cloud Run Deployment</h2>
+        <button class="btn btn-secondary" id="btn-close-gcp-modal">✕</button>
+      </div>
+      <p style="font-size:0.85rem; color:var(--text-secondary); line-height:1.5;">
+        You can deploy this entire multi-agent orchestration application directly to <strong>Google Cloud Run</strong> with a single turnkey script. 
+        It automatically configures production container settings, sets up TLS endpoints, and scales from zero to 1,000 instances.
+      </p>
+
+      <div style="background:#080c15; border:1px solid var(--border-subtle); border-radius:var(--radius-md); padding:1rem;">
+        <div style="font-size:0.75rem; color:var(--text-muted); font-family:var(--font-mono); margin-bottom:0.35rem;">Run in terminal:</div>
+        <pre style="font-family:var(--font-mono); font-size:0.85rem; color:#38bdf8; overflow-x:auto;">cd agents/myagents
+./deploy/deploy_to_gcp.sh</pre>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:0.5rem; font-size:0.85rem; color:#cbd5e1;">
+        <div><strong>What the script automates:</strong></div>
+        <ul style="padding-left:1.25rem; line-height:1.6;">
+          <li>Validates Google Cloud SDK (<code>gcloud</code>) authentication.</li>
+          <li>Builds production multi-stage Docker container via Google Cloud Build.</li>
+          <li>Deploys container to Google Cloud Run with 512MB RAM, 1 vCPU, and HTTPS endpoint.</li>
+          <li>Replaces demo configuration with production environment variables.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Configuration / Settings Modal -->
+  <div class="modal-overlay" id="config-modal">
+    <div class="standard-modal">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h2 style="font-size:1.25rem; font-weight:700;">⚙️ System Engine & Model Settings</h2>
+        <button class="btn btn-secondary" id="btn-close-config-modal">✕</button>
+      </div>
+      <p style="font-size:0.85rem; color:var(--text-secondary);">
+        By default, the application runs in <strong>Autonomous Simulation Mode</strong> requiring 0 API keys. 
+        Optionally provide a Google Gemini API key to switch to live Gemini 1.5 Pro/Flash inference.
+      </p>
+
+      <div style="display:flex; flex-direction:column; gap:0.5rem;">
+        <label style="font-size:0.8rem; font-weight:600; color:var(--text-muted);">Google Gemini API Key (Optional):</label>
+        <input type="password" id="config-api-key" class="prompt-input" style="background:#080c15; border:1px solid var(--border-subtle); padding:0.6rem 0.85rem; border-radius:var(--radius-sm);" placeholder="Leave empty for Zero-Key Autonomous Simulation Mode">
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:0.5rem;">
+        <label style="font-size:0.8rem; font-weight:600; color:var(--text-muted);">Model Tier:</label>
+        <select id="config-model-select" style="background:#080c15; border:1px solid var(--border-subtle); color:white; padding:0.6rem 0.85rem; border-radius:var(--radius-sm); font-family:var(--font-main);">
+          <option value="gemini-1.5-flash" selected>Gemini 1.5 Flash (Ultra-Fast & Low Latency)</option>
+          <option value="gemini-1.5-pro">Gemini 1.5 Pro (Deep Complex Reasoning)</option>
+        </select>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:0.75rem; margin-top:0.5rem;">
+        <button class="btn btn-secondary" id="btn-close-config-modal">Cancel</button>
+        <button class="btn btn-primary" id="btn-save-config">Save Configuration</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="/static/js/presentation.js"></script>
+  <script src="/static/js/graph.js"></script>
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
