@@ -34,40 +34,40 @@ I am a **Lead Backend & AI/ML Engineer** with **12 years of industry experience*
 
 ## 🚀 Featured Monorepo Projects
 
-Here are highlights from my public [**All-Projects**](https://github.com/theabhijeetraut/All-Projects) monorepo:
+Here are highlights from my public [**All-Projects**](https://github.com/arauthub/All-Projects) monorepo:
 
-### 🛡️ [ARNAS: Enterprise Cloud NAS & Zero-Knowledge E2EE Mobile Sync](https://github.com/theabhijeetraut/All-Projects/tree/main/apps/arnas)
+### 🛡️ [ARNAS: Enterprise Cloud NAS & Zero-Knowledge E2EE Mobile Sync](https://github.com/arauthub/All-Projects/tree/main/apps/arnas)
 * **Stack**: Fastify (Node.js/TypeScript), React Native / Expo, PostgreSQL, Prisma, S3/MinIO, AES-256-GCM, PBKDF2
 * Self-hosted enterprise distributed storage system featuring multi-server storage clustering, instant ingest with background fan-out replication, automatic read failover mirrors, zero-knowledge client encryption, battery sentinel sync, onboarding tutorial, and compliance audit logging.
 
-### 🔍 [Diagram & Image Lens Pro](https://github.com/theabhijeetraut/All-Projects/tree/main/extensions/diagram-image-lens)
+### 🔍 [Diagram & Image Lens Pro](https://github.com/arauthub/All-Projects/tree/main/extensions/diagram-image-lens)
 * **Stack**: Chrome Manifest V3, JavaScript (ES6+), HTML5 Canvas, CSS3
 * Precision diagram inspection suite with 2x–16x loupe zoom, fullscreen deep-zoom pan & scan lightbox, schematic dark mode inversion, and offline Retina area screen snipping.
 
-### 🌌 [Anti-Gravity Web & Arcade Browser](https://github.com/theabhijeetraut/All-Projects/tree/main/extensions/anti-gravity-browser)
+### 🌌 [Anti-Gravity Web & Arcade Browser](https://github.com/arauthub/All-Projects/tree/main/extensions/anti-gravity-browser)
 * **Stack**: Chrome Manifest V3, Matter.js Physics Engine, HTML5 Canvas, CSS3
 * Physics-driven extension converting any webpage into an interactive 60 FPS Zero-G sandbox with directional gravity inversion, tractor beams, Asteroids blaster combat, and Katamari absorption.
 
-### 🧩 [Link Inspector Pro & Broken Link Checker](https://github.com/theabhijeetraut/All-Projects/tree/main/extensions/link-inspector-extension)
+### 🧩 [Link Inspector Pro & Broken Link Checker](https://github.com/arauthub/All-Projects/tree/main/extensions/link-inspector-extension)
 * **Stack**: Chrome Manifest V3, JavaScript (ES6+), Asynchronous Service Workers
 * High-performance browser extension providing real-time hover inspection, async HTTP status validation (200, 301, 404, 500), 1-click **Wayback Machine** recovery, UTM tracking parameter stripping, and dual **CSV/JSON** audit reports.
 
-### 🤖 [Autonomous AI Agent Orchestration (MyAgents)](https://github.com/theabhijeetraut/All-Projects/tree/main/agents/myagents)
+### 🤖 [Autonomous AI Agent Orchestration (MyAgents)](https://github.com/arauthub/All-Projects/tree/main/agents/myagents)
 * **Stack**: Python, FastAPI, Google ADK, In-Memory Vector RAG, Docker, Google Cloud Run
 * Production-grade multi-agent orchestration swarm featuring autonomous task decomposition into a topological DAG, dual-engine local simulation / Gemini Live inference, vector knowledge retrieval, real-time SSE streaming UI, and automated executive presentation slide generation with 1-click GCP deployment.
 
-### 🌐 [Flashapps Platform & Docker Deployment](https://github.com/theabhijeetraut/All-Projects/tree/main/apps/flashapps)
+### 🌐 [Flashapps Platform & Docker Deployment](https://github.com/arauthub/All-Projects/tree/main/apps/flashapps)
 * **Stack**: Django REST Framework, Angular, Docker Compose, SQLite
 * Fullstack containerized platform pairing a decoupled Django REST backend with an Angular single-page application and unified Docker Compose orchestration.
 
-### 📰 [Wagtailwind & Mytail CMS Architectures](https://github.com/theabhijeetraut/All-Projects/tree/main/apps/wagtailwind)
+### 📰 [Wagtailwind & Mytail CMS Architectures](https://github.com/arauthub/All-Projects/tree/main/apps/wagtailwind)
 * **Stack**: Python, Wagtail CMS, Django, Tailwind CSS, SCSS
 * High-scalability enterprise content management platforms with custom streamfield blocks, dynamic caching, multi-app blog architectures, and sub-second page delivery.
 
 ---
 
 
-### 🐍 [Wagtail Demo: Modular Django Extension Framework](https://github.com/theabhijeetraut/All-Projects/tree/main/apps/wagtaildemo)
+### 🐍 [Wagtail Demo: Modular Django Extension Framework](https://github.com/arauthub/All-Projects/tree/main/apps/wagtaildemo)
 * **Stack**: Python, Django, Wagtail CMS
 * Specialized Django and Wagtail extension modules demonstrating custom model structures, streamfields, and decoupled service integrations.
 
@@ -84,6 +84,6 @@ Here are highlights from my public [**All-Projects**](https://github.com/theabhi
 ## 📬 Connect With Me
 
 * 📧 Email: [theabhijeetraut@gmail.com](mailto:theabhijeetraut@gmail.com)
-* 🐙 GitHub: [@theabhijeetraut](https://github.com/theabhijeetraut)
-* 📁 Complete Portfolio: [theabhijeetraut/All-Projects](https://github.com/theabhijeetraut/All-Projects)
-* 📄 Full Resume: [CV_Abhijeet_Raut.md](https://github.com/theabhijeetraut/All-Projects/blob/main/CV_Abhijeet_Raut.md)
+* 🐙 GitHub: [@arauthub](https://github.com/arauthub)
+* 📁 Complete Portfolio: [arauthub/All-Projects](https://github.com/arauthub/All-Projects)
+* 📄 Full Resume: [CV_Abhijeet_Raut.md](https://github.com/arauthub/All-Projects/blob/main/CV_Abhijeet_Raut.md)

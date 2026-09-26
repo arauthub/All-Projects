@@ -1,6 +1,10 @@
 # 🔍 Link Inspector Pro & Broken Link Checker (Chrome Extension - Manifest V3)
 
-A high-performance, modern Chrome Extension designed to inspect, audit, validate, and clean links on any webpage in real time. Features interactive hover controls, live HTTP status & redirect destination tracking, 1-click Wayback Machine 404 recovery, real-time SEO & security risk audits, UTM tracking parameter stripping, customizable hover pointers, global keyboard shortcut (`Cmd+Shift+L`), and dual CSV/JSON audit reporting.
+> A high-performance, modern Chrome Extension designed to inspect, audit, validate, and clean links on any webpage in real time. Features interactive hover controls, live HTTP status & redirect destination tracking, 1-click Wayback Machine 404 recovery, real-time SEO & security risk audits, UTM tracking parameter stripping, customizable hover pointers, global keyboard shortcut (`Cmd+Shift+L`), and dual CSV/JSON audit reporting.
+
+[![Manifest V3](https://img.shields.io/badge/Manifest-V3-38bdf8.svg?style=for-the-badge)](https://developer.chrome.com/docs/extensions/mv3/)
+[![Chrome Web Store](https://img.shields.io/badge/Chrome-Web%20Store-4285F4.svg?style=for-the-badge&logo=googlechrome&logoColor=white)](https://chrome.google.com/webstore)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](../../LICENSE)
 
 ---
 
@@ -107,3 +111,18 @@ link-inspector-extension/
 - `contextMenus`: Adds right-click inspect options.
 - `<all_urls>` host permission: Enables background service worker to check HTTP status codes without CORS restrictions.
 - **Privacy Notice**: No user data or browsing activity is sent to external servers. All checks run locally within your browser extension environment.
+
+---
+
+## 👤 Author
+
+**Abhijeet Raut**
+- GitHub: [@arauthub](https://github.com/arauthub)
+- Email: theabhijeetraut@gmail.com
+- Monorepo: [arauthub/All-Projects](https://github.com/arauthub/All-Projects)
+
+---
+
+## 📄 License
+
+This project is licensed under the [MIT License](../../LICENSE).

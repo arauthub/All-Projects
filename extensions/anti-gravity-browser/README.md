@@ -2,6 +2,11 @@
 
 > A Chrome Extension (Manifest V3) that transforms any active webpage into an interactive Zero-G physics playground with gamified arcade modes, non-destructive DOM extraction, and instant layout restoration.
 
+[![Manifest V3](https://img.shields.io/badge/Manifest-V3-38bdf8.svg?style=for-the-badge)](https://developer.chrome.com/docs/extensions/mv3/)
+[![Matter.js](https://img.shields.io/badge/Matter.js-2D_Physics-4B5563?style=for-the-badge)](https://brm.io/matter-js/)
+[![Chrome Web Store](https://img.shields.io/badge/Chrome-Web%20Store-4285F4.svg?style=for-the-badge&logo=googlechrome&logoColor=white)](https://chrome.google.com/webstore)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](../../LICENSE)
+
 ![Anti-Gravity Web](assets/icon128.png)
 
 ---
@@ -143,3 +148,18 @@ extensions/anti-gravity-browser/
 - **No Remote Code**: Matter.js is strictly bundled locally; fully compliant with Google Chrome Web Store Manifest V3 guidelines.
 - **Layout Safety**: Host DOM layout remains untouched; original elements are preserved in-place using CSS visibility rules.
 - **Capped Physics Bodies**: Limited to ~50-60 high-impact semantic elements to guarantee 60 FPS performance even on heavy pages.
+
+---
+
+## 👤 Author
+
+**Abhijeet Raut**
+- GitHub: [@arauthub](https://github.com/arauthub)
+- Email: theabhijeetraut@gmail.com
+- Monorepo: [arauthub/All-Projects](https://github.com/arauthub/All-Projects)
+
+---
+
+## 📄 License
+
+This project is licensed under the [MIT License](../../LICENSE).

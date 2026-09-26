@@ -1,59 +1,79 @@
-# Frontend
+# ⚡ FlashApps Frontend — Angular 21 Single Page Application
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.1.
+> High-performance client-side Single Page Application (SPA) built with **Angular 21**, **TypeScript**, and **TailwindCSS**, acting as the decoupled presentation layer for the **FlashApps Django REST Framework** backend.
 
-## Development server
+[![Angular](https://img.shields.io/badge/Angular-21.2-DD0031?style=for-the-badge&logo=angular&logoColor=white)](https://angular.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.5+-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4+-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
+[![Vitest](https://img.shields.io/badge/Vitest-2.0+-FCC72B?style=for-the-badge&logo=vitest&logoColor=black)](https://vitest.dev)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](../../../LICENSE)
 
-To start a local development server, run:
+---
 
+## 🌟 Overview & Key Features
+
+- **Decoupled Architecture**: Designed to interface directly with the FlashApps Django backend (`http://localhost:8000/api/`) via token-authenticated HTTP interceptors.
+- **Modern Angular 21 Architecture**: Utilizes standalone components, Angular Signals for reactive state management, and optimized hydration pipelines.
+- **Fast Testing**: Powered by Vitest for instantaneous unit test feedback.
+- **Responsive Design**: Mobile-first design system styled with TailwindCSS utilities.
+
+---
+
+## 🚀 Quick Start (Local Development)
+
+### 1. Prerequisites
+- Node.js 20+
+- Angular CLI (`npm install -g @angular/cli`)
+
+### 2. Installation
+```bash
+# Navigate to frontend directory
+cd apps/flashapps/frontend
+
+# Install dependencies
+npm install
+```
+
+### 3. Start Development Server
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Navigate to **`http://localhost:4200/`**. The app automatically reloads when you modify source files.
 
-## Code scaffolding
+---
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## 🏗️ Build & Production Deployment
 
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+To compile the application for production:
 
 ```bash
 ng build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Compiled production artifacts are emitted to the `dist/` directory, optimized with minification, tree-shaking, and differential chunking.
 
-## Running unit tests
+---
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+## 🧪 Testing Suite
+
+Execute unit tests with Vitest:
 
 ```bash
 ng test
 ```
 
-## Running end-to-end tests
+---
 
-For end-to-end (e2e) testing, run:
+## 👤 Author
 
-```bash
-ng e2e
-```
+**Abhijeet Raut**
+- GitHub: [@arauthub](https://github.com/arauthub)
+- Email: theabhijeetraut@gmail.com
+- Monorepo: [arauthub/All-Projects](https://github.com/arauthub/All-Projects)
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+---
 
-## Additional Resources
+## 📄 License
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+This project is licensed under the [MIT License](../../../LICENSE).

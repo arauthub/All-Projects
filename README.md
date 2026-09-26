@@ -1,8 +1,17 @@
 # 🌐 All-Projects: Monorepo & Engineering Portfolio
 
-Welcome to the **All-Projects** repository — a curated monorepo containing browser extensions, fullstack web applications, CMS platforms, AI agent architectures, and containerized deployment configurations.
+[![CI / Monorepo Verification](https://github.com/arauthub/All-Projects/actions/workflows/ci.yml/badge.svg)](https://github.com/arauthub/All-Projects/actions/workflows/ci.yml)
+[![Author: Abhijeet Raut](https://img.shields.io/badge/Author-Abhijeet_Raut-blue.svg?style=flat&logo=github)](https://github.com/arauthub)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=flat)](LICENSE)
+[![Python 3.9+](https://img.shields.io/badge/Python-3.9+-3776AB?style=flat&logo=python&logoColor=white)](https://python.org)
+[![Node.js 20+](https://img.shields.io/badge/Node.js-20+-339933?style=flat&logo=node.js&logoColor=white)](https://nodejs.org)
+[![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=flat&logo=fastapi)](https://fastapi.tiangolo.com)
+[![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker&logoColor=white)](https://docker.com)
+[![Google Cloud](https://img.shields.io/badge/Google_Cloud-4285F4?style=flat&logo=google-cloud&logoColor=white)](https://cloud.google.com)
 
-📄 **Profile & CV**: [Developer Profile](PROFILE.md) • [Curriculum Vitae (12 Years Experience)](CV_Abhijeet_Raut.md)
+Welcome to the **All-Projects** repository — a curated enterprise monorepo architected by **Abhijeet Raut** ([@arauthub](https://github.com/arauthub)), showcasing autonomous multi-agent AI systems, distributed cloud storage NAS, Chrome Manifest V3 extensions, fullstack Django/Angular web apps, Wagtail CMS platforms, and containerized cloud deployment manifests.
+
+📄 **Executive Documentation**: [Developer Profile (Skills & Architecture)](PROFILE.md) • [Curriculum Vitae (12 Years Lead Experience)](CV_Abhijeet_Raut.md) • [Contributing Guide](.github/CONTRIBUTING.md) • [Security Policy](.github/SECURITY.md)
 
 ---
 
@@ -42,6 +51,7 @@ All-Projects/
 | [**Flashapps**](apps/flashapps/) | Fullstack Web App | Django, Angular, SQLite, Docker | Fullstack web platform featuring a Django REST backend and Angular modern frontend with containerized deployment. |
 | [**Wagtailwind**](apps/wagtailwind/) | CMS Platform | Wagtail, Django, Tailwind CSS, Docker | Enterprise-grade Wagtail Content Management System integrated with Tailwind CSS utility styling. |
 | [**Mytail Blog**](apps/mytail/) | CMS Platform | Wagtail, Django, SCSS, Tailwind CSS | Feature-rich Wagtail CMS instance with custom blog architectures, accounts, and responsive layouts. |
+| [**Wagtail Demo**](apps/wagtaildemo/) | Backend Module | Python, Django | Specialized Django and Wagtail extension modules demonstrating custom model structures, streamfields, and cryptographic test generators. |
 | [**MyAgents Multi-Agent Orchestrator**](agents/myagents/) | AI & Multi-Agent Swarm | Python, FastAPI, Google ADK, Vector RAG, Cloud Run, SSE | Enterprise multi-agent orchestration framework with autonomous task DAG decomposition, zero-config local simulation reasoning, in-memory semantic vector store RAG, executive slide presentation generator, and 1-click Google Cloud Run deployment. |
 | [**Docker Orchestration**](devops/docker/) | DevOps & Infra | Docker Compose, Alpine Linux | Multi-container composition uniting backend APIs, frontend clients, and media storage. |
 
@@ -134,7 +144,24 @@ All-Projects/
   python manage.py migrate
   python manage.py runserver
   ```
-  - Admin Panel: `http://localhost:8000/admin/`
+#### **Mytail (Wagtail Multi-app Blog & Account Platform)**
+* **Location**: [`apps/mytail/`](apps/mytail/)
+* **Run Locally**:
+  ```bash
+  cd apps/mytail/demo
+  pip install -r requirements.txt
+  python manage.py migrate
+  python compile_scss.py
+  python manage.py runserver
+  ```
+
+#### **Wagtail Demo (Modular Extension Utilities)**
+* **Location**: [`apps/wagtaildemo/`](apps/wagtaildemo/)
+* **Run Token Generator**:
+  ```bash
+  cd apps/wagtaildemo
+  python3 giftcard.py
+  ```
 
 ---
 
@@ -174,3 +201,19 @@ All-Projects/
 * **Code Organization**: Keep domain projects cleanly separated into their respective top-level folders (`extensions/`, `apps/`, `agents/`, `devops/`).
 * **Clean Commits**: Ensure build artifacts (`node_modules/`, `.angular/`, `__pycache__/`, `.sqlite3`) are kept out of git tracking (handled automatically by root `.gitignore`).
 * **Documentation**: Each project inside its subfolder maintains a standalone `README.md` for local-specific setup and dependencies.
+
+---
+
+## 👤 Author & Maintainer
+
+**Abhijeet Raut**
+- GitHub: [@arauthub](https://github.com/arauthub)
+- Email: [theabhijeetraut@gmail.com](mailto:theabhijeetraut@gmail.com)
+- Profile: [PROFILE.md](PROFILE.md)
+- Curriculum Vitae: [CV_Abhijeet_Raut.md](CV_Abhijeet_Raut.md)
+
+---
+
+## 📄 License
+
+This repository is distributed under the [MIT License](LICENSE).

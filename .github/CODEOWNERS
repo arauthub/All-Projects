@@ -1,0 +1,4 @@
+# .github/CODEOWNERS
+# Repository owner and reviewer for all monorepo pull requests
+
+* @arauthub

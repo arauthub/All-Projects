@@ -213,7 +213,7 @@ def sync_cv_and_profile(projects, changed_project_ids):
         if rel_path not in cv_text and proj_id not in cv_text.lower():
             print(f"➕ Auto-adding new project '{title}' to CV_Abhijeet_Raut.md...")
             # Append new project entry
-            new_entry = f"\n### **{title}**\n*Repository*: [`{rel_path}/`](https://github.com/theabhijeetraut/All-Projects/tree/main/{rel_path})  \n*Tech Stack*: {proj['category']}\n* Enterprise modular component engineered for high reliability, clean architecture, and decoupled deployment.\n"
+            new_entry = f"\n### **{title}**\n*Repository*: [`{rel_path}/`](https://github.com/arauthub/All-Projects/tree/main/{rel_path})  \n*Tech Stack*: {proj['category']}\n* Enterprise modular component engineered for high reliability, clean architecture, and decoupled deployment.\n"
             # Insert before Education section
             if "## Education" in cv_text:
                 cv_text = cv_text.replace("## Education", f"{new_entry}\n## Education")
@@ -224,7 +224,7 @@ def sync_cv_and_profile(projects, changed_project_ids):
         # Check if project exists in PROFILE.md
         if rel_path not in profile_text and proj_id not in profile_text.lower():
             print(f"➕ Auto-adding new project '{title}' to PROFILE.md...")
-            prof_entry = f"\n### 🚀 [{title}](https://github.com/theabhijeetraut/All-Projects/tree/main/{rel_path})\n* **Category**: {proj['category']}\n* High-performance enterprise project showcasing modern engineering standards.\n"
+            prof_entry = f"\n### 🚀 [{title}](https://github.com/arauthub/All-Projects/tree/main/{rel_path})\n* **Category**: {proj['category']}\n* High-performance enterprise project showcasing modern engineering standards.\n"
             if "## 💼 Career Snapshot" in profile_text:
                 profile_text = profile_text.replace("## 💼 Career Snapshot", f"{prof_entry}\n## 💼 Career Snapshot")
             else:

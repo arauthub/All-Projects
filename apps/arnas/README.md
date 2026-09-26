@@ -1,4 +1,12 @@
-# ARNAS — Enterprise Distributed Cloud NAS & Zero-Knowledge E2EE Mobile Sync
+# 🛡️ ARNAS — Enterprise Distributed Cloud NAS & Zero-Knowledge E2EE Mobile Sync
+
+[![Fastify](https://img.shields.io/badge/Fastify-000000?style=flat&logo=fastify&logoColor=white)](https://fastify.dev)
+[![React Native](https://img.shields.io/badge/React_Native-20232A?style=flat&logo=react&logoColor=61DAFB)](https://reactnative.dev)
+[![Expo](https://img.shields.io/badge/Expo-000020?style=flat&logo=expo&logoColor=white)](https://expo.dev)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=flat&logo=postgresql&logoColor=white)](https://postgresql.org)
+[![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=flat&logo=prisma&logoColor=white)](https://prisma.io)
+[![Author: Abhijeet Raut](https://img.shields.io/badge/Author-Abhijeet_Raut-blue.svg?style=flat&logo=github)](https://github.com/arauthub)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=flat)](../../LICENSE)
 
 **ARNAS** (Autonomous Raut Network Attached Storage) is an enterprise-grade, self-hosted, distributed private cloud storage system featuring multi-server storage clustering, instant ingest with background fan-out replication, zero-knowledge end-to-end encryption (E2EE), intelligent sentinel mobile sync, and immutable compliance audit logging.
 
@@ -121,3 +129,9 @@ npm run web    # Or npx expo start --ios / android
 
 * **Web Preview**: `http://localhost:8081`
 * **Metro Bundler**: `exp://localhost:8081`
+
+---
+
+## 👤 Author & Monorepo
+* **Engineer**: Abhijeet Raut ([@arauthub](https://github.com/arauthub))
+* **Repository**: [`All-Projects/apps/arnas`](https://github.com/arauthub/All-Projects/tree/main/apps/arnas)

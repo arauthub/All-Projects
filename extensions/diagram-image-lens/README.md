@@ -95,6 +95,15 @@ Inspect tiny schematics, intricate Mermaid diagrams, architecture flowcharts, ma
 
 ---
 
+## 👤 Author
+
+**Abhijeet Raut**
+- GitHub: [@arauthub](https://github.com/arauthub)
+- Email: theabhijeetraut@gmail.com
+- Monorepo: [arauthub/All-Projects](https://github.com/arauthub/All-Projects)
+
+---
+
 ## 📄 License
 
 Distributed under the [MIT License](../../LICENSE).

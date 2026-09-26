@@ -1,0 +1,68 @@
+name: CI / Monorepo Verification
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  presubmit-audit:
+    name: Security & Architecture Audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+
+      - name: Run Presubmit Security & Sync Audit
+        run: |
+          chmod +x scripts/presubmit.py
+          python3 scripts/presubmit.py --mode=pre-commit
+
+  myagents-tests:
+    name: Multi-Agent Swarm Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+
+      - name: Install Dependencies
+        run: |
+          cd agents/myagents
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Multi-Agent Unit & Integration Tests
+        run: |
+          cd agents/myagents
+          python -m unittest discover -s tests -p "test_*.py"
+
+  arnas-server-tests:
+    name: ARNAS Cloud NAS Server Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run Server Tests
+        run: |
+          cd apps/arnas/server
+          npm install
+          npm test
