@@ -40,6 +40,14 @@ Here are highlights from my public [**All-Projects**](https://github.com/theabhi
 * **Stack**: Fastify (Node.js/TypeScript), React Native / Expo, PostgreSQL, Prisma, S3/MinIO, AES-256-GCM, PBKDF2
 * Self-hosted enterprise distributed storage system featuring multi-server storage clustering, instant ingest with background fan-out replication, automatic read failover mirrors, zero-knowledge client encryption, battery sentinel sync, onboarding tutorial, and compliance audit logging.
 
+### 🔍 [Diagram & Image Lens Pro](https://github.com/theabhijeetraut/All-Projects/tree/main/extensions/diagram-image-lens)
+* **Stack**: Chrome Manifest V3, JavaScript (ES6+), HTML5 Canvas, CSS3
+* Precision diagram inspection suite with 2x–16x loupe zoom, fullscreen deep-zoom pan & scan lightbox, schematic dark mode inversion, and offline Retina area screen snipping.
+
+### 🌌 [Anti-Gravity Web & Arcade Browser](https://github.com/theabhijeetraut/All-Projects/tree/main/extensions/anti-gravity-browser)
+* **Stack**: Chrome Manifest V3, Matter.js Physics Engine, HTML5 Canvas, CSS3
+* Physics-driven extension converting any webpage into an interactive 60 FPS Zero-G sandbox with directional gravity inversion, tractor beams, Asteroids blaster combat, and Katamari absorption.
+
 ### 🧩 [Link Inspector Pro & Broken Link Checker](https://github.com/theabhijeetraut/All-Projects/tree/main/extensions/link-inspector-extension)
 * **Stack**: Chrome Manifest V3, JavaScript (ES6+), Asynchronous Service Workers
 * High-performance browser extension providing real-time hover inspection, async HTTP status validation (200, 301, 404, 500), 1-click **Wayback Machine** recovery, UTM tracking parameter stripping, and dual **CSV/JSON** audit reports.

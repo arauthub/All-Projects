@@ -73,13 +73,25 @@ Accomplished **Lead Software Engineer and Solutions Architect** with **12 years 
 * Integrated intelligent utilities: automated marketing tracking stripper (`utm_*`, `fbclid`, `gclid`), 1-click **Wayback Machine** historical snapshot recovery for 404/500 errors, and dual **CSV/JSON** structured audit exports.
 * Built with zero external dependencies and strict asynchronous message routing between Content Scripts and Service Workers.
 
-### **4. Flashapps Fullstack Platform & Containerized Architecture**
+### **4. Diagram & Image Lens Pro: Precision Visual Inspection (Chrome Manifest V3)**
+*Repository*: [`extensions/diagram-image-lens/`](https://github.com/theabhijeetraut/All-Projects/tree/main/extensions/diagram-image-lens)  
+*Tech Stack*: JavaScript (ES6+), Manifest V3, HTML5 Canvas, CSS3
+* Engineered a high-magnification blueprint and architecture diagram lens featuring an interactive hover loupe (2x–16x zoom), fullscreen deep-zoom pan & scan lightbox, schematic dark mode inversion, and direct PNG clipboard export.
+* Built an in-browser Retina area screen capture tool operating entirely offline without external libraries or tracking.
+
+### **5. Anti-Gravity Web: 2D Physics Engine & Arcade Browser (Chrome Manifest V3)**
+*Repository*: [`extensions/anti-gravity-browser/`](https://github.com/theabhijeetraut/All-Projects/tree/main/extensions/anti-gravity-browser)  
+*Tech Stack*: JavaScript (ES6+), Chrome Manifest V3, Matter.js Physics Engine, HTML5 Canvas, CSS Transforms
+* Engineered an interactive extension that extracts webpage DOM structures non-destructively into an isolated 60 FPS 2D rigid-body physics simulation.
+* Implemented invertible directional gravity, tractor beam mouse manipulation, and integrated arcade mini-games (*Asteroids Web Blaster* and *Orbital Katamari Web Absorption*).
+
+### **6. Flashapps Fullstack Platform & Containerized Architecture**
 *Repository*: [`apps/flashapps/`](https://github.com/theabhijeetraut/All-Projects/tree/main/apps/flashapps) & [`devops/docker/`](https://github.com/theabhijeetraut/All-Projects/tree/main/devops/docker)  
 *Tech Stack*: Django REST Framework, Angular, Docker Compose, SQLite, Gunicorn, Nginx
 * Developed a microservice-ready web application pairing a decoupled Django REST API backend with a high-performance Angular single-page application.
 * Engineered complete Docker Compose orchestration with hot-reloading dev environments, persistent volume mounting, and isolated multi-container networking.
 
-### **5. Wagtailwind & Mytail: Enterprise Wagtail CMS Architectures**
+### **7. Wagtailwind & Mytail: Enterprise Wagtail CMS Architectures**
 *Repository*: [`apps/wagtailwind/`](https://github.com/theabhijeetraut/All-Projects/tree/main/apps/wagtailwind) & [`apps/mytail/`](https://github.com/theabhijeetraut/All-Projects/tree/main/apps/mytail)  
 *Tech Stack*: Python, Django, Wagtail CMS, Tailwind CSS, SCSS, Docker
 * Designed modern content platforms leveraging Wagtail CMS with Tailwind CSS design systems, supporting custom page trees, streamfields, dynamic image generation, and multi-app blog/account architectures.
