@@ -346,9 +346,8 @@ def main():
             print(f"🚀 Pushing new commit with updated CV to origin/{branch}...")
             # Push with --no-verify to prevent infinite recursion
             subprocess.run(["git", "push", "--no-verify", "origin", f"HEAD:{branch}"], cwd=REPO_ROOT, check=True)
+            run_git(["fetch", "origin", branch], check=False)
             print("✅ Successfully pushed new commit with updated CV to remote.")
-            # Exit with 1 to cancel the original stale git push invocation
-            sys.exit(1)
         elif mode == "standalone":
             print("💡 Tip: Changes have been staged with 'git add'.")
 
