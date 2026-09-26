@@ -11,10 +11,12 @@ Welcome to the **All-Projects** repository — a curated monorepo containing bro
 ```text
 All-Projects/
 ├── extensions/                         # 🧩 Browser Extensions
+│   ├── anti-gravity-browser/           # Anti-Gravity Web (Matter.js 2D Physics & Arcade Browser)
 │   ├── diagram-image-lens/             # Diagram & Image Lens Pro (Magnifier, Deep-Zoom & Screenshots)
 │   └── link-inspector-extension/       # Link Inspector Pro & Broken Link Checker (Manifest V3)
 │
 ├── apps/                               # 🌐 Fullstack Web Apps & Content Management
+│   ├── arnas/                          # ARNAS Enterprise Cloud NAS & Zero-Knowledge E2EE Mobile Sync
 │   ├── flashapps/                      # Fullstack Django (REST API) + Angular Single Page App
 │   ├── wagtailwind/                    # Wagtail CMS styled with Tailwind CSS
 │   ├── mytail/                         # Wagtail CMS Multi-app Blog & Account System
@@ -33,6 +35,8 @@ All-Projects/
 
 | Project | Category | Primary Tech Stack | Description |
 | :--- | :--- | :--- | :--- |
+| [**ARNAS Enterprise Cloud NAS**](apps/arnas/) | Distributed Storage & Mobile Sync | Fastify, React Native / Expo, PostgreSQL, Prisma, S3/MinIO, AES-256-GCM | Distributed private cloud storage with multi-server storage clustering, instant ingest + fan-out replication, automatic read failover, zero-knowledge E2EE (AES-256-GCM / PBKDF2), battery sentinel sync, and compliance audit trail. |
+| [**Anti-Gravity Web Browser**](extensions/anti-gravity-browser/) | Browser Extension & Game | JavaScript (ES6+), Manifest V3, Matter.js, HTML5 Canvas, CSS3 | Converts any webpage into a 2D zero-gravity physics sandbox with Matter.js rigid-body dynamics, directional gravity inversion, tractor beams, Asteroids arcade combat, and Katamari web absorption. |
 | [**Diagram & Image Lens Pro**](extensions/diagram-image-lens/) | Browser Extension | JavaScript (ES6+), Manifest V3, HTML5 Canvas, CSS3 | HD hover loupe (2x–16x), fullscreen blueprint deep-zoom lightbox with schematic invert mode, 1-click PNG/SVG clipboard copying, and Retina area snipping tool. |
 | [**Link Inspector Pro**](extensions/link-inspector-extension/) | Browser Extension | JavaScript (ES6+), Manifest V3, CSS3 | Real-time link inspector, broken link auditor (404/5xx), redirect tracker, Wayback Machine recovery, UTM parameter stripper, and CSV/JSON exporter. |
 | [**Flashapps**](apps/flashapps/) | Fullstack Web App | Django, Angular, SQLite, Docker | Fullstack web platform featuring a Django REST backend and Angular modern frontend with containerized deployment. |
@@ -47,6 +51,21 @@ All-Projects/
 ## 🛠️ Category Quick Start Guides
 
 ### 1. 🧩 Browser Extensions (`extensions/`)
+
+#### **Anti-Gravity Web Browser & Arcade Sandbox**
+* **Location**: [`extensions/anti-gravity-browser/`](extensions/anti-gravity-browser/)
+* **Installation**:
+  1. Open Chrome / Edge / Brave and go to `chrome://extensions`.
+  2. Toggle **Developer mode** to **ON**.
+  3. Click **Load unpacked** and select the folder:
+     ```text
+     /Users/abhijeetraut/Documents/All-Projects/extensions/anti-gravity-browser
+     ```
+  4. Shortcuts & Controls:
+     * `0` or `Z`: Toggle Zero-G floating mode.
+     * Arrow Keys (`▲`, `▼`, `◄`, `►`): Invert directional gravity.
+     * Click & Drag: Fling DOM elements with physics momentum.
+     * Arcade Modes: Switch between **Asteroids Blaster** (`WASD` + Spacebar lasers) and **Orbital Katamari** (magnetic rolling absorber).
 
 #### **Diagram & Image Lens Pro**
 * **Location**: [`extensions/diagram-image-lens/`](extensions/diagram-image-lens/)
@@ -77,6 +96,25 @@ All-Projects/
 ---
 
 ### 2. 🌐 Web Applications & CMS (`apps/`)
+
+#### **ARNAS (Enterprise Cloud NAS & Zero-Knowledge E2EE Mobile Sync)**
+* **Location**: [`apps/arnas/`](apps/arnas/)
+* **Features**: Multi-server storage clustering, S3/MinIO failover, AES-256-GCM client encryption, battery sentinel sync, onboarding tutorial, and compliance audit trail.
+* **Run Backend Server**:
+  ```bash
+  cd apps/arnas/server
+  cp .env.example .env
+  npm install
+  npm run dev
+  ```
+  - API Health: `http://localhost:8080/health`
+  - Swagger Docs: `http://localhost:8080/docs`
+* **Run Mobile Client (Expo)**:
+  ```bash
+  cd apps/arnas/mobile
+  npm install
+  npm run web    # Or npx expo start --ios
+  ```
 
 #### **Flashapps (Django + Angular)**
 * **Location**: [`apps/flashapps/`](apps/flashapps/)

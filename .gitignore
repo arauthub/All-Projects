@@ -60,3 +60,10 @@ logs/
 scratch/
 tmp/
 temp/
+
+# Storage & Mobile App Cache
+data/
+storage/
+.expo/
+*.tmp
+*.bin

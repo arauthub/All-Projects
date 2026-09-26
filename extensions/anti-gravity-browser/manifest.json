@@ -1,0 +1,63 @@
+{
+  "manifest_version": 3,
+  "name": "Anti-Gravity Web: Arcade Physics Browser",
+  "short_name": "Anti-Gravity",
+  "version": "1.0.0",
+  "description": "Transform any webpage into an interactive Zero-G playground with twin laser Asteroids, Katamari roll, and 5 arcade stages.",
+  "author": "Abhijeet Raut",
+  "homepage_url": "https://github.com/arauthub/anti-gravity-browser",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "scripting"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background/background.js"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "Anti-Gravity Web (Alt+Shift+G)",
+    "default_icon": {
+      "16": "assets/icon16.png",
+      "32": "assets/icon32.png",
+      "48": "assets/icon48.png",
+      "128": "assets/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "assets/icon16.png",
+    "32": "assets/icon32.png",
+    "48": "assets/icon48.png",
+    "128": "assets/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "lib/matter.min.js",
+        "content/content.js"
+      ],
+      "css": [
+        "content/content.css"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "commands": {
+    "toggle-antigravity": {
+      "suggested_key": {
+        "default": "Alt+Shift+G",
+        "mac": "Command+Shift+G"
+      },
+      "description": "Toggle Anti-Gravity Mode"
+    }
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self';"
+  }
+}

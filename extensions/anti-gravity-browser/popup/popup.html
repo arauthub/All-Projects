@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anti-Gravity Web</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <!-- Header -->
+    <header class="header">
+      <div class="logo-group">
+        <img src="../assets/icon48.png" alt="Anti-Gravity Logo" class="logo-icon">
+        <div>
+          <h1 class="title">Anti-Gravity Web</h1>
+          <span class="subtitle">Physics & Arcade Browser</span>
+        </div>
+      </div>
+      <div class="header-right">
+        <button id="btn-tutorial" class="tutorial-btn" title="How to Play Tutorial">❓ Guide</button>
+        <div id="status-badge" class="badge badge-inactive">INACTIVE</div>
+        <button id="btn-close-popup" class="close-popup-btn" title="Close Popup" aria-label="Close">✕</button>
+      </div>
+    </header>
+
+    <!-- Master Power Switch -->
+    <div class="power-card">
+      <div class="power-info">
+        <span class="power-label" id="power-text">Activate Anti-Gravity</span>
+        <span class="power-sublabel" id="power-subtext">Float and play with page elements</span>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="master-toggle">
+        <span class="slider round"></span>
+      </label>
+    </div>
+
+    <!-- Mode Selector -->
+    <div class="section-title">Arcade Game Mode</div>
+    <div class="mode-grid">
+      <button class="mode-card active" data-mode="asteroids" id="mode-asteroids">
+        <span class="mode-icon">🚀</span>
+        <span class="mode-name">Asteroids</span>
+        <span class="mode-desc">Twin Lasers</span>
+      </button>
+      <button class="mode-card" data-mode="katamari" id="mode-katamari">
+        <span class="mode-icon">🟡</span>
+        <span class="mode-name">Katamari</span>
+        <span class="mode-desc">Roll & Absorb</span>
+      </button>
+      <button class="mode-card" data-mode="sandbox" id="mode-sandbox">
+        <span class="mode-icon">🌌</span>
+        <span class="mode-name">Zero-G</span>
+        <span class="mode-desc">Float & Drift</span>
+      </button>
+    </div>
+
+    <!-- Difficulty Stage Selector -->
+    <div class="section-title">Difficulty Stage</div>
+    <div class="stage-grid">
+      <button class="stage-pill active" data-stage="1" id="stage-1" title="Stage 1: Cadet Orbit (Easy)">
+        <span class="stage-dot easy"></span>
+        <span>1. Cadet</span>
+      </button>
+      <button class="stage-pill" data-stage="2" id="stage-2" title="Stage 2: Debris Splitters (Normal)">
+        <span class="stage-dot normal"></span>
+        <span>2. Splitter</span>
+      </button>
+      <button class="stage-pill" data-stage="3" id="stage-3" title="Stage 3: Cosmic Storm (Hard)">
+        <span class="stage-dot hard"></span>
+        <span>3. Storm</span>
+      </button>
+      <button class="stage-pill" data-stage="4" id="stage-4" title="Stage 4: Vortex Singularity (Extreme)">
+        <span class="stage-dot extreme"></span>
+        <span>4. Vortex</span>
+      </button>
+      <button class="stage-pill" data-stage="5" id="stage-5" title="Stage 5: Quantum Chaos (Nightmare)">
+        <span class="stage-dot nightmare"></span>
+        <span>5. Chaos</span>
+      </button>
+    </div>
+
+    <!-- Gravity Vector Controller -->
+    <div class="section-title">Gravity Direction</div>
+    <div class="gravity-control-card">
+      <div class="gravity-compass">
+        <svg id="gravity-arrow" class="compass-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M12 5v14M5 12l7 7 7-7" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span id="gravity-dir-label">DOWN</span>
+      </div>
+      <div class="dpad-grid">
+        <button class="dpad-btn" id="dpad-up" title="Gravity Up">▲</button>
+        <button class="dpad-btn" id="dpad-left" title="Gravity Left">◄</button>
+        <button class="dpad-btn dpad-zero" id="dpad-zero" title="Zero Gravity">0-G</button>
+        <button class="dpad-btn" id="dpad-right" title="Gravity Right">►</button>
+        <button class="dpad-btn active-dir" id="dpad-down" title="Gravity Down">▼</button>
+      </div>
+    </div>
+
+    <!-- Gravity Strength Slider -->
+    <div class="slider-row">
+      <div class="slider-label-row">
+        <span>Gravity Force</span>
+        <span id="gravity-strength-val">1.0x</span>
+      </div>
+      <input type="range" id="gravity-slider" min="0.2" max="2.2" step="0.1" value="1.0">
+    </div>
+
+    <!-- Mouse Force Tool -->
+    <div class="section-title">Mouse Interaction Tool</div>
+    <div class="tool-selector">
+      <button class="tool-btn active" data-tool="drag" id="tool-drag">
+        <span>🖐️</span> Drag & Fling
+      </button>
+      <button class="tool-btn" data-tool="tractor" id="tool-tractor">
+        <span>🧲</span> Tractor Beam
+      </button>
+      <button class="tool-btn" data-tool="repulsor" id="tool-repulsor">
+        <span>💥</span> Repulsor
+      </button>
+    </div>
+
+    <!-- Live Stats -->
+    <div class="stats-row">
+      <div class="stat-pill">
+        <span class="stat-num" id="stat-elements">0</span>
+        <span class="stat-label">Elements</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-num" id="stat-score">0</span>
+        <span class="stat-label">Score</span>
+      </div>
+      <div class="stat-pill audio-pill" id="btn-audio-toggle" title="Toggle Sound">
+        <span class="stat-num" id="audio-icon">🔊</span>
+        <span class="stat-label">Audio</span>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <button class="restore-action-btn" id="btn-restore">
+      <span>↺</span> Restore Original Webpage <span class="hotkey-pill">ESC</span>
+    </button>
+
+    <!-- Shortcuts Footer -->
+    <footer class="footer">
+      <span>💡 Click elements to shatter</span>
+      <span class="separator">•</span>
+      <span><b>Right-Click / B</b>: Black Hole</span>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

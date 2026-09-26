@@ -1,0 +1,226 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  ADMIN
+  MEMBER
+  GUEST
+}
+
+enum SyncStatus {
+  PENDING
+  UPLOADING
+  COMPLETED
+  FAILED
+}
+
+enum StorageNodeType {
+  LOCAL_DISK
+  S3_COMPATIBLE
+  REMOTE_NODE
+}
+
+enum NodeStatus {
+  ONLINE
+  DEGRADED
+  OFFLINE
+}
+
+enum ReplicaStatus {
+  SYNCED
+  PENDING
+  REPLICATING
+  FAILED
+}
+
+model Family {
+  id                 String     @id @default(uuid())
+  name               String
+  // E2EE Shared Vault
+  isVaultE2EEEnabled Boolean    @default(false)
+  vaultPublicKey     String?
+  vaultEncryptedKey  String?
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
+  members            User[]
+  files              FileItem[]
+
+  @@map("families")
+}
+
+model User {
+  id                      String          @id @default(uuid())
+  familyId                String
+  family                  Family          @relation(fields: [familyId], references: [id], onDelete: Cascade)
+  email                   String          @unique
+  name                    String
+  passwordHash            String
+  role                    Role            @default(MEMBER)
+  storageQuotaBytes       BigInt          @default(107374182400) // 100 GB default
+  usedStorageBytes        BigInt          @default(0)
+  // E2EE Zero-Knowledge Keys
+  isE2EEEnabled           Boolean         @default(false)
+  encryptionSalt          String?
+  publicKey               String?
+  encryptedPrivateKey     String?
+  keyDerivationIterations Int             @default(100000)
+  recoveryHint            String?
+  createdAt               DateTime        @default(now())
+  updatedAt               DateTime        @updatedAt
+  files                   FileItem[]
+  devices                 Device[]
+  uploadSessions          UploadSession[]
+
+  @@index([familyId])
+  @@map("users")
+}
+
+model Device {
+  id             String          @id @default(uuid())
+  userId         String
+  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  deviceName     String
+  platform       String          // 'ios' | 'android' | 'web'
+  pushToken      String?
+  lastSeenAt     DateTime        @default(now())
+  createdAt      DateTime        @default(now())
+  uploadSessions UploadSession[]
+
+  @@index([userId])
+  @@map("devices")
+}
+
+model StorageNode {
+  id                 String          @id @default(uuid())
+  name               String
+  type               StorageNodeType @default(LOCAL_DISK)
+  endpoint           String?         // For S3: e.g. "https://s3.us-east-1.amazonaws.com" or "http://minio:9000"
+  bucket             String?         // For S3: e.g. "arnas-vault"
+  region             String?         @default("us-east-1")
+  accessKeyEncrypted String?
+  secretKeyEncrypted String?
+  localPath          String?         // For LOCAL_DISK: e.g. "/data/storage-secondary"
+  isPrimary          Boolean         @default(false)
+  isActive           Boolean         @default(true)
+  priority           Int             @default(1) // 1 = highest
+  status             NodeStatus      @default(ONLINE)
+  totalSpaceBytes    BigInt          @default(1099511627776) // 1TB default
+  usedSpaceBytes     BigInt          @default(0)
+  lastPingMs         Int?
+  lastHealthCheckAt  DateTime?
+  replicas           FileReplica[]
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+
+  @@map("storage_nodes")
+}
+
+model FileReplica {
+  id             String        @id @default(uuid())
+  fileItemId     String
+  fileItem       FileItem      @relation(fields: [fileItemId], references: [id], onDelete: Cascade)
+  storageNodeId  String
+  storageNode    StorageNode   @relation(fields: [storageNodeId], references: [id], onDelete: Cascade)
+  replicaPath    String
+  checksumSha256 String?       @db.VarChar(64)
+  status         ReplicaStatus @default(PENDING)
+  retryCount     Int           @default(0)
+  errorMessage   String?
+  syncedAt       DateTime?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@unique([fileItemId, storageNodeId])
+  @@index([storageNodeId, status])
+  @@map("file_replicas")
+}
+
+model FileItem {
+  id                   String        @id @default(uuid())
+  familyId             String
+  family               Family        @relation(fields: [familyId], references: [id], onDelete: Cascade)
+  userId               String
+  user                 User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parentFolderId       String?
+  parentFolder         FileItem?     @relation("FolderHierarchy", fields: [parentFolderId], references: [id], onDelete: Cascade)
+  children             FileItem[]    @relation("FolderHierarchy")
+  name                 String
+  isDirectory          Boolean       @default(false)
+  mimeType             String?
+  sizeBytes            BigInt        @default(0)
+  checksumSha256       String?       @db.VarChar(64)
+  storagePath          String?
+  thumbnailPath        String?
+  isSharedVault        Boolean       @default(false)
+  isFavorite           Boolean       @default(false)
+  isDeleted            Boolean       @default(false)
+  takenAt              DateTime?
+  // E2EE Security Metadata
+  isEncrypted          Boolean       @default(false)
+  encryptionAlgo       String?       @default("AES-256-GCM")
+  initializationVector String?       // 96-bit hex IV
+  authTag              String?       // 128-bit hex Auth Tag
+  encryptedFileKey     String?       // AES-256 FEK encrypted with client public key
+  encryptedMetadata    String?       // Encrypted filename and MIME
+  replicas             FileReplica[]
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
+
+  @@index([userId, parentFolderId])
+  @@index([checksumSha256])
+  @@index([familyId, isSharedVault])
+  @@map("file_items")
+}
+
+model UploadSession {
+  id                   String     @id @default(uuid())
+  userId               String
+  user                 User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  deviceId             String?
+  device               Device?    @relation(fields: [deviceId], references: [id], onDelete: SetNull)
+  filename             String
+  mimeType             String
+  totalSizeBytes       BigInt
+  chunkSizeBytes       Int        @default(2097152) // 2MB default
+  totalChunks          Int
+  uploadedChunks       Int[]
+  expectedSha256       String     @db.VarChar(64)
+  status               SyncStatus @default(UPLOADING)
+  // E2EE upload metadata
+  isEncrypted          Boolean    @default(false)
+  encryptionAlgo       String?    @default("AES-256-GCM")
+  initializationVector String?
+  authTag              String?
+  encryptedFileKey     String?
+  encryptedMetadata    String?
+  expiresAt            DateTime
+  createdAt            DateTime   @default(now())
+  updatedAt            DateTime   @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@map("upload_sessions")
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  familyId  String?
+  action    String
+  details   Json?
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([familyId])
+  @@index([action])
+  @@index([createdAt])
+  @@map("audit_logs")
+}

@@ -1,0 +1,93 @@
+version: '3.8'
+
+services:
+  caddy:
+    image: caddy:2-alpine
+    container_name: arnas-caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      DOMAIN: ${DOMAIN:-localhost}
+      ACME_EMAIL: ${ACME_EMAIL:-admin@example.com}
+    volumes:
+      - ./docker/Caddyfile:/etc/caddy/Caddyfile
+      - arnas_caddy_data:/data
+      - arnas_caddy_config:/config
+    depends_on:
+      - arnas-server
+
+  arnas-server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: arnas-server
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 8080
+      HOST: 0.0.0.0
+      DATABASE_URL: postgresql://${POSTGRES_USER:-arnas_admin}:${POSTGRES_PASSWORD:-change_this_secret_password}@postgres:5432/${POSTGRES_DB:-arnas_db}?schema=public
+      JWT_SECRET: ${JWT_SECRET:-generate_a_very_secure_jwt_secret_key_32_chars_min}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:-generate_a_very_secure_refresh_jwt_key_32_chars_min}
+      STORAGE_ROOT: /data/storage
+      MAX_CHUNK_SIZE_BYTES: 2097152
+      THUMBNAIL_QUALITY: 80
+    volumes:
+      - ./data/storage:/data/storage
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: arnas-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-arnas_admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change_this_secret_password}
+      POSTGRES_DB: ${POSTGRES_DB:-arnas_db}
+    volumes:
+      - arnas_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-arnas_admin} -d ${POSTGRES_DB:-arnas_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  db-backup:
+    image: postgres:16-alpine
+    container_name: arnas-db-backup
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_USER: ${POSTGRES_USER:-arnas_admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change_this_secret_password}
+      POSTGRES_DB: ${POSTGRES_DB:-arnas_db}
+    volumes:
+      - ./docker/backup/backup.sh:/backup.sh:ro
+      - ./data/backups:/backups
+    entrypoint: |
+      /bin/sh -c '
+        chmod +x /backup.sh
+        echo "0 3 * * * /backup.sh >> /var/log/cron.log 2>&1" > /etc/crontabs/root
+        # Run initial backup on start
+        /backup.sh
+        # Start crond in foreground
+        crond -f -l 2
+      '
+
+volumes:
+  arnas_pgdata:
+  arnas_caddy_data:
+  arnas_caddy_config:

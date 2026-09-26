@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: arnas-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-arnas_admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change_this_secret_password}
+      POSTGRES_DB: ${POSTGRES_DB:-arnas_db}
+    volumes:
+      - arnas_pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-arnas_admin} -d ${POSTGRES_DB:-arnas_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  arnas-server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: arnas-server
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 8080
+      HOST: 0.0.0.0
+      DATABASE_URL: postgresql://${POSTGRES_USER:-arnas_admin}:${POSTGRES_PASSWORD:-change_this_secret_password}@postgres:5432/${POSTGRES_DB:-arnas_db}?schema=public
+      JWT_SECRET: ${JWT_SECRET:-generate_a_very_secure_jwt_secret_key_32_chars_min}
+      STORAGE_ROOT: /data/storage
+    volumes:
+      - ./data/storage:/data/storage
+    ports:
+      - "8080:8080"
+
+volumes:
+  arnas_pgdata:
