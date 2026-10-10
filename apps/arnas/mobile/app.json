@@ -15,7 +15,9 @@
       "infoPlist": {
         "UIBackgroundModes": ["fetch", "processing"],
         "NSPhotoLibraryUsageDescription": "ARNAS requires access to your photo library to automatically back up and sync your media with your private family drive.",
-        "NSPhotoLibraryAddUsageDescription": "ARNAS requires permission to save downloaded media to your library."
+        "NSPhotoLibraryAddUsageDescription": "ARNAS requires permission to save downloaded media to your library.",
+        "NSLocationWhenInUseUsageDescription": "ARNAS utilizes location to automatically verify trusted home and office Wi-Fi geofences before synchronizing your files.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "ARNAS background sentinel sync verifies your trusted geofence location to ensure auto-backup runs only on designated networks."
       }
     },
     "android": {
@@ -29,12 +31,21 @@
         "READ_EXTERNAL_STORAGE",
         "WRITE_EXTERNAL_STORAGE",
         "ACCESS_NETWORK_STATE",
+        "ACCESS_WIFI_STATE",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
         "BATTERY_STATS"
       ]
     },
     "plugins": [
       "expo-router",
       "expo-secure-store",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "ARNAS uses your location to verify trusted home or office geofences for automated Wi-Fi backup."
+        }
+      ],
       [
         "expo-media-library",
         {

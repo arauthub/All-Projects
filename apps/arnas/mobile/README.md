@@ -12,25 +12,38 @@
 
 ## 🌟 Key Features
 
-1. **Client-Side Zero-Knowledge Encryption (E2EE)**:
+1. **Location Geofencing & Trusted Wi-Fi Auto-Sync**:
+   - Geofence calculation via Haversine distance formula monitoring device distance to trusted perimeters (Home HQ, Design Studio, Office).
+   - Auto-sync triggers **only** when within the geofence perimeter and connected to approved trusted Wi-Fi SSIDs (`Home-5GHz`, `Studio-5G`, etc.).
+   - Holds sync automatically on untrusted public networks or 5G/LTE cellular data to prevent bandwidth waste.
+   - Built-in simulation control panel for instant testing on iOS Simulators, Android Emulators, and Web preview.
+2. **Comprehensive Enterprise NAS Suite**:
+   - **Cloud Explorer**: Breadcrumb navigation, folder trees, search filtering, and batch operations.
+   - **File Management**: In-place rename, duplicate, favorite/starring, and folder moves.
+   - **S.M.A.R.T. Health & Live Telemetry**: Read/write throughput gauges (MB/s), IOPS monitors, and S.M.A.R.T. diagnostics.
+   - **Volume Breakdown**: Detailed chart of Photos, Videos, Documents, and Encrypted E2EE Vaults.
+   - **30-Day Recycle Bin**: Safe soft-delete recovery buffer with 1-click restore or permanent purge.
+   - **Expiring Secure Links**: Generate shareable links with expiration timers, passphrases, and QR codes.
+3. **Client-Side Zero-Knowledge Encryption (E2EE)**:
    - Hardware-accelerated cryptographic primitives using `expo-crypto` and `expo-secure-store`.
    - PBKDF2 key derivation (100,000 iterations) with cryptographic salt generation.
    - Files are encrypted in AES-GCM-256 chunks prior to leaving the device — the server only receives ciphertext.
-2. **Multi-Storage Server Configuration**:
+4. **Multi-Storage Server Configuration**:
    - Manage storage clusters directly from the mobile UI (`StorageClusterModal.tsx`).
    - Configure multiple storage targets: Primary on-premise NAS, secondary MinIO server, and cloud backup buckets (AWS S3, Wasabi).
    - Real-time node latency pinging, replica status indicators, and health monitoring.
-3. **Smart Camera Roll Background Sync**:
+5. **Smart Camera Roll Background Sync**:
    - Automated delta sync queries local camera roll (`expo-media-library`).
    - Power & bandwidth aware: Sync engine monitors battery percentage (`expo-battery`) and network type (`expo-network`), pausing on low battery or cellular metering if configured.
-4. **Interactive User Onboarding Tutorial**:
-   - Comprehensive 5-stage animated onboarding tutorial (`UserTutorialModal.tsx`) walking through pairing, E2EE key setup, multi-cluster management, and camera roll sync.
+6. **Interactive User Onboarding Tutorial**:
+   - Comprehensive 5-stage animated onboarding tutorial (`UserTutorialModal.tsx`) walking through pairing, E2EE key setup, multi-cluster management, geofenced Wi-Fi sync, and camera roll backup.
    - One-tap manual re-launch from the settings header at any time.
-5. **Offline-First SQLite Cache**:
+7. **Offline-First SQLite Cache & Mock Resilience**:
    - High-performance local catalog powered by `expo-sqlite`.
    - Browse cached folders, metadata, and media thumbnails without network connectivity.
-6. **SOC2 / GDPR Audit Trail Viewer**:
+8. **SOC2 / GDPR Audit Trail Viewer**:
    - Inspect security audit records (`AuditTrailModal.tsx`) showing timestamped uploads, key exchanges, and multi-server replications.
+
 
 ---
 

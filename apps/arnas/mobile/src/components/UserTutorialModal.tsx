@@ -19,6 +19,7 @@ import {
   Check,
   Sparkles,
   X,
+  MapPin,
 } from 'lucide-react-native';
 import { theme } from '../theme';
 
@@ -128,7 +129,17 @@ export const UserTutorialModal: React.FC<UserTutorialModalProps> = ({
       accentColor: '#10B981',
       badge: 'AES-256-GCM ENCRYPTED',
     },
+    {
+      title: 'Location & Trusted Wi-Fi Geofence',
+      subtitle: 'Auto-Sync Only Where You Trust',
+      description:
+        'Set up geofenced perimeters for Home, Office, or Studio. The sentinel auto-syncs your content when within the perimeter and connected to trusted Wi-Fi, keeping data held on roaming or public networks.',
+      icon: <MapPin size={44} color="#F59E0B" />,
+      accentColor: '#F59E0B',
+      badge: 'GEOFENCE & TRUSTED WI-FI',
+    },
   ];
+
 
   const current = slides[currentSlide];
 

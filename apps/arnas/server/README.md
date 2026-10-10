@@ -24,10 +24,16 @@
 4. **Smart Sync & Deduplication**:
    - SHA-256 content-addressable deduplication: identical files across family members or devices are referenced without redundant storage consumption.
    - Sync manifest endpoint calculates delta sets for mobile clients based on vector clocks and revision tags.
-5. **Tamper-Evident Audit Logging**:
+5. **Geofenced Trusted Wi-Fi Policy Engine**:
+   - Geofence policies registered per device/user (`/api/v1/sync/geofence-policy`) enforcing that uploads are accepted and scheduled only from pre-approved coordinates and trusted Wi-Fi networks.
+6. **Standard Enterprise NAS Operations & Telemetry**:
+   - Comprehensive file operations: nested folder creation, in-place rename, duplicate, favorite, folder moves, 30-day trash recovery buffer, and expiring share links.
+   - Live NAS telemetry endpoint (`/api/v1/files/nas/metrics`) providing volume distribution (Photos, Videos, Documents, Vault), RAID pool redundancy, IOPS, and S.M.A.R.T. health diagnostics.
+7. **Tamper-Evident Audit Logging**:
    - Immutable audit trail recording user logins, file uploads, key rotations, node syncs, and download requests.
-6. **OpenAPI / Swagger 3.0 Documentation**:
+8. **OpenAPI / Swagger 3.0 Documentation**:
    - Built-in interactive API explorer available at `/documentation`.
+
 
 ---
 

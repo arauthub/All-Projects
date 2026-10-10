@@ -127,6 +127,14 @@ export class ApiClient {
     });
   }
 
+  public static patch<T>(endpoint: string, body: any, headers?: Record<string, string>): Promise<T> {
+    return this.request<T>(endpoint, {
+      method: 'PATCH',
+      body: JSON.stringify(body),
+      headers,
+    });
+  }
+
   public static delete<T>(endpoint: string, headers?: Record<string, string>): Promise<T> {
     return this.request<T>(endpoint, { method: 'DELETE', headers });
   }

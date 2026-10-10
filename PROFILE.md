@@ -38,7 +38,7 @@ Here are highlights from my public [**All-Projects**](https://github.com/arauthu
 
 ### 🛡️ [ARNAS: Enterprise Cloud NAS & Zero-Knowledge E2EE Mobile Sync](https://github.com/arauthub/All-Projects/tree/main/apps/arnas)
 * **Stack**: Fastify (Node.js/TypeScript), React Native / Expo, PostgreSQL, Prisma, S3/MinIO, AES-256-GCM, PBKDF2
-* Self-hosted enterprise distributed storage system featuring multi-server storage clustering, instant ingest with background fan-out replication, automatic read failover mirrors, zero-knowledge client encryption, battery sentinel sync, onboarding tutorial, and compliance audit logging.
+* Self-hosted enterprise distributed storage system featuring multi-server storage clustering, location-geofenced auto-sync (trusted sites + approved Wi-Fi only), full enterprise NAS suite (cloud explorer, search, in-place rename, duplicate, 30-day recycle bin, expiring share links with QR codes, S.M.A.R.T. disk telemetry), zero-knowledge client encryption (AES-256-GCM), and cross-platform iOS & Android mobile apps.
 
 ### 🔍 [Diagram & Image Lens Pro](https://github.com/arauthub/All-Projects/tree/main/extensions/diagram-image-lens)
 * **Stack**: Chrome Manifest V3, JavaScript (ES6+), HTML5 Canvas, CSS3

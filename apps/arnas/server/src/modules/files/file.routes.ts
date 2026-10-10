@@ -132,4 +132,164 @@ export const fileRoutes: FastifyPluginAsync = async (fastify: FastifyInstance) =
     );
     return reply.status(200).send(result);
   });
+
+  // POST /api/v1/files/folder
+  fastify.post('/folder', {
+    schema: {
+      tags: ['File Manager'],
+      summary: 'Create a new directory in personal drive or family vault',
+      security: [{ bearerAuth: [] }],
+    },
+  }, async (request, reply) => {
+    const { name, parentFolderId, isSharedVault } = request.body as any;
+    if (!name) return reply.status(400).send({ message: 'Folder name is required' });
+    const folder = await fileService.createFolder(
+      request.user.id,
+      request.user.familyId,
+      name,
+      parentFolderId,
+      isSharedVault
+    );
+    return reply.status(201).send(folder);
+  });
+
+  // PATCH /api/v1/files/:id/rename
+  fastify.patch('/:id/rename', {
+    schema: {
+      tags: ['File Manager'],
+      summary: 'Rename a file or folder',
+      security: [{ bearerAuth: [] }],
+    },
+  }, async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const { name } = request.body as { name: string };
+    if (!name) return reply.status(400).send({ message: 'New name is required' });
+    const updated = await fileService.renameFile(request.user.id, request.user.familyId, id, name);
+    return reply.status(200).send(updated);
+  });
+
+  // PATCH /api/v1/files/:id/favorite
+  fastify.patch('/:id/favorite', {
+    schema: {
+      tags: ['File Manager'],
+      summary: 'Toggle favorite status',
+      security: [{ bearerAuth: [] }],
+    },
+  }, async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const result = await fileService.toggleFavorite(request.user.id, request.user.familyId, id);
+    return reply.status(200).send(result);
+  });
+
+  // PATCH /api/v1/files/:id/move
+  fastify.patch('/:id/move', {
+    schema: {
+      tags: ['File Manager'],
+      summary: 'Move file to a different folder',
+      security: [{ bearerAuth: [] }],
+    },
+  }, async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const { targetFolderId } = request.body as { targetFolderId?: string | null };
+    const updated = await fileService.moveFile(request.user.id, request.user.familyId, id, targetFolderId);
+    return reply.status(200).send(updated);
+  });
+
+  // POST /api/v1/files/:id/duplicate
+  fastify.post('/:id/duplicate', {
+    schema: {
+      tags: ['File Manager'],
+      summary: 'Duplicate an existing file',
+      security: [{ bearerAuth: [] }],
+    },
+  }, async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const duplicate = await fileService.duplicateFile(request.user.id, request.user.familyId, id);
+    return reply.status(201).send(duplicate);
+  });
+
+  // GET /api/v1/files/trash
+  fastify.get('/trash', {
+    schema: {
+      tags: ['File Manager'],
+      summary: 'List soft-deleted items in the recycle bin',
+      security: [{ bearerAuth: [] }],
+    },
+  }, async (request, reply) => {
+    const trash = await fileService.listTrash(request.user.id, request.user.familyId);
+    return reply.status(200).send(trash);
+  });
+
+  // POST /api/v1/files/:id/restore
+  fastify.post('/:id/restore', {
+    schema: {
+      tags: ['File Manager'],
+      summary: 'Restore a deleted item from the recycle bin',
+      security: [{ bearerAuth: [] }],
+    },
+  }, async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const result = await fileService.restoreFromTrash(request.user.id, request.user.familyId, id);
+    return reply.status(200).send(result);
+  });
+
+  // DELETE /api/v1/files/:id/permanent
+  fastify.delete('/:id/permanent', {
+    schema: {
+      tags: ['File Manager'],
+      summary: 'Permanently purge a file from storage and database',
+      security: [{ bearerAuth: [] }],
+    },
+  }, async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const isAdmin = request.user.role === 'ADMIN';
+    const result = await fileService.permanentlyDelete(request.user.id, request.user.familyId, id, isAdmin);
+    return reply.status(200).send(result);
+  });
+
+  // POST /api/v1/files/trash/empty
+  fastify.post('/trash/empty', {
+    schema: {
+      tags: ['File Manager'],
+      summary: 'Empty user recycle bin',
+      security: [{ bearerAuth: [] }],
+    },
+  }, async (request, reply) => {
+    const isAdmin = request.user.role === 'ADMIN';
+    const result = await fileService.emptyTrash(request.user.id, request.user.familyId);
+    return reply.status(200).send(result);
+  });
+
+  // POST /api/v1/files/:id/share
+  fastify.post('/:id/share', {
+    schema: {
+      tags: ['File Manager'],
+      summary: 'Generate secure shareable link with expiration',
+      security: [{ bearerAuth: [] }],
+    },
+  }, async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const { expirationHours, hasPassword } = (request.body as any) || {};
+    const result = await fileService.createShareLink(
+      request.user.id,
+      request.user.familyId,
+      id,
+      expirationHours || 24,
+      !!hasPassword
+    );
+    return reply.status(200).send(result);
+  });
+
+  // GET /api/v1/files/nas/metrics
+  fastify.get('/nas/metrics', {
+    schema: {
+      tags: ['File Manager'],
+      summary: 'Get NAS storage pools, volume breakdown and live S.M.A.R.T. metrics',
+      security: [{ bearerAuth: [] }],
+    },
+  }, async (request, reply) => {
+    const metrics = await fileService.getNasMetrics(request.user.familyId);
+    return reply.status(200).send(metrics);
+  });
 };
+

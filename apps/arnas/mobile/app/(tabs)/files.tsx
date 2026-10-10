@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   View,
   Text,
@@ -8,7 +8,7 @@ import {
   RefreshControl,
   ActivityIndicator,
   Alert,
-  Modal,
+  TextInput,
 } from 'react-native';
 import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
@@ -18,35 +18,47 @@ import { Card } from '../../src/components/Card';
 import { useAuthStore } from '../../src/stores/authStore';
 import { MobileFileService, FileItem } from '../../src/services/file.service';
 import { MediaModal } from '../../src/components/MediaModal';
+import { CreateFolderModal } from '../../src/components/CreateFolderModal';
+import { FileActionModal } from '../../src/components/FileActionModal';
+import { ShareModal } from '../../src/components/ShareModal';
+import { RecycleBinModal } from '../../src/components/RecycleBinModal';
+import { NASStorageHealthModal } from '../../src/components/NASStorageHealthModal';
 import {
   Folder,
-  Users,
+  Star,
   FileText,
-  HardDrive,
   Plus,
   Trash2,
-  Download,
   ChevronRight,
   Image as ImageIcon,
-  FileUp,
-  Camera,
+  Film,
   Lock,
-  ShieldCheck,
+  Search,
+  Activity,
+  MoreVertical,
+  ArrowLeft,
+  FolderPlus,
+  Upload,
 } from 'lucide-react-native';
 
 export default function FilesScreen() {
   const { serverUrl, refreshProfile } = useAuthStore();
-  const [activeTab, setActiveTab] = useState<'my_files' | 'family_vault'>('my_files');
+  const [activeTab, setActiveTab] = useState<'all' | 'starred' | 'vault'>('all');
   const [files, setFiles] = useState<FileItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [currentFolder, setCurrentFolder] = useState<{ id?: string; name: string } | null>(null);
-  const [selectedFile, setSelectedFile] = useState<FileItem | null>(null);
-  const [showUploadMenu, setShowUploadMenu] = useState(false);
-  const [uploading, setUploading] = useState(false);
-  const [uploadProgressText, setUploadProgressText] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const isVault = activeTab === 'family_vault';
+  // Modals
+  const [selectedMedia, setSelectedMedia] = useState<FileItem | null>(null);
+  const [actionFile, setActionFile] = useState<FileItem | null>(null);
+  const [shareFile, setShareFile] = useState<FileItem | null>(null);
+  const [showCreateFolder, setShowCreateFolder] = useState(false);
+  const [showRecycleBin, setShowRecycleBin] = useState(false);
+  const [showNasHealth, setShowNasHealth] = useState(false);
+
+  const isVault = activeTab === 'vault';
 
   const loadFiles = async () => {
     try {
@@ -70,8 +82,17 @@ export default function FilesScreen() {
     loadFiles();
   };
 
+  const filteredFiles = useMemo(() => {
+    return files.filter((f) => {
+      if (activeTab === 'starred' && !f.isFavorite) return false;
+      if (searchQuery.trim()) {
+        return f.name.toLowerCase().includes(searchQuery.toLowerCase());
+      }
+      return true;
+    });
+  }, [files, activeTab, searchQuery]);
+
   const handlePickImage = async () => {
-    setShowUploadMenu(false);
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: false,
@@ -80,290 +101,266 @@ export default function FilesScreen() {
 
     if (!result.canceled && result.assets && result.assets.length > 0) {
       const asset = result.assets[0];
-      await performUpload(
+      await MobileFileService.uploadLocalFile(
         asset.uri,
         asset.fileName || `media_${Date.now()}.jpg`,
-        asset.mimeType || 'image/jpeg'
+        asset.mimeType || 'image/jpeg',
+        isVault,
+        currentFolder?.id
       );
+      loadFiles();
+      refreshProfile();
     }
   };
 
   const handlePickDocument = async () => {
-    setShowUploadMenu(false);
     const result = await DocumentPicker.getDocumentAsync({
       copyToCacheDirectory: true,
     });
 
     if (!result.canceled && result.assets && result.assets.length > 0) {
       const asset = result.assets[0];
-      await performUpload(
+      await MobileFileService.uploadLocalFile(
         asset.uri,
         asset.name,
-        asset.mimeType || 'application/octet-stream'
-      );
-    }
-  };
-
-  const performUpload = async (uri: string, name: string, mime: string) => {
-    setUploading(true);
-    setUploadProgressText(`Uploading ${name}...`);
-    try {
-      await MobileFileService.uploadLocalFile(
-        uri,
-        name,
-        mime,
+        asset.mimeType || 'application/octet-stream',
         isVault,
         currentFolder?.id
       );
-      await refreshProfile();
-      await loadFiles();
-      Alert.alert('Upload Complete', `${name} is now saved to ARNAS.`);
-    } catch (err: any) {
-      Alert.alert('Upload Failed', err.message || 'Error syncing file to server.');
-    } finally {
-      setUploading(false);
-      setUploadProgressText('');
+      loadFiles();
+      refreshProfile();
     }
   };
 
-  const handleDelete = (fileId: string, filename: string) => {
-    Alert.alert(
-      'Delete File',
-      `Move "${filename}" to trash? Storage quota will be freed.`,
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Delete',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              await MobileFileService.deleteFile(fileId);
-              setFiles((prev) => prev.filter((f) => f.id !== fileId));
-              await refreshProfile();
-            } catch (e: any) {
-              Alert.alert('Error', e.message);
-            }
-          },
-        },
-      ]
-    );
+  const handleCreateFolderSubmit = async (name: string, isShared: boolean) => {
+    await MobileFileService.createFolder(name, currentFolder?.id, isShared);
+    loadFiles();
   };
 
-  const formatSize = (bytesStr: string): string => {
-    const bytes = Number(bytesStr);
-    if (!bytes || bytes === 0) return '0 B';
-    const k = 1024;
-    const sizes = ['B', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
+  const formatSize = (bytesStr: string) => {
+    const bytes = parseInt(bytesStr, 10) || 0;
+    if (bytes === 0) return '';
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
   };
 
-  const renderItem = ({ item }: { item: FileItem }) => {
-    const isImage = item.mimeType?.startsWith('image/');
-    const isVideo = item.mimeType?.startsWith('video/');
-    const thumbUri = item.thumbnailUrl ? `${serverUrl}${item.thumbnailUrl}` : undefined;
-
-    return (
-      <TouchableOpacity
-        style={styles.fileCard}
-        activeOpacity={0.7}
-        onPress={() => {
-          if (item.isDirectory) {
-            setCurrentFolder({ id: item.id, name: item.name });
-          } else {
-            setSelectedFile(item);
-          }
-        }}
-      >
-        <View style={styles.iconColumn}>
-          {item.isDirectory ? (
-            <Folder size={28} color={colors.accent} />
-          ) : thumbUri ? (
-            <Image source={{ uri: thumbUri }} style={styles.thumbnail} contentFit="cover" />
-          ) : isImage || isVideo ? (
-            <ImageIcon size={26} color={colors.primaryLight} />
-          ) : (
-            <FileText size={26} color={colors.textSecondary} />
-          )}
-        </View>
-
-        <View style={styles.fileDetails}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={styles.fileName} numberOfLines={1}>
-              {item.name}
-            </Text>
-            {item.isEncrypted && (
-              <View style={styles.e2eeBadge}>
-                <Lock size={10} color={colors.success} style={{ marginRight: 3 }} />
-                <Text style={styles.e2eeBadgeText}>E2EE</Text>
-              </View>
-            )}
-          </View>
-          <Text style={styles.fileMeta}>
-            {item.isDirectory
-              ? 'Folder'
-              : `${formatSize(item.sizeBytes)} • ${new Date(
-                  item.takenAt || item.createdAt
-                ).toLocaleDateString()}`}
-          </Text>
-        </View>
-
-        <TouchableOpacity
-          style={styles.deleteAction}
-          onPress={() => handleDelete(item.id, item.name)}
-        >
-          <Trash2 size={16} color={colors.textMuted} />
-        </TouchableOpacity>
-      </TouchableOpacity>
-    );
+  const renderIcon = (item: FileItem) => {
+    if (item.isDirectory) return <Folder size={22} color={colors.accent} fill={colors.accent} />;
+    if (item.isEncrypted) return <Lock size={20} color={colors.success} />;
+    if (item.mimeType?.startsWith('image/')) return <ImageIcon size={20} color={colors.accent} />;
+    if (item.mimeType?.startsWith('video/')) return <Film size={20} color={colors.primaryLight} />;
+    return <FileText size={20} color="#F59E0B" />;
   };
 
   return (
     <View style={styles.container}>
-      {/* Scope Segment Tabs */}
-      <View style={styles.segmentContainer}>
+      {/* Top Quick Actions Bar (NAS Health, Recycle Bin, New Folder, Upload) */}
+      <View style={styles.quickBar}>
         <TouchableOpacity
-          style={[styles.segmentBtn, activeTab === 'my_files' && styles.segmentBtnActive]}
-          onPress={() => {
-            setActiveTab('my_files');
-            setCurrentFolder(null);
-          }}
+          style={styles.quickBtn}
+          onPress={() => setShowNasHealth(true)}
           activeOpacity={0.8}
         >
-          <HardDrive
-            size={16}
-            color={activeTab === 'my_files' ? colors.accent : colors.textMuted}
-            style={{ marginRight: 6 }}
-          />
-          <Text
-            style={[styles.segmentText, activeTab === 'my_files' && styles.segmentTextActive]}
-          >
-            My Private Space
-          </Text>
+          <Activity size={15} color={colors.accent} style={{ marginRight: 5 }} />
+          <Text style={styles.quickBtnText}>NAS Health</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={[styles.segmentBtn, activeTab === 'family_vault' && styles.segmentBtnActive]}
-          onPress={() => {
-            setActiveTab('family_vault');
-            setCurrentFolder(null);
-          }}
+          style={styles.quickBtn}
+          onPress={() => setShowRecycleBin(true)}
           activeOpacity={0.8}
         >
-          <Users
-            size={16}
-            color={activeTab === 'family_vault' ? colors.accent : colors.textMuted}
-            style={{ marginRight: 6 }}
-          />
-          <Text
-            style={[styles.segmentText, activeTab === 'family_vault' && styles.segmentTextActive]}
-          >
-            Family Vault
+          <Trash2 size={15} color={colors.danger} style={{ marginRight: 5 }} />
+          <Text style={styles.quickBtnText}>Trash</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.quickBtn}
+          onPress={() => setShowCreateFolder(true)}
+          activeOpacity={0.8}
+        >
+          <FolderPlus size={15} color={colors.primaryLight} style={{ marginRight: 5 }} />
+          <Text style={styles.quickBtnText}>New Folder</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.quickBtn, styles.uploadQuickBtn]}
+          onPress={handlePickImage}
+          activeOpacity={0.8}
+        >
+          <Upload size={15} color={colors.textPrimary} style={{ marginRight: 5 }} />
+          <Text style={[styles.quickBtnText, { color: colors.textPrimary }]}>Upload</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Filter Tabs */}
+      <View style={styles.tabBar}>
+        <TouchableOpacity
+          style={[styles.tab, activeTab === 'all' && styles.activeTab]}
+          onPress={() => setActiveTab('all')}
+        >
+          <Text style={[styles.tabText, activeTab === 'all' && styles.activeTabText]}>
+            All Files
           </Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.tab, activeTab === 'starred' && styles.activeTab]}
+          onPress={() => setActiveTab('starred')}
+        >
+          <Text style={[styles.tabText, activeTab === 'starred' && styles.activeTabText]}>
+            Starred ⭐
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.tab, activeTab === 'vault' && styles.activeTab]}
+          onPress={() => setActiveTab('vault')}
+        >
+          <Text style={[styles.tabText, activeTab === 'vault' && styles.activeTabText]}>
+            E2EE Vault 🛡️
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Search Input Bar */}
+      <View style={styles.searchBar}>
+        <Search size={16} color={colors.textMuted} style={{ marginRight: 8 }} />
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search files, documents, or photos..."
+          placeholderTextColor={colors.textMuted}
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+        />
       </View>
 
       {/* Breadcrumb Navigation */}
       {currentFolder && (
         <View style={styles.breadcrumbBar}>
-          <TouchableOpacity onPress={() => setCurrentFolder(null)}>
-            <Text style={styles.breadcrumbRoot}>Root</Text>
+          <TouchableOpacity
+            style={styles.backBtn}
+            onPress={() => setCurrentFolder(null)}
+            activeOpacity={0.7}
+          >
+            <ArrowLeft size={16} color={colors.accent} style={{ marginRight: 6 }} />
+            <Text style={styles.breadcrumbText}>Root</Text>
           </TouchableOpacity>
           <ChevronRight size={14} color={colors.textMuted} style={{ marginHorizontal: 4 }} />
-          <Text style={styles.breadcrumbCurrent}>{currentFolder.name}</Text>
+          <Text style={styles.currentFolderText} numberOfLines={1}>
+            {currentFolder.name}
+          </Text>
         </View>
       )}
 
-      {/* Uploading Banner */}
-      {uploading && (
-        <View style={styles.uploadingBanner}>
-          <ActivityIndicator size="small" color={colors.accent} style={{ marginRight: 8 }} />
-          <Text style={styles.uploadingText}>{uploadProgressText}</Text>
-        </View>
-      )}
-
-      {/* Files List */}
+      {/* File List */}
       {loading ? (
-        <View style={styles.loadingContainer}>
+        <View style={styles.centerContainer}>
           <ActivityIndicator size="large" color={colors.accent} />
+        </View>
+      ) : filteredFiles.length === 0 ? (
+        <View style={styles.centerContainer}>
+          <View style={styles.emptyIconCircle}>
+            <Folder size={40} color={colors.textMuted} />
+          </View>
+          <Text style={styles.emptyTitle}>Folder is Empty</Text>
+          <Text style={styles.emptyDesc}>
+            Upload photos, documents, or create sub-folders to organize your enterprise NAS.
+          </Text>
         </View>
       ) : (
         <FlatList
-          data={files}
+          data={filteredFiles}
           keyExtractor={(item) => item.id}
-          renderItem={renderItem}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-              tintColor={colors.accent}
-            />
-          }
-          ListEmptyComponent={
-            <View style={styles.emptyContainer}>
-              <View style={styles.emptyIconCircle}>
-                <Folder size={44} color={colors.textMuted} />
-              </View>
-              <Text style={styles.emptyTitle}>
-                {isVault ? 'Family Vault is Empty' : 'No Files in Private Space'}
-              </Text>
-              <Text style={styles.emptySubtitle}>
-                Tap the (+) button below to upload documents or photos.
-              </Text>
-            </View>
-          }
           contentContainerStyle={styles.listContent}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.accent} />
+          }
+          renderItem={({ item }) => (
+            <Card style={styles.fileCard}>
+              <TouchableOpacity
+                style={styles.fileRow}
+                activeOpacity={0.7}
+                onPress={() => {
+                  if (item.isDirectory) {
+                    setCurrentFolder({ id: item.id, name: item.name });
+                  } else if (item.mimeType?.startsWith('image/') || item.mimeType?.startsWith('video/')) {
+                    setSelectedMedia(item);
+                  } else {
+                    setActionFile(item);
+                  }
+                }}
+              >
+                <View style={styles.fileIconBox}>{renderIcon(item)}</View>
+
+                <View style={{ flex: 1, marginLeft: 12 }}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Text style={styles.fileName} numberOfLines={1}>
+                      {item.name}
+                    </Text>
+                    {item.isFavorite && (
+                      <Star
+                        size={12}
+                        color="#F59E0B"
+                        fill="#F59E0B"
+                        style={{ marginLeft: 6 }}
+                      />
+                    )}
+                  </View>
+                  <Text style={styles.fileMeta}>
+                    {item.isDirectory ? 'Directory' : `${formatSize(item.sizeBytes)} • ${item.mimeType || 'File'}`}
+                  </Text>
+                </View>
+
+                <TouchableOpacity
+                  style={styles.moreBtn}
+                  onPress={() => setActionFile(item)}
+                  activeOpacity={0.7}
+                >
+                  <MoreVertical size={18} color={colors.textSecondary} />
+                </TouchableOpacity>
+              </TouchableOpacity>
+            </Card>
+          )}
         />
       )}
 
-      {/* Floating Action Button */}
-      <TouchableOpacity
-        style={styles.fab}
-        activeOpacity={0.85}
-        onPress={() => setShowUploadMenu(true)}
-      >
-        <Plus size={24} color={colors.textPrimary} />
-      </TouchableOpacity>
+      {/* Modals */}
+      <CreateFolderModal
+        visible={showCreateFolder}
+        isSharedVault={isVault}
+        onClose={() => setShowCreateFolder(false)}
+        onCreate={handleCreateFolderSubmit}
+      />
 
-      {/* Upload Choice Modal */}
-      <Modal
-        visible={showUploadMenu}
-        transparent
-        animationType="slide"
-        onRequestClose={() => setShowUploadMenu(false)}
-      >
-        <TouchableOpacity
-          style={styles.modalBackdrop}
-          activeOpacity={1}
-          onPress={() => setShowUploadMenu(false)}
-        >
-          <View style={styles.uploadSheet}>
-            <Text style={styles.sheetTitle}>Upload to {isVault ? 'Family Vault' : 'My Drive'}</Text>
-            <TouchableOpacity style={styles.sheetOption} onPress={handlePickImage}>
-              <Camera size={20} color={colors.accent} style={styles.sheetIcon} />
-              <View>
-                <Text style={styles.sheetOptionTitle}>Photo or Video</Text>
-                <Text style={styles.sheetOptionSub}>Select from device camera roll</Text>
-              </View>
-            </TouchableOpacity>
+      <FileActionModal
+        visible={!!actionFile}
+        file={actionFile}
+        onClose={() => setActionFile(null)}
+        onShare={(f) => setShareFile(f)}
+        onRefresh={loadFiles}
+      />
 
-            <TouchableOpacity style={styles.sheetOption} onPress={handlePickDocument}>
-              <FileUp size={20} color={colors.primaryLight} style={styles.sheetIcon} />
-              <View>
-                <Text style={styles.sheetOptionTitle}>Document or File</Text>
-                <Text style={styles.sheetOptionSub}>PDFs, archives, raw files</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-        </TouchableOpacity>
-      </Modal>
+      <ShareModal
+        visible={!!shareFile}
+        file={shareFile}
+        onClose={() => setShareFile(null)}
+      />
 
-      {/* Fullscreen Photo Viewer */}
+      <RecycleBinModal
+        visible={showRecycleBin}
+        onClose={() => setShowRecycleBin(false)}
+        onRestored={loadFiles}
+      />
+
+      <NASStorageHealthModal
+        visible={showNasHealth}
+        onClose={() => setShowNasHealth(false)}
+      />
+
       <MediaModal
-        visible={!!selectedFile}
-        file={selectedFile}
+        visible={!!selectedMedia}
+        file={selectedMedia}
         serverUrl={serverUrl}
-        onClose={() => setSelectedFile(null)}
+        onClose={() => setSelectedMedia(null)}
       />
     </View>
   );
@@ -374,212 +371,157 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background,
   },
-  segmentContainer: {
+  quickBar: {
     flexDirection: 'row',
-    marginHorizontal: 16,
-    marginTop: 12,
-    marginBottom: 8,
+    paddingHorizontal: 16,
+    paddingTop: 12,
+    paddingBottom: 8,
+    gap: 8,
+  },
+  quickBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 7,
+    paddingHorizontal: 10,
+    borderRadius: 8,
     backgroundColor: colors.surfaceCard,
-    borderRadius: 12,
-    padding: 4,
     borderWidth: 1,
     borderColor: colors.border,
   },
-  segmentBtn: {
-    flex: 1,
+  uploadQuickBtn: {
+    backgroundColor: colors.primary,
+    borderColor: colors.primary,
+  },
+  quickBtnText: {
+    color: colors.textSecondary,
+    fontSize: 11,
+    fontWeight: '700',
+  },
+  tabBar: {
     flexDirection: 'row',
+    marginHorizontal: 16,
+    marginVertical: 8,
+    backgroundColor: colors.surfaceCard,
+    borderRadius: 10,
+    padding: 3,
+  },
+  tab: {
+    flex: 1,
+    paddingVertical: 8,
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 10,
     borderRadius: 8,
   },
-  segmentBtnActive: {
+  activeTab: {
     backgroundColor: colors.surfaceHighlight,
   },
-  segmentText: {
-    color: colors.textMuted,
-    fontSize: 13,
+  tabText: {
+    color: colors.textSecondary,
+    fontSize: 12,
     fontWeight: '600',
   },
-  segmentTextActive: {
+  activeTabText: {
+    color: colors.accent,
+    fontWeight: '700',
+  },
+  searchBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: 16,
+    marginBottom: 8,
+    backgroundColor: colors.surfaceHighlight,
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  searchInput: {
+    flex: 1,
     color: colors.textPrimary,
+    fontSize: 13,
+    padding: 0,
   },
   breadcrumbBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
     paddingVertical: 6,
+    backgroundColor: colors.surface,
   },
-  breadcrumbRoot: {
-    color: colors.accent,
-    fontSize: 13,
-    fontWeight: '600',
-  },
-  breadcrumbCurrent: {
-    color: colors.textPrimary,
-    fontSize: 13,
-    fontWeight: '700',
-  },
-  uploadingBanner: {
+  backBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.surfaceElevated,
-    marginHorizontal: 16,
-    padding: 10,
-    borderRadius: 8,
-    marginBottom: 8,
-    borderWidth: 1,
-    borderColor: colors.accent,
   },
-  uploadingText: {
+  breadcrumbText: {
+    color: colors.accent,
+    fontSize: 12,
+    fontWeight: '700',
+  },
+  currentFolderText: {
     color: colors.textPrimary,
     fontSize: 12,
     fontWeight: '600',
+    flex: 1,
   },
-  loadingContainer: {
+  centerContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    padding: 30,
+  },
+  emptyIconCircle: {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    backgroundColor: colors.surfaceCard,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  emptyTitle: {
+    color: colors.textPrimary,
+    fontSize: 17,
+    fontWeight: '700',
+    marginBottom: 6,
+  },
+  emptyDesc: {
+    color: colors.textMuted,
+    fontSize: 13,
+    textAlign: 'center',
+    lineHeight: 18,
   },
   listContent: {
-    padding: 16,
-    paddingBottom: 80,
+    paddingHorizontal: 16,
+    paddingBottom: 24,
   },
   fileCard: {
+    marginBottom: 8,
+    padding: 12,
+  },
+  fileRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.surfaceCard,
-    padding: 12,
-    borderRadius: 12,
-    marginBottom: 8,
-    borderWidth: 1,
-    borderColor: colors.border,
   },
-  iconColumn: {
-    width: 44,
-    height: 44,
+  fileIconBox: {
+    width: 38,
+    height: 38,
     borderRadius: 8,
     backgroundColor: colors.surfaceHighlight,
     justifyContent: 'center',
     alignItems: 'center',
-    overflow: 'hidden',
-    marginRight: 12,
-  },
-  thumbnail: {
-    width: '100%',
-    height: '100%',
-  },
-  fileDetails: {
-    flex: 1,
   },
   fileName: {
     color: colors.textPrimary,
     fontSize: 14,
     fontWeight: '600',
+    flex: 1,
   },
   fileMeta: {
     color: colors.textSecondary,
     fontSize: 11,
     marginTop: 2,
   },
-  deleteAction: {
+  moreBtn: {
     padding: 8,
-  },
-  emptyContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 24,
-    marginTop: 80,
-  },
-  emptyIconCircle: {
-    width: 72,
-    height: 72,
-    borderRadius: 36,
-    backgroundColor: colors.surfaceCard,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 12,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  emptyTitle: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: colors.textPrimary,
-    marginBottom: 4,
-  },
-  emptySubtitle: {
-    fontSize: 12,
-    color: colors.textSecondary,
-    textAlign: 'center',
-  },
-  fab: {
-    position: 'absolute',
-    bottom: 24,
-    right: 20,
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    backgroundColor: colors.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: colors.primary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.4,
-    shadowRadius: 8,
-    elevation: 6,
-  },
-  modalBackdrop: {
-    flex: 1,
-    backgroundColor: '#00000088',
-    justifyContent: 'flex-end',
-  },
-  uploadSheet: {
-    backgroundColor: colors.surfaceCard,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    padding: 20,
-    paddingBottom: 36,
-    borderTopWidth: 1,
-    borderColor: colors.borderHighlight,
-  },
-  sheetTitle: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: colors.textPrimary,
-    marginBottom: 16,
-  },
-  sheetOption: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 12,
-  },
-  sheetIcon: {
-    marginRight: 14,
-  },
-  sheetOptionTitle: {
-    color: colors.textPrimary,
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  sheetOptionSub: {
-    color: colors.textSecondary,
-    fontSize: 12,
-    marginTop: 1,
-  },
-  e2eeBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'rgba(16, 185, 129, 0.15)',
-    paddingHorizontal: 6,
-    paddingVertical: 1,
-    borderRadius: 4,
-    marginLeft: 6,
-  },
-  e2eeBadgeText: {
-    fontSize: 9,
-    fontWeight: '700',
-    color: colors.success,
   },
 });

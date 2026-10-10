@@ -62,17 +62,32 @@
    - **Mathematical Zero-Knowledge**: The server never receives plaintext or private keys.
    - **12-Word Recovery Mnemonic**: Offline emergency recovery phrase for identity restoration.
 
-3. **Intelligent Mobile Sentinel Engine**:
+3. **Location Geofencing & Trusted Wi-Fi Auto-Sync**:
+   - **Geofenced Perimeter Detection**: Configurable multi-site perimeters (Home HQ, Design Studio, Office/Lab) calculated via real-time Haversine GPS distance algorithms.
+   - **Trusted Wi-Fi Validation**: Auto-sync initiates **only** when within the geofence perimeter and connected to pre-approved trusted Wi-Fi SSIDs.
+   - **Zero Cellular Leakage**: Sync strictly pauses on mobile data, untrusted coffee shop networks, or when roaming outside designated perimeters.
+   - **Testing & Simulator Radar**: Built-in interactive simulation toolbar allowing instant verification on iOS Simulator, Android Emulator, and Web preview.
+
+4. **Comprehensive Enterprise NAS Application Features**:
+   - **Cloud File Explorer**: Breadcrumb navigation, folder hierarchy, instant search, and batch multi-select.
+   - **File Operations**: In-place rename, duplicate, favorite/starring, and folder moves.
+   - **S.M.A.R.T. Health & Live Telemetry**: Real-time read/write throughput meters (MB/s), IOPS monitors, drive temperatures, and S.M.A.R.T. diagnostics.
+   - **Volume Breakdown**: Visual usage segmentation across Photos, Videos, Documents, and Zero-Knowledge Encrypted Vaults.
+   - **30-Day Recycle Bin (Trash Recovery)**: Soft-deletion buffer with 1-click file restoration and permanent purge controls.
+   - **Expiring Secure Share Links**: Share files via customizable expiration timers (1h–7d), passphrase locks, and cross-device QR codes.
+
+5. **Intelligent Mobile Sentinel Engine**:
    - Adaptive background syncing respecting battery level thresholds (e.g. pauses below 20%).
    - Wi-Fi only mode preventing accidental cellular data consumption.
    - Delta sync determination detecting missing mobile assets via SHA-256 fingerprinting.
 
-4. **User Walkthrough Tutorial & Orientation**:
-   - Interactive 4-step onboarding carousel introducing Cloud Sync, Sentinel Policies, Cluster Redundancy, and Zero-Knowledge Security.
+6. **User Walkthrough Tutorial & Orientation**:
+   - Interactive 5-step onboarding carousel introducing Cloud Sync, Sentinel Policies, Cluster Redundancy, Zero-Knowledge Security, and Geofenced Wi-Fi Sync.
    - Auto-triggers on first launch for new users; accessible anytime via Settings ("App Walkthrough Tutorial").
 
-5. **Immutable Compliance Audit Trail**:
+7. **Immutable Compliance Audit Trail**:
    - Cryptographic log entries recording `FILE_UPLOAD`, `FILE_DELETE`, `STORAGE_NODE_ADDED`, and `E2EE_INITIALIZED` with timestamps and client IP.
+
 
 ---
 

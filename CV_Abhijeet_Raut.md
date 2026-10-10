@@ -6,7 +6,7 @@ Pune, India • theabhijeetraut@gmail.com • [GitHub: github.com/arauthub](http
 
 ## Executive Summary
 
-> 📌 **Portfolio Monorepo Synchronization**: Verified up to date with repository on `2026-09-26 15:38 UTC` • Presubmit Suite Clean
+> 📌 **Portfolio Monorepo Synchronization**: Verified up to date with repository on `2026-10-10 15:02 UTC` • Presubmit Suite Clean
 
 Accomplished **Lead Software Engineer and Solutions Architect** with **12 years of hands-on experience** architecting high-concurrency backend services, distributed systems, and modern AI/ML solutions. 
 - **3 years at Persistent Systems** driving enterprise AI adoption, autonomous agent architectures (Google ADK, LangChain), and cloud-native microservice backends.
@@ -60,7 +60,8 @@ Accomplished **Lead Software Engineer and Solutions Architect** with **12 years 
 * Architected a distributed, self-hosted enterprise cloud storage platform featuring multi-server storage clustering (local NVMe/NAS disks + S3-compatible object stores like MinIO, AWS S3, and Cloudflare R2).
 * Engineered an instant ingest pipeline with asynchronous fan-out replication queue, SHA-256 checksum verification, and automatic read failover routing to secondary mirrors upon primary node degradation.
 * Designed a client-side Zero-Knowledge End-to-End Encryption (E2EE) cryptographic suite utilizing AES-256-GCM, 100,000-iteration PBKDF2 key derivation, and a 12-word recovery mnemonic.
-* Built an intelligent mobile Sentinel background sync engine adhering to adaptive battery thresholds and Wi-Fi policies, complete with an interactive onboarding walkthrough tutorial and compliance audit logging.
+* Built a Location Geofenced Auto-Sync engine utilizing real-time GPS distance calculation to trigger automatic backups strictly when inside trusted sites (Home/Office) and connected to pre-approved trusted Wi-Fi SSIDs, preventing cellular leakage.
+* Implemented standard enterprise NAS capabilities: cloud folder explorer, instant search, in-place rename, duplicate, 30-day recycle bin recovery buffer, expiring share links with QR codes, S.M.A.R.T. disk telemetry, and cross-platform iOS & Android mobile clients.
 
 ### **2. Autonomous AI Agent Orchestration Framework (MyAgents)** ⚡ *(Active Architecture / Recently Updated)*
 *Repository*: [`agents/myagents/`](https://github.com/arauthub/All-Projects/tree/main/agents/myagents)  

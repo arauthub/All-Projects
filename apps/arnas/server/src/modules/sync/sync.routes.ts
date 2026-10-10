@@ -114,4 +114,80 @@ export const syncRoutes: FastifyPluginAsync = async (fastify: FastifyInstance) =
     );
     return reply.status(201).send(result);
   });
+
+  // In-memory cache for user geofence policies
+  const userGeofencePolicies = new Map<string, any>();
+
+  // GET /api/v1/sync/geofence-policy
+  fastify.get('/geofence-policy', {
+    schema: {
+      tags: ['Sync Engine'],
+      summary: 'Get user trusted locations and geofence-bound Wi-Fi sync policy',
+      security: [{ bearerAuth: [] }],
+    },
+  }, async (request, reply) => {
+    const existing = userGeofencePolicies.get(request.user.id);
+    if (existing) {
+      return reply.status(200).send(existing);
+    }
+
+    // Default enterprise preset policy
+    const defaultPolicy = {
+      autoSyncEnabled: true,
+      strictLocationOnly: true,
+      strictWifiOnly: true,
+      trustedLocations: [
+        {
+          id: 'loc-home',
+          name: 'Home NAS (HQ)',
+          latitude: 37.7749,
+          longitude: -122.4194,
+          radiusMeters: 250,
+          trustedWifiSsids: ['Home-5GHz', 'ARNAS-Local-Mesh', 'RautHome-Fast'],
+          targetStorageClusterId: 'primary-local',
+          targetStorageName: 'Primary Local NVMe + S3 Mirror',
+          enabled: true,
+        },
+        {
+          id: 'loc-studio',
+          name: 'Creative Studio',
+          latitude: 37.7833,
+          longitude: -122.4167,
+          radiusMeters: 150,
+          trustedWifiSsids: ['Studio-5G', 'Studio-Internal'],
+          targetStorageClusterId: 'minio-onprem',
+          targetStorageName: 'MinIO On-Premises NAS',
+          enabled: true,
+        },
+        {
+          id: 'loc-office',
+          name: 'Office & Lab',
+          latitude: 37.7892,
+          longitude: -122.4014,
+          radiusMeters: 300,
+          trustedWifiSsids: ['Enterprise-Secure', 'Corp-Lab-WiFi'],
+          targetStorageClusterId: 'all-nodes',
+          targetStorageName: 'All Storage Nodes',
+          enabled: true,
+        },
+      ],
+    };
+
+    userGeofencePolicies.set(request.user.id, defaultPolicy);
+    return reply.status(200).send(defaultPolicy);
+  });
+
+  // POST /api/v1/sync/geofence-policy
+  fastify.post('/geofence-policy', {
+    schema: {
+      tags: ['Sync Engine'],
+      summary: 'Update user trusted locations and geofence Wi-Fi sync rules',
+      security: [{ bearerAuth: [] }],
+    },
+  }, async (request, reply) => {
+    const policy = request.body as any;
+    userGeofencePolicies.set(request.user.id, policy);
+    return reply.status(200).send({ success: true, policy });
+  });
 };
+

@@ -13,7 +13,7 @@ import { colors } from '../theme/colors';
 interface ButtonProps {
   title: string;
   onPress: () => void;
-  variant?: 'primary' | 'secondary' | 'danger' | 'ghost';
+  variant?: 'primary' | 'secondary' | 'danger' | 'ghost' | 'outline';
   size?: 'sm' | 'md' | 'lg';
   loading?: boolean;
   disabled?: boolean;
@@ -37,6 +37,8 @@ export const Button: React.FC<ButtonProps> = ({
     switch (variant) {
       case 'secondary':
         return styles.secondary;
+      case 'outline':
+        return styles.outline;
       case 'danger':
         return styles.danger;
       case 'ghost':
@@ -50,6 +52,8 @@ export const Button: React.FC<ButtonProps> = ({
     switch (variant) {
       case 'ghost':
         return styles.textGhost;
+      case 'outline':
+        return styles.textOutline;
       case 'secondary':
         return styles.textSecondary;
       default:
@@ -110,6 +114,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.borderHighlight,
   },
+  outline: {
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
   danger: {
     backgroundColor: colors.danger,
   },
@@ -128,6 +137,9 @@ const styles = StyleSheet.create({
   },
   textSecondary: {
     color: colors.textPrimary,
+  },
+  textOutline: {
+    color: colors.textSecondary,
   },
   textGhost: {
     color: colors.primaryLight,

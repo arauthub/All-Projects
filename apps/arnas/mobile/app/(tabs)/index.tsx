@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   View,
   Text,
@@ -14,9 +14,25 @@ import { colors } from '../../src/theme/colors';
 import { Card } from '../../src/components/Card';
 import { useAuthStore } from '../../src/stores/authStore';
 import { MobileFileService, FileItem } from '../../src/services/file.service';
+import {
+  GeofenceSyncService,
+  GeofenceState,
+} from '../../src/services/geofence-sync.service';
 import { MediaModal } from '../../src/components/MediaModal';
 import { UserTutorialModal } from '../../src/components/UserTutorialModal';
-import { Sparkles, Image as ImageIcon, Camera, Play } from 'lucide-react-native';
+import { LocationGeofenceModal } from '../../src/components/LocationGeofenceModal';
+import {
+  Sparkles,
+  Image as ImageIcon,
+  Camera,
+  Play,
+  MapPin,
+  Wifi,
+  ShieldCheck,
+  ShieldAlert,
+  Star,
+  Film,
+} from 'lucide-react-native';
 import { useRouter } from 'expo-router';
 
 const { width } = Dimensions.get('window');
@@ -27,9 +43,12 @@ export default function TimelineScreen() {
   const router = useRouter();
 
   const [mediaItems, setMediaItems] = useState<FileItem[]>([]);
+  const [activeFilter, setActiveFilter] = useState<'all' | 'photos' | 'videos' | 'favorites'>('all');
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [selectedFile, setSelectedFile] = useState<FileItem | null>(null);
+  const [geofence, setGeofence] = useState<GeofenceState | null>(null);
+  const [showGeofenceModal, setShowGeofenceModal] = useState(false);
 
   const loadMedia = async () => {
     try {
@@ -40,6 +59,8 @@ export default function TimelineScreen() {
         (i) => i.mimeType?.startsWith('image/') || i.mimeType?.startsWith('video/')
       );
       setMediaItems(media);
+      const geo = await GeofenceSyncService.evaluateGeofence();
+      setGeofence(geo);
     } catch (e: any) {
       console.warn('Failed to load media:', e.message);
     } finally {
@@ -50,12 +71,23 @@ export default function TimelineScreen() {
 
   useEffect(() => {
     loadMedia();
+    const unsub = GeofenceSyncService.subscribe(setGeofence);
+    return unsub;
   }, []);
 
   const onRefresh = () => {
     setRefreshing(true);
     loadMedia();
   };
+
+  const filteredMedia = useMemo(() => {
+    return mediaItems.filter((item) => {
+      if (activeFilter === 'photos') return item.mimeType?.startsWith('image/');
+      if (activeFilter === 'videos') return item.mimeType?.startsWith('video/');
+      if (activeFilter === 'favorites') return item.isFavorite;
+      return true;
+    });
+  }, [mediaItems, activeFilter]);
 
   const renderGridItem = ({ item }: { item: FileItem }) => {
     const isVideo = item.mimeType?.startsWith('video/');
@@ -80,12 +112,38 @@ export default function TimelineScreen() {
             <Play size={12} color={colors.textPrimary} fill={colors.textPrimary} />
           </View>
         )}
+        {item.isFavorite && (
+          <View style={styles.favoriteBadge}>
+            <Star size={10} color="#F59E0B" fill="#F59E0B" />
+          </View>
+        )}
       </TouchableOpacity>
     );
   };
 
   return (
     <View style={styles.container}>
+      {/* Geofence & Trusted Wi-Fi Status Bar */}
+      <TouchableOpacity
+        style={[
+          styles.geofenceBar,
+          geofence?.canAutoSync ? styles.geofenceBarActive : styles.geofenceBarHeld,
+        ]}
+        onPress={() => setShowGeofenceModal(true)}
+        activeOpacity={0.8}
+      >
+        {geofence?.canAutoSync ? (
+          <ShieldCheck size={14} color={colors.success} style={{ marginRight: 6 }} />
+        ) : (
+          <ShieldAlert size={14} color={colors.warning} style={{ marginRight: 6 }} />
+        )}
+        <Text style={styles.geofenceBarText} numberOfLines={1}>
+          {geofence?.canAutoSync
+            ? `📍 ${geofence.matchedLocation?.name || 'Home'} • 📶 ${geofence.currentSsid} • Auto-Sync Ready`
+            : `📍 ${geofence?.statusMessage || 'Checking geofence policy...'}`}
+        </Text>
+      </TouchableOpacity>
+
       {/* Banner */}
       <Card style={styles.banner}>
         <View style={styles.bannerContent}>
@@ -93,22 +151,58 @@ export default function TimelineScreen() {
             <Sparkles size={22} color={colors.accent} />
           </View>
           <View style={styles.bannerText}>
-            <Text style={styles.greeting}>Welcome, {user?.name || 'Family Member'}</Text>
+            <Text style={styles.greeting}>Welcome, {user?.name || 'Abhijeet Raut'}</Text>
             <Text style={styles.subGreeting}>
-              {user?.familyName || 'Family Cloud'} • {mediaItems.length} Media Synced
+              {user?.familyName || 'Family Cloud NAS'} • {mediaItems.length} Synced Media
             </Text>
           </View>
         </View>
       </Card>
+
+      {/* Filter Chips */}
+      <View style={styles.filterChipsRow}>
+        <TouchableOpacity
+          style={[styles.chip, activeFilter === 'all' && styles.chipActive]}
+          onPress={() => setActiveFilter('all')}
+        >
+          <Text style={[styles.chipText, activeFilter === 'all' && styles.chipTextActive]}>
+            All Media
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.chip, activeFilter === 'photos' && styles.chipActive]}
+          onPress={() => setActiveFilter('photos')}
+        >
+          <Text style={[styles.chipText, activeFilter === 'photos' && styles.chipTextActive]}>
+            Photos
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.chip, activeFilter === 'videos' && styles.chipActive]}
+          onPress={() => setActiveFilter('videos')}
+        >
+          <Text style={[styles.chipText, activeFilter === 'videos' && styles.chipTextActive]}>
+            Videos
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.chip, activeFilter === 'favorites' && styles.chipActive]}
+          onPress={() => setActiveFilter('favorites')}
+        >
+          <Text style={[styles.chipText, activeFilter === 'favorites' && styles.chipTextActive]}>
+            Favorites ⭐
+          </Text>
+        </TouchableOpacity>
+      </View>
 
       {/* Media Grid or Empty State */}
       {loading ? (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={colors.accent} />
         </View>
-      ) : mediaItems.length > 0 ? (
+      ) : filteredMedia.length > 0 ? (
         <FlatList
-          data={mediaItems}
+          data={filteredMedia}
           keyExtractor={(item) => item.id}
           renderItem={renderGridItem}
           numColumns={3}
@@ -150,6 +244,15 @@ export default function TimelineScreen() {
         onClose={() => setSelectedFile(null)}
       />
 
+      {/* Location Geofence Modal */}
+      <LocationGeofenceModal
+        visible={showGeofenceModal}
+        onClose={() => {
+          setShowGeofenceModal(false);
+          loadMedia();
+        }}
+      />
+
       {/* New User Walkthrough / Onboarding Tutorial */}
       <UserTutorialModal />
     </View>
@@ -161,9 +264,35 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background,
   },
+  geofenceBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: 16,
+    marginTop: 8,
+    marginBottom: 4,
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+    borderRadius: 8,
+    borderWidth: 1,
+  },
+  geofenceBarActive: {
+    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+    borderColor: 'rgba(16, 185, 129, 0.3)',
+  },
+  geofenceBarHeld: {
+    backgroundColor: 'rgba(245, 158, 11, 0.1)',
+    borderColor: 'rgba(245, 158, 11, 0.3)',
+  },
+  geofenceBarText: {
+    color: colors.textPrimary,
+    fontSize: 11,
+    fontWeight: '600',
+    flex: 1,
+  },
   banner: {
-    margin: 16,
-    marginBottom: 12,
+    marginHorizontal: 16,
+    marginTop: 6,
+    marginBottom: 8,
   },
   bannerContent: {
     flexDirection: 'row',
@@ -191,6 +320,33 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 2,
   },
+  filterChipsRow: {
+    flexDirection: 'row',
+    paddingHorizontal: 16,
+    marginBottom: 10,
+    gap: 8,
+  },
+  chip: {
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 16,
+    backgroundColor: colors.surfaceCard,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  chipActive: {
+    borderColor: colors.accent,
+    backgroundColor: 'rgba(6, 182, 212, 0.15)',
+  },
+  chipText: {
+    color: colors.textSecondary,
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  chipTextActive: {
+    color: colors.accent,
+    fontWeight: '700',
+  },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -207,8 +363,9 @@ const styles = StyleSheet.create({
   gridItem: {
     width: COLUMN_SIZE,
     height: COLUMN_SIZE,
-    borderRadius: 8,
+    borderRadius: 6,
     overflow: 'hidden',
+    position: 'relative',
     backgroundColor: colors.surfaceCard,
   },
   gridImage: {
@@ -219,10 +376,21 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 6,
     right: 6,
-    backgroundColor: 'rgba(0,0,0,0.6)',
-    borderRadius: 10,
-    width: 20,
-    height: 20,
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    backgroundColor: 'rgba(0, 0, 0, 0.65)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  favoriteBadge: {
+    position: 'absolute',
+    top: 6,
+    right: 6,
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    backgroundColor: 'rgba(0, 0, 0, 0.65)',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -230,29 +398,26 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 24,
-    marginTop: 40,
+    padding: 32,
   },
   emptyIconCircle: {
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: colors.surfaceCard,
+    backgroundColor: colors.surfaceHighlight,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 16,
-    borderWidth: 1,
-    borderColor: colors.border,
   },
   emptyTitle: {
-    fontSize: 17,
-    fontWeight: '700',
     color: colors.textPrimary,
-    marginBottom: 6,
+    fontSize: 18,
+    fontWeight: '700',
+    marginBottom: 8,
   },
   emptySubtitle: {
-    fontSize: 13,
     color: colors.textSecondary,
+    fontSize: 13,
     textAlign: 'center',
     lineHeight: 18,
     marginBottom: 20,
@@ -261,13 +426,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: colors.primary,
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 10,
   },
   syncActionText: {
     color: colors.textPrimary,
+    fontSize: 13,
     fontWeight: '600',
-    fontSize: 14,
   },
 });
