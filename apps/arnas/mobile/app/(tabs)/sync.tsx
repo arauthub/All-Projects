@@ -19,6 +19,8 @@ import {
   GeofenceState,
 } from '../../src/services/geofence-sync.service';
 import { LocationGeofenceModal } from '../../src/components/LocationGeofenceModal';
+import { ExternalDriveModal } from '../../src/components/ExternalDriveModal';
+import { ExternalDriveService } from '../../src/services/external-drive.service';
 import { useAuthStore } from '../../src/stores/authStore';
 import {
   RefreshCw,
@@ -50,6 +52,8 @@ export default function SyncScreen() {
   });
   const [geofence, setGeofence] = useState<GeofenceState | null>(null);
   const [showGeofenceModal, setShowGeofenceModal] = useState(false);
+  const [showExternalDriveModal, setShowExternalDriveModal] = useState(false);
+  const [activeTargetDrive, setActiveTargetDrive] = useState<string>('Samsung T7 Shield 2TB (USB-C SSD)');
   const [refreshing, setRefreshing] = useState(false);
 
   const loadData = async () => {
@@ -60,6 +64,10 @@ export default function SyncScreen() {
       setHwStatus(hardware);
       const geo = await GeofenceSyncService.evaluateGeofence();
       setGeofence(geo);
+      const extDrives = await ExternalDriveService.getExternalDrives();
+      if (extDrives.primaryTarget) {
+        setActiveTargetDrive(extDrives.primaryTarget.name);
+      }
     } catch {
       // Ignore
     } finally {
@@ -211,6 +219,34 @@ export default function SyncScreen() {
         </View>
       </View>
 
+      {/* Target Storage Destination & External Drive Banner */}
+      <TouchableOpacity
+        style={styles.targetDriveCard}
+        onPress={() => setShowExternalDriveModal(true)}
+        activeOpacity={0.8}
+      >
+        <View style={styles.targetDriveLeft}>
+          <View style={styles.targetDriveIconBox}>
+            <HardDrive size={18} color={colors.cyan || '#38BDF8'} />
+          </View>
+          <View style={{ flex: 1, marginLeft: 10 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+              <Text style={styles.targetDriveHeading}>WIRELESS SYNC DESTINATION</Text>
+              <View style={styles.targetDriveBadge}>
+                <Text style={styles.targetDriveBadgeText}>DIRECT SSD</Text>
+              </View>
+            </View>
+            <Text style={styles.targetDriveTitle} numberOfLines={1}>
+              {activeTargetDrive}
+            </Text>
+            <Text style={styles.targetDriveSub}>
+              Mobile Wi-Fi ➔ Server ➔ USB 3.2 External SSD
+            </Text>
+          </View>
+        </View>
+        <Sliders size={16} color={colors.textSecondary} />
+      </TouchableOpacity>
+
       {/* Main Sync Status Hero Card */}
       <Card style={styles.heroCard} elevated>
         <View style={styles.heroHeader}>
@@ -295,6 +331,16 @@ export default function SyncScreen() {
           loadData();
         }}
       />
+
+      {/* External Drive NAS Modal */}
+      <ExternalDriveModal
+        visible={showExternalDriveModal}
+        onClose={() => setShowExternalDriveModal(false)}
+        onTargetChanged={(driveName) => {
+          setActiveTargetDrive(driveName);
+          loadData();
+        }}
+      />
     </ScrollView>
   );
 }
@@ -306,6 +352,60 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 16,
+  },
+  targetDriveCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#121824',
+    borderRadius: 14,
+    padding: 14,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(56, 189, 248, 0.3)',
+  },
+  targetDriveLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  targetDriveIconBox: {
+    width: 38,
+    height: 38,
+    borderRadius: 10,
+    backgroundColor: 'rgba(56, 189, 248, 0.12)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(56, 189, 248, 0.3)',
+  },
+  targetDriveHeading: {
+    fontSize: 10,
+    fontWeight: '800',
+    color: colors.cyan || '#38BDF8',
+    letterSpacing: 0.6,
+  },
+  targetDriveBadge: {
+    backgroundColor: 'rgba(56, 189, 248, 0.15)',
+    paddingHorizontal: 6,
+    paddingVertical: 1,
+    borderRadius: 4,
+  },
+  targetDriveBadgeText: {
+    fontSize: 9,
+    fontWeight: '800',
+    color: colors.cyan || '#38BDF8',
+  },
+  targetDriveTitle: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#F8FAFC',
+    marginTop: 2,
+  },
+  targetDriveSub: {
+    fontSize: 10,
+    color: colors.textSecondary,
+    marginTop: 2,
   },
   radarCard: {
     padding: 16,

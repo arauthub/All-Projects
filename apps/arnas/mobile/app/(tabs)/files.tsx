@@ -23,6 +23,7 @@ import { FileActionModal } from '../../src/components/FileActionModal';
 import { ShareModal } from '../../src/components/ShareModal';
 import { RecycleBinModal } from '../../src/components/RecycleBinModal';
 import { NASStorageHealthModal } from '../../src/components/NASStorageHealthModal';
+import { ExternalDriveModal } from '../../src/components/ExternalDriveModal';
 import {
   Folder,
   Star,
@@ -39,6 +40,7 @@ import {
   ArrowLeft,
   FolderPlus,
   Upload,
+  HardDrive,
 } from 'lucide-react-native';
 
 export default function FilesScreen() {
@@ -57,6 +59,7 @@ export default function FilesScreen() {
   const [showCreateFolder, setShowCreateFolder] = useState(false);
   const [showRecycleBin, setShowRecycleBin] = useState(false);
   const [showNasHealth, setShowNasHealth] = useState(false);
+  const [showExternalDrives, setShowExternalDrives] = useState(false);
 
   const isVault = activeTab === 'vault';
 
@@ -163,6 +166,15 @@ export default function FilesScreen() {
         >
           <Activity size={15} color={colors.accent} style={{ marginRight: 5 }} />
           <Text style={styles.quickBtnText}>NAS Health</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.quickBtn}
+          onPress={() => setShowExternalDrives(true)}
+          activeOpacity={0.8}
+        >
+          <HardDrive size={15} color={colors.cyan || '#38BDF8'} style={{ marginRight: 5 }} />
+          <Text style={styles.quickBtnText}>External SSD</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -354,6 +366,12 @@ export default function FilesScreen() {
       <NASStorageHealthModal
         visible={showNasHealth}
         onClose={() => setShowNasHealth(false)}
+      />
+
+      <ExternalDriveModal
+        visible={showExternalDrives}
+        onClose={() => setShowExternalDrives(false)}
+        onTargetChanged={() => loadFiles()}
       />
 
       <MediaModal

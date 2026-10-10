@@ -11,10 +11,13 @@ export const colors = {
 
   accent: '#06B6D4',
   accentGlow: 'rgba(6, 182, 212, 0.15)',
+  cyan: '#38BDF8',
+  emerald: '#10B981',
 
   success: '#10B981',
   warning: '#F59E0B',
   danger: '#EF4444',
+  error: '#EF4444',
 
   textPrimary: '#F8FAFC',
   textSecondary: '#94A3B8',

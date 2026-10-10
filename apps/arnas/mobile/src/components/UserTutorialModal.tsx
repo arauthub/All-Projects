@@ -20,6 +20,7 @@ import {
   Sparkles,
   X,
   MapPin,
+  HardDrive,
 } from 'lucide-react-native';
 import { theme } from '../theme';
 
@@ -137,6 +138,15 @@ export const UserTutorialModal: React.FC<UserTutorialModalProps> = ({
       icon: <MapPin size={44} color="#F59E0B" />,
       accentColor: '#F59E0B',
       badge: 'GEOFENCE & TRUSTED WI-FI',
+    },
+    {
+      title: 'External HDD / SSD Wireless NAS',
+      subtitle: 'Direct Wireless Storage to USB & Thunderbolt Drives',
+      description:
+        'Connect any external USB-C SSD or high-capacity HDD to your home server. Configure it as your primary wireless destination to auto-backup your phone directly onto your external drive.',
+      icon: <HardDrive size={44} color="#38BDF8" />,
+      accentColor: '#38BDF8',
+      badge: 'EXTERNAL SSD/HDD STORAGE',
     },
   ];
 

@@ -34,6 +34,13 @@ export class StorageService {
     return this.rootPath;
   }
 
+  public setOverrideRootPath(newRoot: string): void {
+    this.rootPath = path.resolve(newRoot);
+    if (!fsSync.existsSync(this.rootPath)) {
+      fsSync.mkdirSync(this.rootPath, { recursive: true });
+    }
+  }
+
   public getFamilyPath(familyId: string): string {
     return path.join(this.rootPath, 'families', familyId);
   }

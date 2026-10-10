@@ -13,6 +13,7 @@ import { familyRoutes } from './modules/family/family.routes.js';
 import { syncRoutes } from './modules/sync/sync.routes.js';
 import { fileRoutes } from './modules/files/file.routes.js';
 import { storageRoutes } from './modules/storage/storage.routes.js';
+import { externalDriveRoutes } from './modules/storage/external-drive.routes.js';
 import { e2eeRoutes } from './modules/e2ee/e2ee.routes.js';
 import { auditRoutes } from './modules/audit/audit.routes.js';
 
@@ -109,6 +110,7 @@ export async function buildApp(): Promise<FastifyInstance> {
   await app.register(syncRoutes, { prefix: '/api/v1/sync' });
   await app.register(fileRoutes, { prefix: '/api/v1/files' });
   await app.register(storageRoutes, { prefix: '/api/v1/storage' });
+  await app.register(externalDriveRoutes, { prefix: '/api/v1/storage/external-drives' });
   await app.register(e2eeRoutes, { prefix: '/api/v1/e2ee' });
   await app.register(auditRoutes, { prefix: '/api/v1/audit' });
 

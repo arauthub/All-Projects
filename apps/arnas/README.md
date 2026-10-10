@@ -76,16 +76,22 @@
    - **30-Day Recycle Bin (Trash Recovery)**: Soft-deletion buffer with 1-click file restoration and permanent purge controls.
    - **Expiring Secure Share Links**: Share files via customizable expiration timers (1h–7d), passphrase locks, and cross-device QR codes.
 
-5. **Intelligent Mobile Sentinel Engine**:
+5. **External HDD / SSD Wireless NAS Storage**:
+   - **Direct Wireless Backup to External Drives**: Auto-routes mobile photos, videos, and vaults over Wi-Fi directly to attached USB 3.2 / Thunderbolt external SSDs or HDDs connected to the server.
+   - **Auto-Detection & Canary Testing**: Scans system volumes (`/Volumes`, `/media`, `/mnt`) with `.arnas_canary.json` verification before mounting.
+   - **Real-Time I/O Speed Benchmarking**: Live write/read throughput benchmark (MB/s) and random IOPS measurement directly from mobile and web UI.
+   - **Safe Ejection Protocol**: Flushes active sync buffers, unregisters target, and safely detaches drive while falling back to server NVMe.
+
+6. **Intelligent Mobile Sentinel Engine**:
    - Adaptive background syncing respecting battery level thresholds (e.g. pauses below 20%).
    - Wi-Fi only mode preventing accidental cellular data consumption.
    - Delta sync determination detecting missing mobile assets via SHA-256 fingerprinting.
 
-6. **User Walkthrough Tutorial & Orientation**:
-   - Interactive 5-step onboarding carousel introducing Cloud Sync, Sentinel Policies, Cluster Redundancy, Zero-Knowledge Security, and Geofenced Wi-Fi Sync.
+7. **User Walkthrough Tutorial & Orientation**:
+   - Interactive 6-step onboarding carousel introducing Cloud Sync, Sentinel Policies, Cluster Redundancy, Zero-Knowledge Security, Geofenced Wi-Fi Sync, and External Drive Storage.
    - Auto-triggers on first launch for new users; accessible anytime via Settings ("App Walkthrough Tutorial").
 
-7. **Immutable Compliance Audit Trail**:
+8. **Immutable Compliance Audit Trail**:
    - Cryptographic log entries recording `FILE_UPLOAD`, `FILE_DELETE`, `STORAGE_NODE_ADDED`, and `E2EE_INITIALIZED` with timestamps and client IP.
 
 

@@ -18,8 +18,10 @@ import {
   MapPin,
   Activity,
   Trash2,
+  HardDrive,
 } from 'lucide-react-native';
 import { StorageClusterModal } from '../../src/components/StorageClusterModal';
+import { ExternalDriveModal } from '../../src/components/ExternalDriveModal';
 import { E2EESecurityModal } from '../../src/components/E2EESecurityModal';
 import { AuditTrailModal } from '../../src/components/AuditTrailModal';
 import { UserTutorialModal } from '../../src/components/UserTutorialModal';
@@ -43,6 +45,7 @@ export default function SettingsScreen() {
   const [showGeofenceModal, setShowGeofenceModal] = useState(false);
   const [showHealthModal, setShowHealthModal] = useState(false);
   const [showTrashModal, setShowTrashModal] = useState(false);
+  const [showExternalDriveModal, setShowExternalDriveModal] = useState(false);
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
@@ -131,6 +134,27 @@ export default function SettingsScreen() {
           <View style={{ flex: 1, marginLeft: 12 }}>
             <Text style={styles.enterpriseTitle}>Recycle Bin (Trash Recovery)</Text>
             <Text style={styles.enterpriseDesc}>Restore soft-deleted files within 30-day buffer</Text>
+          </View>
+          <ChevronRight size={18} color={colors.textSecondary} />
+        </TouchableOpacity>
+
+        {/* External HDD / SSD Storage */}
+        <TouchableOpacity
+          style={styles.enterpriseRow}
+          onPress={() => setShowExternalDriveModal(true)}
+          activeOpacity={0.7}
+        >
+          <View style={[styles.enterpriseIconBox, { backgroundColor: 'rgba(56, 189, 248, 0.15)' }]}>
+            <HardDrive size={20} color={colors.cyan || '#38BDF8'} />
+          </View>
+          <View style={{ flex: 1, marginLeft: 12 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Text style={styles.enterpriseTitle}>External HDD / SSD Storage</Text>
+              <View style={[styles.activePill, { backgroundColor: 'rgba(56, 189, 248, 0.2)' }]}>
+                <Text style={[styles.activePillText, { color: colors.cyan || '#38BDF8' }]}>WIRELESS TARGET</Text>
+              </View>
+            </View>
+            <Text style={styles.enterpriseDesc}>Direct mobile Wi-Fi sync to connected USB/Thunderbolt drives</Text>
           </View>
           <ChevronRight size={18} color={colors.textSecondary} />
         </TouchableOpacity>
@@ -321,6 +345,10 @@ export default function SettingsScreen() {
       <RecycleBinModal
         visible={showTrashModal}
         onClose={() => setShowTrashModal(false)}
+      />
+      <ExternalDriveModal
+        visible={showExternalDriveModal}
+        onClose={() => setShowExternalDriveModal(false)}
       />
       <StorageClusterModal
         visible={showClusterModal}
