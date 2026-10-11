@@ -6,9 +6,9 @@
 export const STATIC_GIT_SNAPSHOT = {
   repo: {
     owner: "arauthub",
-    name: "All-Projects",
-    full_name: "arauthub/All-Projects",
-    html_url: "https://github.com/arauthub/All-Projects",
+    name: "portfolio",
+    full_name: "arauthub/portfolio",
+    html_url: "https://github.com/arauthub/portfolio",
     description: "Curated enterprise monorepo: Autonomous AI multi-agent swarms, distributed cloud storage NAS, Chrome Manifest V3 extensions, Wagtail/Django platforms, and DevOps automation.",
     default_branch: "main",
     stars: 48,
@@ -149,7 +149,7 @@ export async function getGitIntelligenceData() {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 2500);
 
-    const repoRes = await fetch("https://api.github.com/repos/arauthub/All-Projects", {
+    const repoRes = await fetch("https://api.github.com/repos/arauthub/portfolio", {
       signal: controller.signal,
       headers: { "Accept": "application/vnd.github.v3+json" }
     });
