@@ -83,10 +83,11 @@ class NexusPrimeApp {
   renderHeroSection() {
     // Subtitle typewriter rotation
     const subtitles = [
-      "Architecting Autonomous Multi-Agent AI Swarms & RAG Pipelines",
-      "Designing Zero-Knowledge Distributed Cloud NAS Storage (E2EE)",
-      "Building Precision Chrome DevTools & 2D Physics Browser Sandboxes",
-      "Lead Backend & Distributed Systems Architect (12 Years Experience)"
+      "Lead Backend & AI/ML Engineer | Solutions Architect",
+      "12 Years Hands-on Experience • Persistent Systems & Cybage Software",
+      "Architecting Autonomous Multi-Agent AI Swarms & Vector RAG (Google ADK)",
+      "Distributed Systems & High-Concurrency Backends (Python, FastAPI, Django, Go)",
+      "Zero-Knowledge E2EE Cloud Storage & Chrome Manifest V3 DevTools"
     ];
 
     let subIndex = 0;
