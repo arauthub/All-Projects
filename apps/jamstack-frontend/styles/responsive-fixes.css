@@ -1,0 +1,242 @@
+/*
+  Responsive, accessibility, and performance polish for Nexus Prime portfolio
+  Fixes: mobile overflow, narrow-screen layout collapse, focus visibility, reduced-motion behavior.
+*/
+
+:root {
+  --safe-inline: clamp(0.875rem, 2vw, 1.5rem);
+}
+
+img,
+svg,
+canvas {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a,
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 4px rgba(0, 245, 255, 0.18);
+}
+
+@media (max-width: 1200px) {
+  .site-hud {
+    height: auto;
+    min-height: 72px;
+  }
+
+  .hud-container {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  .hud-telemetry {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .git-header-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .tree-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tree-sidebar {
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  }
+}
+
+@media (max-width: 900px) {
+  .container {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .hero-section {
+    padding-top: 150px;
+  }
+
+  .hero-name {
+    font-size: clamp(2.5rem, 7vw, 4rem);
+  }
+
+  .project-holo-card,
+  .timeline-card,
+  .skill-category-card,
+  .git-header-bar {
+    border-radius: 16px;
+  }
+}
+
+@media (max-width: 680px) {
+  .hero-section {
+    padding-top: 170px;
+  }
+
+  .hero-badge-row {
+    gap: 8px;
+  }
+
+  .hero-pill {
+    padding: 6px 12px;
+    font-size: 10px;
+    letter-spacing: 0.04em;
+  }
+
+  .hero-typewriter {
+    font-size: clamp(1rem, 4.6vw, 1.6rem);
+  }
+
+  .hero-bio {
+    font-size: 15px;
+  }
+
+  .hero-stats-grid,
+  .projects-grid,
+  .git-commits-stream,
+  .skills-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-cta-group {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-primary,
+  .btn-secondary,
+  .btn-hud-palette,
+  .btn-hud-audio {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .projects-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .search-box-wrap {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .filters-row {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .filter-pill {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .card-actions {
+    flex-direction: column;
+  }
+
+  .card-top,
+  .timeline-card-header,
+  .terminal-top-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .terminal-shell {
+    max-width: 100%;
+  }
+
+  .terminal-body {
+    height: 300px;
+  }
+
+  .command-palette-modal {
+    padding-top: 8vh;
+  }
+
+  .palette-box {
+    width: calc(100% - 24px);
+  }
+}
+
+@media (max-width: 480px) {
+  .site-hud {
+    position: fixed;
+  }
+
+  .hud-brand-text {
+    display: none;
+  }
+
+  .hud-item {
+    padding: 5px 8px;
+    font-size: 10px;
+  }
+
+  .hud-actions {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .section-title {
+    font-size: clamp(1.9rem, 8vw, 2.5rem);
+  }
+
+  .git-header-bar,
+  .project-holo-card,
+  .timeline-card,
+  .skill-category-card,
+  .tree-sidebar,
+  .tree-code-wrap,
+  .terminal-body,
+  .panel-terminal {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .metric-cell,
+  .metrics-grid {
+    min-width: 0;
+  }
+
+  .search-box-wrap {
+    min-width: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
