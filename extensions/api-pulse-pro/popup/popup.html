@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Pulse Pro</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <!-- Header -->
+    <header class="header">
+      <div class="brand">
+        <div class="logo-wrap">
+          <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        <div>
+          <h1 class="title">API Pulse <span class="pro-tag">PRO</span></h1>
+          <div class="host-pill" id="current-host">Inspecting Active Tab</div>
+        </div>
+      </div>
+      <button class="btn-studio" id="btn-open-studio" title="Open Full Screen Studio Workbench (Alt+Shift+S)">
+        <span>Studio</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </button>
+    </header>
+
+    <!-- Stats Bar -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-val" id="stat-total">0</div>
+        <div class="stat-label">Total APIs</div>
+      </div>
+      <div class="stat-card stat-card-post">
+        <div class="stat-val" id="stat-post">0</div>
+        <div class="stat-label">POST Calls</div>
+      </div>
+      <div class="stat-card stat-card-err">
+        <div class="stat-val" id="stat-err">0</div>
+        <div class="stat-label">Failed (4xx/5xx)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="stat-latency">0ms</div>
+        <div class="stat-label">Avg Latency</div>
+      </div>
+    </div>
+
+    <!-- Filter & Search Toolbar -->
+    <div class="toolbar">
+      <div class="search-box">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="search-input" placeholder="Search path, status, body...">
+      </div>
+      <div class="filter-pills">
+        <button class="filter-pill active" data-filter="ALL">ALL</button>
+        <button class="filter-pill" data-filter="POST">POST</button>
+        <button class="filter-pill" data-filter="ERR">ERR</button>
+      </div>
+    </div>
+
+    <!-- Action Bar -->
+    <div class="action-bar">
+      <button class="action-btn" id="btn-toggle-hud" title="Toggle Floating HUD in page">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>
+        <span>Toggle HUD</span>
+      </button>
+      <button class="action-btn" id="btn-export" title="Export requests as JSON">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span>Export</span>
+      </button>
+      <button class="action-btn" id="btn-clear" title="Clear captured calls">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        <span>Clear</span>
+      </button>
+    </div>
+
+    <!-- Request Stream List -->
+    <div class="list-container" id="request-list">
+      <div class="empty-state">
+        <div class="empty-icon">⚡</div>
+        <p>No API activity detected yet.</p>
+        <small>Interact with the active page or submit forms to see requests stream in real-time!</small>
+      </div>
+    </div>
+
+    <!-- Quick Preview Drawer -->
+    <div class="quick-preview" id="quick-preview" style="display: none;">
+      <div class="preview-header">
+        <div class="preview-title" id="preview-title">POST /api/endpoint</div>
+        <button class="preview-close" id="preview-close">✕</button>
+      </div>
+      <div class="preview-tabs">
+        <button class="preview-tab active" data-tab="res">Response</button>
+        <button class="preview-tab" data-tab="req">Payload</button>
+        <button class="preview-tab" data-tab="headers">Headers</button>
+      </div>
+      <pre class="preview-content" id="preview-body"></pre>
+      <div class="preview-actions">
+        <button class="action-btn" id="preview-copy-curl">Copy cURL</button>
+        <button class="action-btn action-btn-primary" id="preview-studio-view">Inspect in Studio 🚀</button>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <span>Shortcuts: <b>Alt+Shift+A</b> (HUD) • <b>Alt+Shift+S</b> (Studio)</span>
+    </footer>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>

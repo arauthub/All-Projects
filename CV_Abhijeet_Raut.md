@@ -6,7 +6,7 @@ Pune, India • theabhijeetraut@gmail.com • [GitHub: github.com/arauthub](http
 
 ## Executive Summary
 
-> 📌 **Portfolio Monorepo Synchronization**: Verified up to date with repository on `2026-10-11 08:15 UTC` • Presubmit Suite Clean
+> 📌 **Portfolio Monorepo Synchronization**: Verified up to date with repository on `2026-10-11 09:13 UTC` • Presubmit Suite Clean
 
 Accomplished **Lead Software Engineer and Solutions Architect** with **12 years of hands-on experience** architecting high-concurrency backend services, distributed systems, and modern AI/ML solutions. 
 - **3 years at Persistent Systems** driving enterprise AI adoption, autonomous agent architectures (Google ADK, LangChain), and cloud-native microservice backends.
@@ -113,10 +113,15 @@ Accomplished **Lead Software Engineer and Solutions Architect** with **12 years 
 ---
 
 
-### **Api Pulse Pro**
+### **API Pulse Pro: Network Traffic Inspector & Replay Studio**
 *Repository*: [`extensions/api-pulse-pro/`](https://github.com/arauthub/All-Projects/tree/main/extensions/api-pulse-pro)  
-*Tech Stack*: Browser Extension
-* Enterprise modular component engineered for high reliability, clean architecture, and decoupled deployment.
+*Tech Stack*: JavaScript (ES6+), Chrome Manifest V3, Chrome DevTools Protocol, HTML5, Scoped CSS3
+* Architected a developer-grade browser network inspector and API mock engine providing zero-configuration capture of `fetch` and `XMLHttpRequest` transactions.
+* Implemented in-page floating glassmorphic HUD with real-time counters, pulse animations, and expandable drawer.
+* Built full-screen developer workbench with live traffic streaming, simulated latency delays, response stubbing, and in-page session replay inheriting active browser cookies and authentication.
+* Engineered utility generators converting captured request/response JSON payloads directly into TypeScript interfaces, cURL commands, and Axios/Python code snippets.
+
+---
 
 ## Education
 

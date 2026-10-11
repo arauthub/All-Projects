@@ -9,6 +9,8 @@
 
 Inspect tiny schematics, intricate Mermaid diagrams, architecture flowcharts, mathematical formulas, and document figures with crystal clarity. Copy images and vector graphics directly to your clipboard and take precision area screenshots.
 
+📄 **Technical Documentation**: [Technical Design Document](DESIGN.md) • [Store Listing](STORE_LISTING.md) • [Privacy Policy](PRIVACY_POLICY.md)
+
 ---
 
 ## 🌟 Key Features

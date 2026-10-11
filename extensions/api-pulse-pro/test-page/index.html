@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Pulse Pro - Interactive Test Lab & Playground</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="test-container">
+    <header class="test-header">
+      <div class="brand-row">
+        <div class="logo-box">⚡</div>
+        <div>
+          <h1>API Pulse Pro — Interactive Test Ground</h1>
+          <p>Fire real POST requests, inspect payloads, test in-browser mocking, and try the Replayer!</p>
+        </div>
+      </div>
+      <div class="header-status">
+        <label class="switch-wrap">
+          <input type="checkbox" id="check-auto-traffic">
+          <span class="slider"></span>
+          <span class="switch-label">Auto-Simulate Traffic (every 4s)</span>
+        </label>
+      </div>
+    </header>
+
+    <div class="cards-grid">
+      <!-- 1. POST Authentication -->
+      <div class="test-card">
+        <div class="card-tag tag-post">POST</div>
+        <h3>1. User Login (Returns JWT)</h3>
+        <p>Dispatches a POST request with credentials and returns a Bearer JWT token.</p>
+        <div class="input-group">
+          <input type="text" id="login-email" value="alex.engineer@example.com">
+          <input type="password" id="login-pass" value="super-secret-password-123">
+        </div>
+        <button class="btn-fire" id="btn-fire-login">Fire POST /api/v1/auth/login</button>
+      </div>
+
+      <!-- 2. POST Order Checkout -->
+      <div class="test-card">
+        <div class="card-tag tag-post">POST</div>
+        <h3>2. E-Commerce Checkout</h3>
+        <p>Sends nested JSON payload with order items, shipping details, and metadata.</p>
+        <div class="json-preview-small">
+          { "orderId": "ord_9821", "items": [{"id": "item_1", "qty": 2, "price": 49.99}], "currency": "USD" }
+        </div>
+        <button class="btn-fire" id="btn-fire-checkout">Fire POST /api/v1/orders/checkout</button>
+      </div>
+
+      <!-- 3. POST GraphQL Mutation -->
+      <div class="test-card">
+        <div class="card-tag tag-gql">GRAPHQL</div>
+        <h3>3. GraphQL Mutation</h3>
+        <p>Sends a POST to <code>/graphql</code> with an operation name, mutation query, and variables.</p>
+        <div class="json-preview-small">
+          mutation AddComment($postId: ID!, $text: String!) { ... }
+        </div>
+        <button class="btn-fire" id="btn-fire-graphql">Fire POST /graphql (AddComment)</button>
+      </div>
+
+      <!-- 4. Slow POST -->
+      <div class="test-card">
+        <div class="card-tag tag-post">SLOW POST</div>
+        <h3>4. Heavy Analytics Report</h3>
+        <p>Simulates a heavy backend aggregation job with 1,500ms latency to test loading & waterfall.</p>
+        <button class="btn-fire" id="btn-fire-slow">Fire Slow POST (1.5s delay)</button>
+      </div>
+
+      <!-- 5. Failing POST -->
+      <div class="test-card">
+        <div class="card-tag tag-err">500 ERROR</div>
+        <h3>5. Failed Payment Charge</h3>
+        <p>Returns a 500 Internal Server Error / 402 Payment Required to test error tracking.</p>
+        <button class="btn-fire btn-danger" id="btn-fire-error">Fire Failing POST (HTTP 500)</button>
+      </div>
+
+      <!-- 6. GET & CRUD APIs -->
+      <div class="test-card">
+        <div class="card-tag tag-get">GET / PUT / DEL</div>
+        <h3>6. Standard REST APIs</h3>
+        <p>Execute GET feeds, PUT user profile updates, and DELETE resources.</p>
+        <div class="btn-group-row">
+          <button class="btn-fire-sm" id="btn-fire-get">GET /users</button>
+          <button class="btn-fire-sm" id="btn-fire-put">PUT /profile</button>
+          <button class="btn-fire-sm" id="btn-fire-del">DEL /items/42</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Execution Console -->
+    <div class="console-box">
+      <div class="console-header">
+        <h4>Page Output Log</h4>
+        <button class="btn-clear-console" id="btn-clear-console">Clear Log</button>
+      </div>
+      <pre class="console-content" id="test-console">// Trigger any button above to see request results here...</pre>
+    </div>
+  </div>
+  <script src="test-api.js"></script>
+</body>
+</html>

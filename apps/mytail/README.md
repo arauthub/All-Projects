@@ -9,6 +9,8 @@
 [![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://docker.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](../../LICENSE)
 
+📄 **Technical Documentation**: [Technical Design Document](DESIGN.md)
+
 ---
 
 ## 🌟 Key Architectural Features
@@ -75,6 +77,7 @@ apps/mytail/
 
 ```bash
 cd apps/mytail/demo
+cp .env.example .env
 
 # Create and activate virtual environment
 python3 -m venv venv

@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Pulse Studio Pro - Developer Network Workbench</title>
+  <link rel="stylesheet" href="studio.css">
+</head>
+<body>
+  <div class="studio-layout">
+    <!-- Top Bar -->
+    <header class="studio-header">
+      <div class="header-left">
+        <div class="brand-logo">
+          <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">API Pulse <span class="badge-pro">PRO</span></span>
+          <span class="brand-sub">Developer Network Studio & Mock Workbench</span>
+        </div>
+        <div class="tab-target-selector">
+          <label>Target:</label>
+          <select id="select-target-tab">
+            <option value="active">Active Tab</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="header-center">
+        <!-- Universal Search -->
+        <div class="global-search">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="studio-search-input" placeholder="Search URL, method, status, payload, response body (Ctrl+F)...">
+          <span class="search-kbd">⌘K</span>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- Record toggle -->
+        <button class="btn-tool btn-recording" id="btn-toggle-record" title="Pause / Resume request interception">
+          <span class="record-dot"></span>
+          <span id="record-text">Recording</span>
+        </button>
+
+        <label class="checkbox-label" title="Keep requests when page reloads">
+          <input type="checkbox" id="check-preserve-log">
+          <span>Preserve Log</span>
+        </label>
+
+        <button class="btn-tool" id="btn-mock-manager" title="Manage In-Browser Mock Rules">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+          <span>Mock Engine</span>
+          <span class="counter-badge" id="mock-count-badge">0</span>
+        </button>
+
+        <button class="btn-tool" id="btn-diff-modal" title="Compare two JSON responses">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          <span>JSON Diff</span>
+        </button>
+
+        <div class="export-dropdown-wrap">
+          <button class="btn-tool" id="btn-export-menu" title="Export requests">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>Export</span>
+          </button>
+        </div>
+
+        <button class="btn-tool btn-danger" id="btn-clear-all" title="Clear all captured requests">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          <span>Clear</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Sub Toolbar: Method Filters & Quick Stats -->
+    <div class="filter-toolbar">
+      <div class="filter-pills-row">
+        <button class="filter-btn active" data-filter="ALL">ALL <span class="tag-count" id="count-all">0</span></button>
+        <button class="filter-btn filter-post" data-filter="POST">POST <span class="tag-count" id="count-post">0</span></button>
+        <button class="filter-btn filter-get" data-filter="GET">GET <span class="tag-count" id="count-get">0</span></button>
+        <button class="filter-btn filter-put" data-filter="PUT">PUT/PATCH <span class="tag-count" id="count-put">0</span></button>
+        <button class="filter-btn filter-del" data-filter="DELETE">DELETE <span class="tag-count" id="count-del">0</span></button>
+        <button class="filter-btn filter-gql" data-filter="GQL">GRAPHQL <span class="tag-count" id="count-gql">0</span></button>
+        <button class="filter-btn filter-err" data-filter="ERR">ERRORS <span class="tag-count" id="count-err">0</span></button>
+        <button class="filter-btn filter-slow" data-filter="SLOW">SLOW (>500ms) <span class="tag-count" id="count-slow">0</span></button>
+      </div>
+      <div class="filter-actions-right">
+        <label class="toggle-switch-wrap" title="Auto-scroll to latest requests">
+          <input type="checkbox" id="check-autoscroll" checked>
+          <span>Auto-Scroll</span>
+        </label>
+        <button class="btn-tool btn-primary-compact" id="btn-new-custom-req">+ New Request</button>
+      </div>
+    </div>
+
+    <!-- Main Workspace Split -->
+    <div class="studio-body" id="studio-workspace">
+      <!-- Left Column: Request Stream -->
+      <aside class="stream-panel" id="stream-panel">
+        <div class="stream-table-header">
+          <span class="col-star">★</span>
+          <span class="col-method">Method</span>
+          <span class="col-status">Status</span>
+          <span class="col-path">Path / Endpoint</span>
+          <span class="col-latency">Latency</span>
+          <span class="col-size">Size</span>
+          <span class="col-time">Time</span>
+        </div>
+        <div class="stream-list" id="stream-request-list">
+          <div class="empty-stream-state">
+            <div class="empty-art">⚡</div>
+            <h3>Waiting for API Traffic</h3>
+            <p>Make API requests on the active page to see real-time network communications.</p>
+          </div>
+        </div>
+        <div class="stream-footer">
+          <span id="footer-summary">0 requests</span>
+          <span id="footer-data-transferred">0 KB transferred</span>
+        </div>
+      </aside>
+
+      <!-- Resizer Handle -->
+      <div class="splitter" id="workspace-splitter"></div>
+
+      <!-- Right Column: Deep Inspection & Playground -->
+      <main class="inspector-panel" id="inspector-panel">
+        <div class="no-selection-state" id="no-selection-pane">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+          <h2>No Request Selected</h2>
+          <p>Click any API call on the left to inspect payload, headers, response body, replay it, or generate mock rules.</p>
+        </div>
+
+        <div class="inspector-content" id="active-inspector-pane" style="display: none;">
+          <!-- Inspection Top Bar -->
+          <div class="inspector-header">
+            <div class="inspector-title-row">
+              <span class="method-badge" id="insp-method">POST</span>
+              <span class="status-badge" id="insp-status">200 OK</span>
+              <div class="url-bar-wrap">
+                <input type="text" id="insp-full-url" readonly>
+                <button class="btn-icon-tiny" id="btn-copy-url" title="Copy URL">📋</button>
+              </div>
+            </div>
+            <div class="inspector-quick-actions">
+              <button class="btn-action" id="btn-quick-replay">⚡ Replay in Page</button>
+              <button class="btn-action" id="btn-create-mock">+ Mock Response</button>
+              <button class="btn-action" id="btn-quick-curl">Copy cURL</button>
+              <button class="btn-action" id="btn-pin-active">★ Pin</button>
+            </div>
+          </div>
+
+          <!-- Master Inspector Tabs -->
+          <nav class="inspector-tabs-nav">
+            <button class="insp-tab active" data-tab="response">Response</button>
+            <button class="insp-tab" data-tab="payload">Payload</button>
+            <button class="insp-tab" data-tab="headers">Headers</button>
+            <button class="insp-tab" data-tab="replay">Replay Studio</button>
+            <button class="insp-tab" data-tab="types">TypeScript Types</button>
+            <button class="insp-tab" data-tab="codegen">Code Snippets</button>
+            <button class="insp-tab" data-tab="security">Security & Tokens</button>
+            <button class="insp-tab" data-tab="timing">Waterfall / Timing</button>
+          </nav>
+
+          <!-- Inspector Tab Panes -->
+          <div class="inspector-tab-content">
+            <!-- 1. Response Body Tab -->
+            <div class="tab-pane active" id="pane-response">
+              <div class="pane-toolbar">
+                <div class="pane-toolbar-left">
+                  <span class="info-pill" id="resp-size-pill">0 B</span>
+                  <span class="info-pill" id="resp-type-pill">application/json</span>
+                  <button class="btn-tool-sm" id="btn-format-resp">Prettify JSON</button>
+                </div>
+                <div class="pane-toolbar-right">
+                  <input type="text" class="input-search-inline" id="search-resp-body" placeholder="Find in response...">
+                  <button class="btn-tool-sm" id="btn-copy-resp">Copy Response</button>
+                </div>
+              </div>
+              <div class="code-editor-wrap">
+                <pre class="code-view" id="code-response-body"></pre>
+              </div>
+            </div>
+
+            <!-- 2. Payload Tab -->
+            <div class="tab-pane" id="pane-payload">
+              <div class="pane-toolbar">
+                <div class="pane-toolbar-left">
+                  <span class="info-pill" id="req-size-pill">0 B</span>
+                  <button class="btn-tool-sm" id="btn-format-req">Prettify JSON</button>
+                </div>
+                <div class="pane-toolbar-right">
+                  <input type="text" class="input-search-inline" id="search-req-body" placeholder="Find in payload...">
+                  <button class="btn-tool-sm" id="btn-copy-req">Copy Payload</button>
+                </div>
+              </div>
+              <div class="code-editor-wrap">
+                <pre class="code-view" id="code-payload-body"></pre>
+              </div>
+            </div>
+
+            <!-- 3. Headers Tab -->
+            <div class="tab-pane" id="pane-headers">
+              <div class="headers-container">
+                <div class="headers-section">
+                  <div class="section-title">
+                    <h4>Request Headers</h4>
+                    <button class="btn-tool-sm" id="btn-copy-req-headers">Copy Raw</button>
+                  </div>
+                  <table class="headers-table" id="table-req-headers">
+                    <thead><tr><th>Header</th><th>Value</th></tr></thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
+
+                <div class="headers-section">
+                  <div class="section-title">
+                    <h4>Response Headers</h4>
+                    <button class="btn-tool-sm" id="btn-copy-res-headers">Copy Raw</button>
+                  </div>
+                  <table class="headers-table" id="table-res-headers">
+                    <thead><tr><th>Header</th><th>Value</th></tr></thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- 4. Replay Studio Tab -->
+            <div class="tab-pane" id="pane-replay">
+              <div class="replay-workbench">
+                <div class="replay-config">
+                  <div class="replay-url-bar">
+                    <select id="replay-method">
+                      <option value="GET">GET</option>
+                      <option value="POST">POST</option>
+                      <option value="PUT">PUT</option>
+                      <option value="PATCH">PATCH</option>
+                      <option value="DELETE">DELETE</option>
+                    </select>
+                    <input type="text" id="replay-url" placeholder="https://api.example.com/v1/endpoint">
+                    <button class="btn-action-primary" id="btn-exec-replay">🚀 Replay in Page</button>
+                    <button class="btn-action" id="btn-exec-direct-fetch">🌐 Direct Fetch</button>
+                  </div>
+
+                  <div class="replay-tabs-sub">
+                    <span class="subtab active" data-sub="body">Request Body</span>
+                    <span class="subtab" data-sub="headers">Custom Headers</span>
+                  </div>
+
+                  <div class="replay-subcontent" id="replay-sub-body">
+                    <textarea id="replay-body-input" placeholder="Request body (JSON or text)..."></textarea>
+                  </div>
+
+                  <div class="replay-subcontent" id="replay-sub-headers" style="display:none;">
+                    <textarea id="replay-headers-input" placeholder="Header-Name: Value&#10;Authorization: Bearer xyz"></textarea>
+                  </div>
+                </div>
+
+                <!-- Replay Result -->
+                <div class="replay-result-pane">
+                  <div class="result-header">
+                    <h4>Replay Execution Result</h4>
+                    <div id="replay-status-result">Ready</div>
+                  </div>
+                  <pre class="code-view" id="replay-output-view">// Hit "Replay in Page" to execute this request inside the active page's context with cookies and credentials!</pre>
+                </div>
+              </div>
+            </div>
+
+            <!-- 5. TypeScript Types Generator Tab -->
+            <div class="tab-pane" id="pane-types">
+              <div class="pane-toolbar">
+                <span class="info-pill">Auto-Inferred TypeScript Interfaces</span>
+                <button class="btn-tool-sm" id="btn-copy-ts">Copy TypeScript</button>
+              </div>
+              <div class="code-editor-wrap">
+                <pre class="code-view" id="code-ts-types"></pre>
+              </div>
+            </div>
+
+            <!-- 6. Code Generators Tab -->
+            <div class="tab-pane" id="pane-codegen">
+              <div class="pane-toolbar">
+                <div class="lang-pills">
+                  <button class="lang-pill active" data-lang="curl">cURL</button>
+                  <button class="lang-pill" data-lang="fetch">JS fetch()</button>
+                  <button class="lang-pill" data-lang="axios">Axios</button>
+                  <button class="lang-pill" data-lang="python">Python Requests</button>
+                  <button class="lang-pill" data-lang="go">Go HTTP</button>
+                </div>
+                <button class="btn-tool-sm" id="btn-copy-snippet">Copy Code</button>
+              </div>
+              <div class="code-editor-wrap">
+                <pre class="code-view" id="code-snippet-view"></pre>
+              </div>
+            </div>
+
+            <!-- 7. Security & Secrets Scanner Tab -->
+            <div class="tab-pane" id="pane-security">
+              <div class="security-container">
+                <div class="sec-card" id="jwt-card" style="display:none;">
+                  <div class="sec-card-header">
+                    <h4>🔑 JWT Token Detected</h4>
+                    <span class="jwt-badge" id="jwt-exp-badge">Valid</span>
+                  </div>
+                  <div class="jwt-decoded-grid">
+                    <div>
+                      <h5>Header</h5>
+                      <pre class="jwt-box" id="jwt-header-box"></pre>
+                    </div>
+                    <div>
+                      <h5>Payload Claims</h5>
+                      <pre class="jwt-box" id="jwt-payload-box"></pre>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="sec-card">
+                  <h4>Detected Auth & Sensitive Keys</h4>
+                  <div class="token-list" id="tokens-detected-list">
+                    <p class="text-muted">No exposed API keys or tokens found in this request.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 8. Timing Tab -->
+            <div class="tab-pane" id="pane-timing">
+              <div class="timing-container">
+                <div class="timing-card">
+                  <h4>Request Latency Breakdown</h4>
+                  <div class="waterfall-bar-wrap">
+                    <div class="waterfall-bar" id="waterfall-bar" style="width: 100%;"></div>
+                  </div>
+                  <div class="timing-grid" id="timing-grid">
+                    <div class="timing-row"><span>Total Duration</span><b id="time-total">0 ms</b></div>
+                    <div class="timing-row"><span>Initiator Script</span><code id="time-initiator">-</code></div>
+                    <div class="timing-row"><span>Client Type</span><span id="time-type">Fetch API</span></div>
+                    <div class="timing-row"><span>Start Timestamp</span><span id="time-started">-</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Mock Manager Modal -->
+    <div class="modal-overlay" id="mock-modal" style="display: none;">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>In-Browser Mock Engine</h3>
+          <button class="btn-close-modal" id="btn-close-mock-modal">✕</button>
+        </div>
+        <div class="modal-body">
+          <p class="modal-desc">Intercept matching requests in the browser and return synthetic responses without touching the server!</p>
+          <div class="mock-rules-list" id="mock-rules-container"></div>
+          <button class="btn-action-primary" id="btn-add-mock-rule">+ Add New Mock Rule</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- JSON Diff Modal -->
+    <div class="modal-overlay" id="diff-modal" style="display: none;">
+      <div class="modal-card modal-lg">
+        <div class="modal-header">
+          <h3>Side-by-Side JSON Diff Tool</h3>
+          <button class="btn-close-modal" id="btn-close-diff-modal">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="diff-selectors">
+            <div>
+              <label>Request A (Baseline):</label>
+              <select id="diff-select-a"></select>
+            </div>
+            <div>
+              <label>Request B (Comparison):</label>
+              <select id="diff-select-b"></select>
+            </div>
+          </div>
+          <div class="diff-view-container" id="diff-results-view">
+            <pre class="diff-box" id="diff-box-left"></pre>
+            <pre class="diff-box" id="diff-box-right"></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="studio.js"></script>
+</body>
+</html>

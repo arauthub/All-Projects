@@ -9,6 +9,8 @@
 [![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://docker.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](../../LICENSE)
 
+📄 **Technical Documentation**: [Technical Design Document](DESIGN.md)
+
 ---
 
 ## 🌟 Key Capabilities
@@ -71,6 +73,7 @@ apps/wagtailwind/
 ### 2. Install & Run:
 ```bash
 cd apps/wagtailwind
+cp .env.example .env
 
 # Create and activate virtual environment
 python3 -m venv venv

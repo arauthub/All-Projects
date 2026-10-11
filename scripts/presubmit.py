@@ -183,6 +183,7 @@ def get_project_title(project_id):
         "anti-gravity-browser": "Anti-Gravity Web: 2D Physics Engine & Arcade Browser (Chrome Manifest V3)",
         "diagram-image-lens": "Diagram & Image Lens Pro: Precision Visual Inspection (Chrome Manifest V3)",
         "link-inspector-extension": "Link Inspector Pro & Broken Link Checker (Chrome Manifest V3)",
+        "api-pulse-pro": "API Pulse Pro: Network Traffic Inspector & Replay Studio (Chrome Manifest V3)",
         "myagents": "Autonomous AI Agent Orchestration Framework (MyAgents)",
     }
     return titles.get(project_id, project_id.replace("-", " ").title())

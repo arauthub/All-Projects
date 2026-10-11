@@ -6,6 +6,8 @@
 [![Chrome Web Store](https://img.shields.io/badge/Chrome-Web%20Store-4285F4.svg?style=for-the-badge&logo=googlechrome&logoColor=white)](https://chrome.google.com/webstore)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](../../LICENSE)
 
+📄 **Technical Documentation**: [Technical Design Document](DESIGN.md) • [Store Listing](STORE_LISTING.md) • [Publishing Guide](PUBLISHING_GUIDE.md) • [Privacy Policy](PRIVACY_POLICY.md)
+
 ---
 
 ## 🌟 Key Features

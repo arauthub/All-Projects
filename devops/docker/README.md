@@ -7,6 +7,8 @@
 [![Nginx](https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=nginx&logoColor=white)](https://nginx.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](../../LICENSE)
 
+📄 **Technical Documentation**: [Technical Design Document](DESIGN.md)
+
 ---
 
 ## 🏗️ Orchestration Topology

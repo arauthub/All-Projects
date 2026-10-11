@@ -7,6 +7,8 @@
 [![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://docker.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](../../LICENSE)
 
+📄 **Technical Documentation**: [Technical Design Document](DESIGN.md) • [Frontend Documentation](frontend/README.md)
+
 ---
 
 ## 🏗️ Architecture & Component Topology
@@ -77,10 +79,12 @@ docker compose up --build -d
 ### 1. Run Backend:
 ```bash
 cd apps/flashapps/backend
+cp .env.example .env
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 python manage.py migrate
+python setup_erp.py    # Optional: seed ERP demo records
 python manage.py runserver 0.0.0.0:8000
 ```
 

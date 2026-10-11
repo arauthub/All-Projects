@@ -7,6 +7,8 @@
 [![Google Cloud Run](https://img.shields.io/badge/Google_Cloud_Run-4285F4?style=for-the-badge&logo=google-cloud&logoColor=white)](https://cloud.google.com/run)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
 
+📄 **Technical Documentation**: [Technical Design Document](DESIGN.md) • [Cloud Run Deploy Script](deploy/deploy_to_gcp.sh)
+
 ---
 
 ## 🌟 Key Highlights & Architectural Capabilities

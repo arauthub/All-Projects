@@ -2,6 +2,10 @@
 
 > Multi-stage automated validation pipeline configured for **GitHub Actions**, validating security, Presubmit sync, Python multi-agent swarms, and Fastify server test suites.
 
+📄 **Technical Documentation**: [Technical Design Document](DESIGN.md) • [Workflow Definition](ci.yml)
+
+---
+
 ## 📋 CI Jobs Specification
 
 The pipeline defined in [`ci.yml`](ci.yml) executes:

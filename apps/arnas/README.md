@@ -10,6 +10,8 @@
 
 **ARNAS** (Autonomous Raut Network Attached Storage) is an enterprise-grade, self-hosted, distributed private cloud storage system featuring multi-server storage clustering, instant ingest with background fan-out replication, zero-knowledge end-to-end encryption (E2EE), intelligent sentinel mobile sync, and immutable compliance audit logging.
 
+📄 **Technical Documentation**: [Technical Design Document](DESIGN.md) • [API Specification](API_SPECIFICATION.md) • [Sync Protocol Spec](SYNC_PROTOCOL_SPEC.md) • [Execution Spec](EXECUTION_SPEC.md)
+
 ---
 
 ## 🏗 Enterprise Architecture Overview

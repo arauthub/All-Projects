@@ -74,9 +74,11 @@ Here are highlights from my public [**All-Projects**](https://github.com/arauthu
 ---
 
 
-### 🚀 [Api Pulse Pro](https://github.com/arauthub/All-Projects/tree/main/extensions/api-pulse-pro)
-* **Category**: Browser Extension
-* High-performance enterprise project showcasing modern engineering standards.
+### ⚡ [API Pulse Pro: Network Inspector & Replay Studio](https://github.com/arauthub/All-Projects/tree/main/extensions/api-pulse-pro)
+* **Stack**: JavaScript (ES6+), Chrome Manifest V3, Chrome DevTools Protocol, HTML5, Scoped CSS3
+* Developer-grade browser network inspector and API mock engine providing zero-configuration capture of `fetch`/`XHR` traffic, in-page HUD, mock engine, session replay, and auto-generated TypeScript & cURL/Axios snippets.
+
+---
 
 ## 💼 Career Snapshot
 

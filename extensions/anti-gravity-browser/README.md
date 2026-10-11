@@ -9,6 +9,8 @@
 
 ![Anti-Gravity Web](assets/icon128.png)
 
+📄 **Technical Documentation**: [Technical Design Document](DESIGN.md) • [Store Listing](CWS_STORE_LISTING.md) • [Privacy Policy](PRIVACY_POLICY.md) • [Terms](TERMS_OF_SERVICE.md)
+
 ---
 
 ## ✨ Key Features
