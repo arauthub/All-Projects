@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tabs } from 'expo-router';
 import { colors } from '../../src/theme/colors';
-import { Image as ImageIcon, Folder, RefreshCw, Settings } from 'lucide-react-native';
+import { Image as ImageIcon, Folder, RefreshCw, Settings, BookOpen } from 'lucide-react-native';
 
 export default function TabLayout() {
   return (
@@ -53,6 +53,14 @@ export default function TabLayout() {
           title: 'Sync',
           headerTitle: 'Sync Engine',
           tabBarIcon: ({ color, size }) => <RefreshCw color={color} size={size} />,
+        }}
+      />
+      <Tabs.Screen
+        name="guide"
+        options={{
+          title: 'Guide',
+          headerTitle: 'Site Guide & Flow Center',
+          tabBarIcon: ({ color, size }) => <BookOpen color={color} size={size} />,
         }}
       />
       <Tabs.Screen

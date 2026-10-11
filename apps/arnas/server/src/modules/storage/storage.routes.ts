@@ -25,6 +25,9 @@ export const storageRoutes: FastifyPluginAsync = async (fastify: FastifyInstance
       security: [{ bearerAuth: [] }],
     },
   }, async (request, reply) => {
+    if (request.user.role !== 'ADMIN') {
+      return reply.status(403).send({ message: 'Only administrators can test storage nodes.' });
+    }
     const input = testStorageNodeSchema.parse(request.body);
     const result = await enterpriseStorageService.testStorageNode(input);
     return reply.status(200).send(result);
@@ -97,7 +100,10 @@ export const storageRoutes: FastifyPluginAsync = async (fastify: FastifyInstance
       summary: 'Trigger live health checks and ping all cluster nodes',
       security: [{ bearerAuth: [] }],
     },
-  }, async (_request, reply) => {
+  }, async (request, reply) => {
+    if (request.user.role !== 'ADMIN') {
+      return reply.status(403).send({ message: 'Only administrators can trigger manual cluster health checks.' });
+    }
     const results = await enterpriseStorageService.healthCheck();
     return reply.status(200).send({ nodes: results });
   });

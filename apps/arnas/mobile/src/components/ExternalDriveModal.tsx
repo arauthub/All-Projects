@@ -30,6 +30,7 @@ import {
   Sliders,
 } from 'lucide-react-native';
 import { theme } from '../theme';
+import { useAuthStore } from '../stores/authStore';
 import {
   ExternalDriveService,
   ExternalDriveInfo,
@@ -47,6 +48,9 @@ export const ExternalDriveModal: React.FC<ExternalDriveModalProps> = ({
   onClose,
   onTargetChanged,
 }) => {
+  const { user } = useAuthStore();
+  const isAdmin = user?.role === 'ADMIN';
+
   const [loading, setLoading] = useState(false);
   const [drives, setDrives] = useState<ExternalDriveInfo[]>([]);
   const [primaryTarget, setPrimaryTarget] = useState<ExternalDriveInfo | null>(null);
@@ -302,40 +306,51 @@ export const ExternalDriveModal: React.FC<ExternalDriveModalProps> = ({
               </View>
             )}
 
-            {/* Quick Demo Simulation Toolbar */}
-            <View style={styles.simulationBar}>
-              <Text style={styles.simulationTitle}>QUICK MOUNT SIMULATOR (DEMO & TEST)</Text>
-              <View style={styles.simulationButtons}>
-                <TouchableOpacity
-                  style={styles.simBtn}
-                  onPress={() => handleSimulatePreset('samsung_t7')}
-                  disabled={loading}
-                >
-                  <Zap size={14} color={theme.colors.cyan} />
-                  <Text style={styles.simBtnText}>Samsung T7 SSD (2TB)</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.simBtn}
-                  onPress={() => handleSimulatePreset('seagate_hdd')}
-                  disabled={loading}
-                >
-                  <Disc size={14} color={theme.colors.warning} />
-                  <Text style={styles.simBtnText}>Seagate HDD (8TB)</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
+            {/* Quick Demo Simulation Toolbar (Admin Only) */}
+            {isAdmin ? (
+              <>
+                <View style={styles.simulationBar}>
+                  <Text style={styles.simulationTitle}>QUICK MOUNT SIMULATOR (DEMO & TEST)</Text>
+                  <View style={styles.simulationButtons}>
+                    <TouchableOpacity
+                      style={styles.simBtn}
+                      onPress={() => handleSimulatePreset('samsung_t7')}
+                      disabled={loading}
+                    >
+                      <Zap size={14} color={theme.colors.cyan} />
+                      <Text style={styles.simBtnText}>Samsung T7 SSD (2TB)</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.simBtn}
+                      onPress={() => handleSimulatePreset('seagate_hdd')}
+                      disabled={loading}
+                    >
+                      <Disc size={14} color={theme.colors.warning} />
+                      <Text style={styles.simBtnText}>Seagate HDD (8TB)</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
 
-            {/* Connected Drives Section */}
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>CONNECTED EXTERNAL DRIVES ({drives.length})</Text>
-              <TouchableOpacity
-                style={styles.addDriveBtn}
-                onPress={() => setShowAddForm(!showAddForm)}
-              >
-                <Plus size={14} color={theme.colors.cyan} />
-                <Text style={styles.addDriveBtnText}>{showAddForm ? 'Cancel' : 'Mount Drive'}</Text>
-              </TouchableOpacity>
-            </View>
+                {/* Connected Drives Section */}
+                <View style={styles.sectionHeader}>
+                  <Text style={styles.sectionTitle}>CONNECTED EXTERNAL DRIVES ({drives.length})</Text>
+                  <TouchableOpacity
+                    style={styles.addDriveBtn}
+                    onPress={() => setShowAddForm(!showAddForm)}
+                  >
+                    <Plus size={14} color={theme.colors.cyan} />
+                    <Text style={styles.addDriveBtnText}>{showAddForm ? 'Cancel' : 'Mount Drive'}</Text>
+                  </TouchableOpacity>
+                </View>
+              </>
+            ) : (
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionTitle}>CONNECTED EXTERNAL DRIVES ({drives.length})</Text>
+                <View style={styles.readOnlyBadge}>
+                  <Text style={styles.readOnlyBadgeText}>READ-ONLY TELEMETRY</Text>
+                </View>
+              </View>
+            )}
 
             {/* Add Drive Form */}
             {showAddForm && (
@@ -505,41 +520,51 @@ export const ExternalDriveModal: React.FC<ExternalDriveModalProps> = ({
 
                     {/* Actions */}
                     <View style={styles.driveActionsRow}>
-                      {!isTarget ? (
-                        <TouchableOpacity
-                          style={styles.setTargetBtn}
-                          onPress={() => handleSetPrimary(drive)}
-                        >
-                          <Radio size={14} color="#0B0F17" />
-                          <Text style={styles.setTargetBtnText}>Set Wireless Sync Target</Text>
-                        </TouchableOpacity>
+                      {isAdmin ? (
+                        <>
+                          {!isTarget ? (
+                            <TouchableOpacity
+                              style={styles.setTargetBtn}
+                              onPress={() => handleSetPrimary(drive)}
+                            >
+                              <Radio size={14} color="#0B0F17" />
+                              <Text style={styles.setTargetBtnText}>Set Wireless Sync Target</Text>
+                            </TouchableOpacity>
+                          ) : (
+                            <View style={styles.targetActiveBox}>
+                              <Text style={styles.targetActiveBoxText}>Receiving Mobile Wi-Fi Sync</Text>
+                            </View>
+                          )}
+
+                          <TouchableOpacity
+                            style={styles.benchmarkBtn}
+                            onPress={() => handleBenchmark(drive)}
+                            disabled={isBenchmarking}
+                          >
+                            {isBenchmarking ? (
+                              <ActivityIndicator size="small" color={theme.colors.cyan} />
+                            ) : (
+                              <>
+                                <Gauge size={14} color={theme.colors.cyan} />
+                                <Text style={styles.benchmarkBtnText}>Speed Test</Text>
+                              </>
+                            )}
+                          </TouchableOpacity>
+
+                          <TouchableOpacity
+                            style={styles.ejectBtn}
+                            onPress={() => handleEject(drive)}
+                          >
+                            <LogOut size={14} color={theme.colors.error} />
+                          </TouchableOpacity>
+                        </>
                       ) : (
                         <View style={styles.targetActiveBox}>
-                          <Text style={styles.targetActiveBoxText}>Receiving Mobile Wi-Fi Sync</Text>
+                          <Text style={styles.targetActiveBoxText}>
+                            {isTarget ? '🎯 Active Wireless Sync Destination' : 'Connected Storage Volume'}
+                          </Text>
                         </View>
                       )}
-
-                      <TouchableOpacity
-                        style={styles.benchmarkBtn}
-                        onPress={() => handleBenchmark(drive)}
-                        disabled={isBenchmarking}
-                      >
-                        {isBenchmarking ? (
-                          <ActivityIndicator size="small" color={theme.colors.cyan} />
-                        ) : (
-                          <>
-                            <Gauge size={14} color={theme.colors.cyan} />
-                            <Text style={styles.benchmarkBtnText}>Speed Test</Text>
-                          </>
-                        )}
-                      </TouchableOpacity>
-
-                      <TouchableOpacity
-                        style={styles.ejectBtn}
-                        onPress={() => handleEject(drive)}
-                      >
-                        <LogOut size={14} color={theme.colors.error} />
-                      </TouchableOpacity>
                     </View>
                   </View>
                 );
@@ -1060,5 +1085,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 1,
     borderColor: 'rgba(239, 68, 68, 0.2)',
+  },
+  readOnlyBadge: {
+    backgroundColor: 'rgba(100, 116, 139, 0.15)',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 6,
+  },
+  readOnlyBadgeText: {
+    fontSize: 10,
+    fontWeight: '800',
+    color: '#94A3B8',
+    letterSpacing: 0.5,
   },
 });

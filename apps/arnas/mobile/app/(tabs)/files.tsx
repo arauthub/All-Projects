@@ -44,8 +44,9 @@ import {
 } from 'lucide-react-native';
 
 export default function FilesScreen() {
-  const { serverUrl, refreshProfile } = useAuthStore();
-  const [activeTab, setActiveTab] = useState<'all' | 'starred' | 'vault'>('all');
+  const { user, serverUrl, refreshProfile } = useAuthStore();
+  const isAdmin = user?.role === 'ADMIN';
+  const [activeTab, setActiveTab] = useState<'all' | 'shared' | 'starred' | 'vault'>('all');
   const [files, setFiles] = useState<FileItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -62,11 +63,12 @@ export default function FilesScreen() {
   const [showExternalDrives, setShowExternalDrives] = useState(false);
 
   const isVault = activeTab === 'vault';
+  const isShared = activeTab === 'shared';
 
   const loadFiles = async () => {
     try {
       setLoading(true);
-      const res = await MobileFileService.listFiles(isVault, currentFolder?.id);
+      const res = await MobileFileService.listFiles(isVault, currentFolder?.id, isShared);
       setFiles(res.items);
     } catch (err: any) {
       console.warn('Failed to load files:', err.message);
@@ -157,25 +159,29 @@ export default function FilesScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Top Quick Actions Bar (NAS Health, Recycle Bin, New Folder, Upload) */}
+      {/* Top Quick Actions Bar (Admin Storage controls vs User Actions) */}
       <View style={styles.quickBar}>
-        <TouchableOpacity
-          style={styles.quickBtn}
-          onPress={() => setShowNasHealth(true)}
-          activeOpacity={0.8}
-        >
-          <Activity size={15} color={colors.accent} style={{ marginRight: 5 }} />
-          <Text style={styles.quickBtnText}>NAS Health</Text>
-        </TouchableOpacity>
+        {isAdmin && (
+          <TouchableOpacity
+            style={styles.quickBtn}
+            onPress={() => setShowNasHealth(true)}
+            activeOpacity={0.8}
+          >
+            <Activity size={15} color={colors.accent} style={{ marginRight: 5 }} />
+            <Text style={styles.quickBtnText}>NAS Health</Text>
+          </TouchableOpacity>
+        )}
 
-        <TouchableOpacity
-          style={styles.quickBtn}
-          onPress={() => setShowExternalDrives(true)}
-          activeOpacity={0.8}
-        >
-          <HardDrive size={15} color={colors.cyan || '#38BDF8'} style={{ marginRight: 5 }} />
-          <Text style={styles.quickBtnText}>External SSD</Text>
-        </TouchableOpacity>
+        {isAdmin && (
+          <TouchableOpacity
+            style={styles.quickBtn}
+            onPress={() => setShowExternalDrives(true)}
+            activeOpacity={0.8}
+          >
+            <HardDrive size={15} color={colors.cyan || '#38BDF8'} style={{ marginRight: 5 }} />
+            <Text style={styles.quickBtnText}>External SSD</Text>
+          </TouchableOpacity>
+        )}
 
         <TouchableOpacity
           style={styles.quickBtn}
@@ -209,15 +215,23 @@ export default function FilesScreen() {
       <View style={styles.tabBar}>
         <TouchableOpacity
           style={[styles.tab, activeTab === 'all' && styles.activeTab]}
-          onPress={() => setActiveTab('all')}
+          onPress={() => { setCurrentFolder(null); setActiveTab('all'); }}
         >
           <Text style={[styles.tabText, activeTab === 'all' && styles.activeTabText]}>
             All Files
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
+          style={[styles.tab, activeTab === 'shared' && styles.activeTab]}
+          onPress={() => { setCurrentFolder(null); setActiveTab('shared'); }}
+        >
+          <Text style={[styles.tabText, activeTab === 'shared' && styles.activeTabText]}>
+            Shared With Me 🤝
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
           style={[styles.tab, activeTab === 'starred' && styles.activeTab]}
-          onPress={() => setActiveTab('starred')}
+          onPress={() => { setCurrentFolder(null); setActiveTab('starred'); }}
         >
           <Text style={[styles.tabText, activeTab === 'starred' && styles.activeTabText]}>
             Starred ⭐
@@ -225,7 +239,7 @@ export default function FilesScreen() {
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.tab, activeTab === 'vault' && styles.activeTab]}
-          onPress={() => setActiveTab('vault')}
+          onPress={() => { setCurrentFolder(null); setActiveTab('vault'); }}
         >
           <Text style={[styles.tabText, activeTab === 'vault' && styles.activeTabText]}>
             E2EE Vault 🛡️
@@ -355,6 +369,7 @@ export default function FilesScreen() {
         visible={!!shareFile}
         file={shareFile}
         onClose={() => setShareFile(null)}
+        onShareUpdated={loadFiles}
       />
 
       <RecycleBinModal

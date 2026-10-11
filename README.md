@@ -44,6 +44,7 @@ All-Projects/
 
 | Project | Category | Primary Tech Stack | Description |
 | :--- | :--- | :--- | :--- |
+| [**Api Pulse Pro**](extensions/api-pulse-pro/) | Browser Extension | Native Stack | Modular architecture component. |
 | [**ARNAS Enterprise Cloud NAS**](apps/arnas/) | Distributed Storage & Mobile Sync | Fastify, React Native / Expo, PostgreSQL, Prisma, S3/MinIO, AES-256-GCM, Expo Location | Distributed private cloud storage with multi-server storage clustering, location-geofenced auto-sync (trusted locations + trusted Wi-Fi only), full NAS suite (folder hierarchy, search, in-place rename, duplicate, 30-day recycle bin, expiring share links, live S.M.A.R.T. telemetry, IOPS), instant ingest + fan-out replication, zero-knowledge E2EE (AES-256-GCM), and cross-platform iOS & Android support. |
 | [**Anti-Gravity Web Browser**](extensions/anti-gravity-browser/) | Browser Extension & Game | JavaScript (ES6+), Manifest V3, Matter.js, HTML5 Canvas, CSS3 | Converts any webpage into a 2D zero-gravity physics sandbox with Matter.js rigid-body dynamics, directional gravity inversion, tractor beams, Asteroids arcade combat, and Katamari web absorption. |
 | [**Diagram & Image Lens Pro**](extensions/diagram-image-lens/) | Browser Extension | JavaScript (ES6+), Manifest V3, HTML5 Canvas, CSS3 | HD hover loupe (2x–16x), fullscreen blueprint deep-zoom lightbox with schematic invert mode, 1-click PNG/SVG clipboard copying, and Retina area snipping tool. |

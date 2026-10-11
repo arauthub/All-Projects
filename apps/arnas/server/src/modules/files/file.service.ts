@@ -12,13 +12,25 @@ export class FileService {
    */
   public async listFiles(userId: string, familyId: string, query: FileListQuery) {
     const isVault = query.vault === true;
+    const isShared = query.shared === true;
 
     const whereClause: any = {
       isDeleted: false,
-      parentFolderId: query.folderId || null,
     };
 
-    if (isVault) {
+    if (query.folderId !== undefined) {
+      whereClause.parentFolderId = query.folderId;
+    } else if (!isShared) {
+      whereClause.parentFolderId = null;
+    }
+
+    if (isShared) {
+      whereClause.shares = {
+        some: {
+          sharedWithUserId: userId,
+        },
+      };
+    } else if (isVault) {
       whereClause.familyId = familyId;
       whereClause.isSharedVault = true;
     } else {
@@ -29,6 +41,18 @@ export class FileService {
     const [items, total] = await Promise.all([
       prisma.fileItem.findMany({
         where: whereClause,
+        include: {
+          user: {
+            select: { id: true, name: true, email: true },
+          },
+          shares: {
+            include: {
+              sharedWithUser: {
+                select: { id: true, name: true, email: true },
+              },
+            },
+          },
+        },
         orderBy: [{ isDirectory: 'desc' }, { createdAt: 'desc' }],
         take: query.limit,
         skip: query.offset,
@@ -57,6 +81,14 @@ export class FileService {
         encryptedFileKey: item.encryptedFileKey,
         encryptedMetadata: item.encryptedMetadata,
         takenAt: item.takenAt,
+        owner: item.user ? { id: item.user.id, name: item.user.name, email: item.user.email } : null,
+        isOwner: item.userId === userId,
+        shares: item.shares.map((s) => ({
+          userId: s.sharedWithUserId,
+          userName: s.sharedWithUser.name,
+          userEmail: s.sharedWithUser.email,
+          permission: s.permission,
+        })),
         createdAt: item.createdAt,
       })),
     };
@@ -83,8 +115,16 @@ export class FileService {
 
     const isOwner = file.userId === userId;
     const isSharedInFamily = file.familyId === familyId && file.isSharedVault;
+    const directShare = await prisma.fileShare.findUnique({
+      where: {
+        fileItemId_sharedWithUserId: {
+          fileItemId: file.id,
+          sharedWithUserId: userId,
+        },
+      },
+    });
 
-    if (!isOwner && !isSharedInFamily) {
+    if (!isOwner && !isSharedInFamily && !directShare) {
       const error: any = new Error('Access denied to this file');
       error.statusCode = 403;
       throw error;
@@ -122,11 +162,19 @@ export class FileService {
       throw error;
     }
 
-    // Access control: User owns file OR file is in family shared vault
+    // Access control: User owns file OR file is in family shared vault OR explicitly shared with user
     const isOwner = file.userId === userId;
     const isSharedInFamily = file.familyId === familyId && file.isSharedVault;
+    const directShare = await prisma.fileShare.findUnique({
+      where: {
+        fileItemId_sharedWithUserId: {
+          fileItemId: file.id,
+          sharedWithUserId: userId,
+        },
+      },
+    });
 
-    if (!isOwner && !isSharedInFamily) {
+    if (!isOwner && !isSharedInFamily && !directShare) {
       const error: any = new Error('Access denied to this file');
       error.statusCode = 403;
       throw error;
@@ -556,6 +604,162 @@ export class FileService {
       clusterNodes: clusterMetrics.nodes,
       totalFilesCount: files.length,
     };
+  }
+
+  /**
+   * Share file directly with another user by email (User-to-User Granular Sharing)
+   */
+  public async shareFileWithUser(
+    ownerUserId: string,
+    fileId: string,
+    targetEmail: string,
+    permission: 'READ' | 'WRITE' = 'READ'
+  ) {
+    const file = await prisma.fileItem.findUnique({
+      where: { id: fileId },
+    });
+
+    if (!file || file.isDeleted) {
+      const error: any = new Error('File not found');
+      error.statusCode = 404;
+      throw error;
+    }
+
+    if (file.userId !== ownerUserId) {
+      const error: any = new Error('Only the file owner can share this item');
+      error.statusCode = 403;
+      throw error;
+    }
+
+    const targetUser = await prisma.user.findUnique({
+      where: { email: targetEmail.toLowerCase() },
+    });
+
+    if (!targetUser) {
+      const error: any = new Error(`User with email "${targetEmail}" was not found`);
+      error.statusCode = 404;
+      throw error;
+    }
+
+    if (targetUser.id === ownerUserId) {
+      const error: any = new Error('You cannot share a file with yourself');
+      error.statusCode = 400;
+      throw error;
+    }
+
+    const share = await prisma.fileShare.upsert({
+      where: {
+        fileItemId_sharedWithUserId: {
+          fileItemId: file.id,
+          sharedWithUserId: targetUser.id,
+        },
+      },
+      update: {
+        permission,
+      },
+      create: {
+        fileItemId: file.id,
+        sharedWithUserId: targetUser.id,
+        sharedByUserId: ownerUserId,
+        permission,
+      },
+      include: {
+        sharedWithUser: {
+          select: { id: true, name: true, email: true },
+        },
+      },
+    });
+
+    await auditService.logEvent('FILE_SHARE_USER', {
+      userId: ownerUserId,
+      familyId: file.familyId,
+      details: {
+        fileId: file.id,
+        fileName: file.name,
+        sharedWithUserId: targetUser.id,
+        sharedWithEmail: targetUser.email,
+        permission,
+      },
+    });
+
+    return {
+      message: `File shared with ${targetUser.name} (${targetUser.email})`,
+      share,
+    };
+  }
+
+  /**
+   * List all files and folders explicitly shared with current user
+   */
+  public async listSharedWithMe(userId: string) {
+    const shares = await prisma.fileShare.findMany({
+      where: {
+        sharedWithUserId: userId,
+        fileItem: {
+          isDeleted: false,
+        },
+      },
+      include: {
+        fileItem: true,
+        sharedByUser: {
+          select: { id: true, name: true, email: true },
+        },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    return {
+      total: shares.length,
+      items: shares.map((s) => ({
+        id: s.fileItem.id,
+        name: s.fileItem.name,
+        isDirectory: s.fileItem.isDirectory,
+        mimeType: s.fileItem.mimeType,
+        sizeBytes: s.fileItem.sizeBytes.toString(),
+        checksumSha256: s.fileItem.checksumSha256,
+        thumbnailUrl: s.fileItem.thumbnailPath ? `/api/v1/files/${s.fileItem.id}/thumbnail` : null,
+        isSharedVault: s.fileItem.isSharedVault,
+        isFavorite: s.fileItem.isFavorite,
+        isEncrypted: s.fileItem.isEncrypted,
+        sharedBy: {
+          id: s.sharedByUser.id,
+          name: s.sharedByUser.name,
+          email: s.sharedByUser.email,
+        },
+        permission: s.permission,
+        sharedAt: s.createdAt,
+      })),
+    };
+  }
+
+  /**
+   * Revoke a direct share from a user
+   */
+  public async revokeFileShare(ownerUserId: string, fileId: string, targetUserId: string) {
+    const file = await prisma.fileItem.findUnique({
+      where: { id: fileId },
+    });
+
+    if (!file || file.isDeleted) {
+      const error: any = new Error('File not found');
+      error.statusCode = 404;
+      throw error;
+    }
+
+    if (file.userId !== ownerUserId) {
+      const error: any = new Error('Only the file owner can revoke sharing');
+      error.statusCode = 403;
+      throw error;
+    }
+
+    await prisma.fileShare.deleteMany({
+      where: {
+        fileItemId: fileId,
+        sharedWithUserId: targetUserId,
+      },
+    });
+
+    return { success: true, message: 'Share permission revoked successfully' };
   }
 }
 

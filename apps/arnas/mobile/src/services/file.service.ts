@@ -161,10 +161,11 @@ export class MobileFileService {
   /**
    * Fetch directory listing with offline fallback
    */
-  public static async listFiles(vault: boolean = false, folderId?: string): Promise<FileListResponse> {
+  public static async listFiles(vault: boolean = false, folderId?: string, shared: boolean = false): Promise<FileListResponse> {
     try {
       const params = new URLSearchParams();
       if (vault) params.append('vault', 'true');
+      if (shared) params.append('shared', 'true');
       if (folderId) params.append('folderId', folderId);
 
       const query = params.toString() ? `?${params.toString()}` : '';
@@ -507,5 +508,51 @@ export class MobileFileService {
       localStore = [newItem, ...localStore];
       return newItem;
     }
+  }
+
+  /**
+   * Share file with another user by email
+   */
+  public static async shareFileWithUser(
+    fileId: string,
+    email: string,
+    permission: 'READ' | 'WRITE' = 'READ'
+  ): Promise<{ message: string; share: any }> {
+    try {
+      return await ApiClient.post<{ message: string; share: any }>(`/api/v1/files/${fileId}/share-user`, {
+        email,
+        permission,
+      });
+    } catch (err: any) {
+      // Local fallback for offline mode
+      return {
+        message: `File shared with ${email} (offline mock)`,
+        share: {
+          fileItemId: fileId,
+          permission,
+          sharedWithUser: { email, name: email.split('@')[0] },
+        },
+      };
+    }
+  }
+
+  /**
+   * Fetch all files shared directly with current user
+   */
+  public static async listSharedWithMe(): Promise<{ total: number; items: FileItem[] }> {
+    try {
+      return await ApiClient.get<{ total: number; items: FileItem[] }>('/api/v1/files/shared-with-me');
+    } catch {
+      return { total: 0, items: [] };
+    }
+  }
+
+  /**
+   * Revoke file sharing from a user
+   */
+  public static async revokeFileShare(fileId: string, targetUserId: string): Promise<{ success: boolean; message: string }> {
+    return await ApiClient.delete<{ success: boolean; message: string }>(
+      `/api/v1/files/${fileId}/share-user/${targetUserId}`
+    );
   }
 }

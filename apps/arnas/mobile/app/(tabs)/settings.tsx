@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Switch, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Switch, TouchableOpacity, Alert } from 'react-native';
+import { useRouter } from 'expo-router';
 import { colors } from '../../src/theme/colors';
 import { Card } from '../../src/components/Card';
 import { StorageMeter } from '../../src/components/StorageMeter';
+import { Button } from '../../src/components/Button';
 import { useAuthStore } from '../../src/stores/authStore';
 import {
   User,
@@ -19,6 +21,10 @@ import {
   Activity,
   Trash2,
   HardDrive,
+  BookOpen,
+  Lock,
+  RefreshCw,
+  Users,
 } from 'lucide-react-native';
 import { StorageClusterModal } from '../../src/components/StorageClusterModal';
 import { ExternalDriveModal } from '../../src/components/ExternalDriveModal';
@@ -30,12 +36,15 @@ import { NASStorageHealthModal } from '../../src/components/NASStorageHealthModa
 import { RecycleBinModal } from '../../src/components/RecycleBinModal';
 
 export default function SettingsScreen() {
-  const { user, serverUrl } = useAuthStore();
+  const router = useRouter();
+  const { user, serverUrl, login } = useAuthStore();
+  const isAdmin = user?.role === 'ADMIN';
 
   const [wifiOnly, setWifiOnly] = useState(true);
   const [chargingOnly, setChargingOnly] = useState(false);
   const [autoSync, setAutoSync] = useState(true);
   const [geofenceSyncOnly, setGeofenceSyncOnly] = useState(true);
+  const [switchingRole, setSwitchingRole] = useState(false);
 
   // Modals
   const [showClusterModal, setShowClusterModal] = useState(false);
@@ -47,75 +56,228 @@ export default function SettingsScreen() {
   const [showTrashModal, setShowTrashModal] = useState(false);
   const [showExternalDriveModal, setShowExternalDriveModal] = useState(false);
 
+  const handleSwitchAccount = async () => {
+    try {
+      setSwitchingRole(true);
+      if (isAdmin) {
+        await login('user@example.com', 'UserPassword123!', serverUrl);
+        Alert.alert('Role Switched', 'You are now signed in as Standard User (user@example.com). Storage drive configs are now hidden and access is isolated.');
+      } else {
+        await login('abhijeet@example.com', 'AdminPassword123!', serverUrl);
+        Alert.alert('Role Switched', 'You are now signed in as Administrator (abhijeet@example.com). Storage drive controls and cluster admin privileges restored.');
+      }
+    } catch (e: any) {
+      Alert.alert('Switch Failed', e.message || 'Cannot switch account in offline mode.');
+    } finally {
+      setSwitchingRole(false);
+    }
+  };
+
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       {/* Profile Card */}
       <Card style={styles.profileCard}>
         <View style={styles.profileRow}>
-          <View style={styles.avatar}>
-            <User size={24} color={colors.accent} />
+          <View
+            style={[
+              styles.avatar,
+              { backgroundColor: isAdmin ? 'rgba(6, 182, 212, 0.15)' : 'rgba(99, 102, 241, 0.15)' },
+            ]}
+          >
+            <User size={24} color={isAdmin ? colors.accent : colors.primaryLight} />
           </View>
           <View style={styles.profileDetails}>
-            <Text style={styles.userName}>{user?.name || 'Abhijeet Raut'}</Text>
-            <Text style={styles.userEmail}>{user?.email || 'theabhijeetraut@gmail.com'}</Text>
-            <View style={styles.roleBadge}>
-              <Text style={styles.roleText}>{user?.role || 'ADMIN'}</Text>
+            <Text style={styles.userName}>{user?.name || (isAdmin ? 'Abhijeet Raut' : 'Sarah Raut')}</Text>
+            <Text style={styles.userEmail}>{user?.email || (isAdmin ? 'abhijeet@example.com' : 'user@example.com')}</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 4, gap: 6 }}>
+              <View
+                style={[
+                  styles.roleBadge,
+                  { backgroundColor: isAdmin ? 'rgba(6, 182, 212, 0.2)' : 'rgba(99, 102, 241, 0.2)' },
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.roleText,
+                    { color: isAdmin ? colors.accent : colors.primaryLight },
+                  ]}
+                >
+                  {isAdmin ? 'ADMINISTRATOR 👑' : 'STANDARD USER 👤'}
+                </Text>
+              </View>
             </View>
           </View>
         </View>
+
+        {/* Quick Role Switcher for Seamless Demo */}
+        <TouchableOpacity
+          style={styles.switchAccountBtn}
+          onPress={handleSwitchAccount}
+          disabled={switchingRole}
+          activeOpacity={0.8}
+        >
+          <RefreshCw size={14} color={colors.accent} style={{ marginRight: 6 }} />
+          <Text style={styles.switchAccountBtnText}>
+            {switchingRole
+              ? 'Switching Account...'
+              : isAdmin
+              ? 'Switch to Standard User (Sarah)'
+              : 'Switch to Administrator (Abhijeet)'}
+          </Text>
+        </TouchableOpacity>
       </Card>
 
       {/* Storage Quota Usage */}
       <Card style={styles.sectionCard}>
         <StorageMeter
           usedBytes={user?.usedStorageBytes || 2415919104}
-          quotaBytes={user?.storageQuotaBytes || 107374182400}
+          quotaBytes={user?.storageQuotaBytes || (isAdmin ? 107374182400 : 53687091200)}
         />
       </Card>
 
-      {/* Enterprise NAS Architecture & Security */}
-      <Text style={styles.sectionTitle}>Enterprise NAS Infrastructure</Text>
+      {/* Enterprise NAS Storage Infrastructure (Admin Only vs Member Info) */}
+      <View style={styles.sectionHeaderRow}>
+        <Text style={styles.sectionTitle}>
+          {isAdmin ? 'Storage Infrastructure (Administrator)' : 'Storage Infrastructure Status'}
+        </Text>
+        <View
+          style={[
+            styles.authorityPill,
+            { backgroundColor: isAdmin ? 'rgba(6, 182, 212, 0.15)' : 'rgba(100, 116, 139, 0.15)' },
+          ]}
+        >
+          <Text
+            style={[
+              styles.authorityPillText,
+              { color: isAdmin ? colors.accent : colors.textMuted },
+            ]}
+          >
+            {isAdmin ? 'FULL ADMIN' : 'RESTRICTED'}
+          </Text>
+        </View>
+      </View>
+
+      {isAdmin ? (
+        <Card style={styles.sectionCard}>
+          {/* External HDD / SSD Storage */}
+          <TouchableOpacity
+            style={styles.enterpriseRow}
+            onPress={() => setShowExternalDriveModal(true)}
+            activeOpacity={0.7}
+          >
+            <View style={[styles.enterpriseIconBox, { backgroundColor: 'rgba(56, 189, 248, 0.15)' }]}>
+              <HardDrive size={20} color={colors.cyan || '#38BDF8'} />
+            </View>
+            <View style={{ flex: 1, marginLeft: 12 }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Text style={styles.enterpriseTitle}>External HDD / SSD Storage</Text>
+                <View style={[styles.activePill, { backgroundColor: 'rgba(56, 189, 248, 0.2)' }]}>
+                  <Text style={[styles.activePillText, { color: colors.cyan || '#38BDF8' }]}>WIRELESS TARGET</Text>
+                </View>
+              </View>
+              <Text style={styles.enterpriseDesc}>Mount USB/Thunderbolt drives & route mobile uploads</Text>
+            </View>
+            <ChevronRight size={18} color={colors.textSecondary} />
+          </TouchableOpacity>
+
+          <View style={styles.divider} />
+
+          {/* Storage Cluster */}
+          <TouchableOpacity
+            style={styles.enterpriseRow}
+            onPress={() => setShowClusterModal(true)}
+            activeOpacity={0.7}
+          >
+            <View style={styles.enterpriseIconBox}>
+              <Layers size={20} color={colors.primaryLight} />
+            </View>
+            <View style={{ flex: 1, marginLeft: 12 }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Text style={styles.enterpriseTitle}>Multi-Node Storage Cluster</Text>
+                <View style={styles.activePill}>
+                  <Text style={styles.activePillText}>MULTI-NODE</Text>
+                </View>
+              </View>
+              <Text style={styles.enterpriseDesc}>Configure S3, MinIO & Local redundancy tiers</Text>
+            </View>
+            <ChevronRight size={18} color={colors.textSecondary} />
+          </TouchableOpacity>
+
+          <View style={styles.divider} />
+
+          {/* NAS Storage Health & S.M.A.R.T. */}
+          <TouchableOpacity
+            style={styles.enterpriseRow}
+            onPress={() => setShowHealthModal(true)}
+            activeOpacity={0.7}
+          >
+            <View style={[styles.enterpriseIconBox, { backgroundColor: 'rgba(16, 185, 129, 0.15)' }]}>
+              <Activity size={20} color={colors.success} />
+            </View>
+            <View style={{ flex: 1, marginLeft: 12 }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Text style={styles.enterpriseTitle}>NAS Health & S.M.A.R.T.</Text>
+                <View style={[styles.activePill, { backgroundColor: 'rgba(16, 185, 129, 0.2)' }]}>
+                  <Text style={[styles.activePillText, { color: colors.success }]}>HEALTHY</Text>
+                </View>
+              </View>
+              <Text style={styles.enterpriseDesc}>RAID pools, IOPS, temperatures & volume metrics</Text>
+            </View>
+            <ChevronRight size={18} color={colors.textSecondary} />
+          </TouchableOpacity>
+
+          <View style={styles.divider} />
+
+          {/* Audit Logs */}
+          <TouchableOpacity
+            style={styles.enterpriseRow}
+            onPress={() => setShowAuditModal(true)}
+            activeOpacity={0.7}
+          >
+            <View style={[styles.enterpriseIconBox, { backgroundColor: 'rgba(245, 158, 11, 0.15)' }]}>
+              <ClipboardList size={20} color="#F59E0B" />
+            </View>
+            <View style={{ flex: 1, marginLeft: 12 }}>
+              <Text style={styles.enterpriseTitle}>Compliance Audit Trail</Text>
+              <Text style={styles.enterpriseDesc}>Immutable security & cluster access logs</Text>
+            </View>
+            <ChevronRight size={18} color={colors.textSecondary} />
+          </TouchableOpacity>
+        </Card>
+      ) : (
+        <Card style={styles.sectionCard}>
+          <View style={styles.nonAdminInfoBox}>
+            <Lock size={20} color={colors.accent} style={{ marginRight: 12 }} />
+            <View style={{ flex: 1 }}>
+              <Text style={styles.nonAdminTitle}>Hardware & Cluster Managed by Admin</Text>
+              <Text style={styles.nonAdminDesc}>
+                Physical SSD/HDD mountings, cluster nodes, and S.M.A.R.T. diagnostics are controlled by administrators. Your personal photos and documents are strictly isolated in your private vault.
+              </Text>
+            </View>
+          </View>
+        </Card>
+      )}
+
+      {/* Personal Vault & Cloud Security (Available to All Roles) */}
+      <Text style={styles.sectionTitle}>Personal Vault & Cloud Security</Text>
       <Card style={styles.sectionCard}>
-        {/* Location & Trusted Wi-Fi Geofence */}
+        {/* Zero-Knowledge E2EE */}
         <TouchableOpacity
           style={styles.enterpriseRow}
-          onPress={() => setShowGeofenceModal(true)}
+          onPress={() => setShowE2EEModal(true)}
           activeOpacity={0.7}
         >
-          <View style={[styles.enterpriseIconBox, { backgroundColor: 'rgba(6, 182, 212, 0.15)' }]}>
-            <MapPin size={20} color={colors.accent} />
+          <View style={[styles.enterpriseIconBox, { backgroundColor: 'rgba(16, 185, 129, 0.15)' }]}>
+            <ShieldCheck size={20} color={colors.success} />
           </View>
           <View style={{ flex: 1, marginLeft: 12 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={styles.enterpriseTitle}>Location & Trusted Wi-Fi</Text>
-              <View style={[styles.activePill, { backgroundColor: 'rgba(6, 182, 212, 0.2)' }]}>
-                <Text style={[styles.activePillText, { color: colors.accent }]}>GEOFENCE</Text>
-              </View>
-            </View>
-            <Text style={styles.enterpriseDesc}>Auto-sync only in trusted sites & Wi-Fi networks</Text>
-          </View>
-          <ChevronRight size={18} color={colors.textSecondary} />
-        </TouchableOpacity>
-
-        <View style={styles.divider} />
-
-        {/* NAS Storage Health & S.M.A.R.T. */}
-        <TouchableOpacity
-          style={styles.enterpriseRow}
-          onPress={() => setShowHealthModal(true)}
-          activeOpacity={0.7}
-        >
-          <View style={[styles.enterpriseIconBox, { backgroundColor: 'rgba(99, 102, 241, 0.15)' }]}>
-            <Activity size={20} color={colors.primaryLight} />
-          </View>
-          <View style={{ flex: 1, marginLeft: 12 }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={styles.enterpriseTitle}>NAS Health & S.M.A.R.T.</Text>
+              <Text style={styles.enterpriseTitle}>Zero-Knowledge E2EE Vault</Text>
               <View style={[styles.activePill, { backgroundColor: 'rgba(16, 185, 129, 0.2)' }]}>
-                <Text style={[styles.activePillText, { color: colors.success }]}>HEALTHY</Text>
+                <Text style={[styles.activePillText, { color: colors.success }]}>AES-256-GCM</Text>
               </View>
             </View>
-            <Text style={styles.enterpriseDesc}>RAID pools, IOPS, temperatures & volume metrics</Text>
+            <Text style={styles.enterpriseDesc}>Client-side key derivation & recovery phrase</Text>
           </View>
           <ChevronRight size={18} color={colors.textSecondary} />
         </TouchableOpacity>
@@ -138,94 +300,32 @@ export default function SettingsScreen() {
           <ChevronRight size={18} color={colors.textSecondary} />
         </TouchableOpacity>
 
-        {/* External HDD / SSD Storage */}
+        <View style={styles.divider} />
+
+        {/* Location & Trusted Wi-Fi Geofence */}
         <TouchableOpacity
           style={styles.enterpriseRow}
-          onPress={() => setShowExternalDriveModal(true)}
+          onPress={() => setShowGeofenceModal(true)}
           activeOpacity={0.7}
         >
-          <View style={[styles.enterpriseIconBox, { backgroundColor: 'rgba(56, 189, 248, 0.15)' }]}>
-            <HardDrive size={20} color={colors.cyan || '#38BDF8'} />
+          <View style={[styles.enterpriseIconBox, { backgroundColor: 'rgba(6, 182, 212, 0.15)' }]}>
+            <MapPin size={20} color={colors.accent} />
           </View>
           <View style={{ flex: 1, marginLeft: 12 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={styles.enterpriseTitle}>External HDD / SSD Storage</Text>
-              <View style={[styles.activePill, { backgroundColor: 'rgba(56, 189, 248, 0.2)' }]}>
-                <Text style={[styles.activePillText, { color: colors.cyan || '#38BDF8' }]}>WIRELESS TARGET</Text>
+              <Text style={styles.enterpriseTitle}>Location & Trusted Wi-Fi</Text>
+              <View style={[styles.activePill, { backgroundColor: 'rgba(6, 182, 212, 0.2)' }]}>
+                <Text style={[styles.activePillText, { color: colors.accent }]}>GEOFENCE</Text>
               </View>
             </View>
-            <Text style={styles.enterpriseDesc}>Direct mobile Wi-Fi sync to connected USB/Thunderbolt drives</Text>
-          </View>
-          <ChevronRight size={18} color={colors.textSecondary} />
-        </TouchableOpacity>
-
-        <View style={styles.divider} />
-
-        {/* Storage Cluster */}
-        <TouchableOpacity
-          style={styles.enterpriseRow}
-          onPress={() => setShowClusterModal(true)}
-          activeOpacity={0.7}
-        >
-          <View style={styles.enterpriseIconBox}>
-            <Layers size={20} color={colors.primaryLight} />
-          </View>
-          <View style={{ flex: 1, marginLeft: 12 }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={styles.enterpriseTitle}>Multi-Node Storage Cluster</Text>
-              <View style={styles.activePill}>
-                <Text style={styles.activePillText}>MULTI-NODE</Text>
-              </View>
-            </View>
-            <Text style={styles.enterpriseDesc}>Configure S3, MinIO & Local redundancy</Text>
-          </View>
-          <ChevronRight size={18} color={colors.textSecondary} />
-        </TouchableOpacity>
-
-        <View style={styles.divider} />
-
-        {/* Zero-Knowledge E2EE */}
-        <TouchableOpacity
-          style={styles.enterpriseRow}
-          onPress={() => setShowE2EEModal(true)}
-          activeOpacity={0.7}
-        >
-          <View style={[styles.enterpriseIconBox, { backgroundColor: 'rgba(16, 185, 129, 0.15)' }]}>
-            <ShieldCheck size={20} color={colors.success} />
-          </View>
-          <View style={{ flex: 1, marginLeft: 12 }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={styles.enterpriseTitle}>Zero-Knowledge E2EE Vault</Text>
-              <View style={[styles.activePill, { backgroundColor: 'rgba(16, 185, 129, 0.2)' }]}>
-                <Text style={[styles.activePillText, { color: colors.success }]}>AES-256-GCM</Text>
-              </View>
-            </View>
-            <Text style={styles.enterpriseDesc}>Client-side key derivation & recovery</Text>
-          </View>
-          <ChevronRight size={18} color={colors.textSecondary} />
-        </TouchableOpacity>
-
-        <View style={styles.divider} />
-
-        {/* Audit Logs */}
-        <TouchableOpacity
-          style={styles.enterpriseRow}
-          onPress={() => setShowAuditModal(true)}
-          activeOpacity={0.7}
-        >
-          <View style={[styles.enterpriseIconBox, { backgroundColor: 'rgba(245, 158, 11, 0.15)' }]}>
-            <ClipboardList size={20} color="#F59E0B" />
-          </View>
-          <View style={{ flex: 1, marginLeft: 12 }}>
-            <Text style={styles.enterpriseTitle}>Compliance Audit Trail</Text>
-            <Text style={styles.enterpriseDesc}>Immutable security & access logs</Text>
+            <Text style={styles.enterpriseDesc}>Auto-sync only in trusted sites & Wi-Fi networks</Text>
           </View>
           <ChevronRight size={18} color={colors.textSecondary} />
         </TouchableOpacity>
       </Card>
 
-      {/* Backup Sentinel Policies */}
-      <Text style={styles.sectionTitle}>Sync & Geofence Policies</Text>
+      {/* Sync & Geofence Policies */}
+      <Text style={styles.sectionTitle}>Sync & Mobile Policies</Text>
       <Card style={styles.sectionCard}>
         {/* Geofence Rule Toggle */}
         <View style={styles.settingRow}>
@@ -302,9 +402,37 @@ export default function SettingsScreen() {
         </View>
       </Card>
 
-      {/* Orientation Tutorial */}
-      <Text style={styles.sectionTitle}>Help & Tutorial</Text>
+      {/* Help & Documentation (Dedicated Site Guide) */}
+      <Text style={styles.sectionTitle}>Help & Documentation</Text>
       <Card style={styles.sectionCard}>
+        {/* Dedicated Role-Based Site Guide */}
+        <TouchableOpacity
+          style={styles.enterpriseRow}
+          onPress={() => router.push('/(tabs)/guide' as any)}
+          activeOpacity={0.7}
+        >
+          <View style={[styles.enterpriseIconBox, { backgroundColor: 'rgba(6, 182, 212, 0.15)' }]}>
+            <BookOpen size={20} color={colors.accent} />
+          </View>
+          <View style={{ flex: 1, marginLeft: 12 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Text style={styles.enterpriseTitle}>Site Guide & Flow Center</Text>
+              <View style={[styles.activePill, { backgroundColor: 'rgba(6, 182, 212, 0.2)' }]}>
+                <Text style={[styles.activePillText, { color: colors.accent }]}>ROLE-BASED</Text>
+              </View>
+            </View>
+            <Text style={styles.enterpriseDesc}>
+              {isAdmin
+                ? 'Full cluster, drive hot-plugging & deployment flows'
+                : 'Personal cloud explorer, auto-sync & sharing guidelines'}
+            </Text>
+          </View>
+          <ChevronRight size={18} color={colors.textSecondary} />
+        </TouchableOpacity>
+
+        <View style={styles.divider} />
+
+        {/* App Walkthrough Tutorial */}
         <TouchableOpacity
           style={styles.enterpriseRow}
           onPress={() => setShowTutorialModal(true)}
@@ -392,7 +520,6 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: colors.surfaceHighlight,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 14,
@@ -412,23 +539,52 @@ const styles = StyleSheet.create({
   },
   roleBadge: {
     alignSelf: 'flex-start',
-    backgroundColor: 'rgba(99, 102, 241, 0.2)',
     paddingHorizontal: 8,
-    paddingVertical: 2,
+    paddingVertical: 3,
     borderRadius: 6,
-    marginTop: 6,
   },
   roleText: {
-    color: colors.primaryLight,
     fontSize: 10,
+    fontWeight: '800',
+    letterSpacing: 0.5,
+  },
+  switchAccountBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.surfaceHighlight,
+    borderWidth: 1,
+    borderColor: colors.borderHighlight,
+    borderRadius: 8,
+    paddingVertical: 8,
+    marginTop: 14,
+  },
+  switchAccountBtnText: {
+    fontSize: 12,
     fontWeight: '700',
+    color: colors.accent,
+  },
+  sectionHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 10,
+    marginBottom: 8,
   },
   sectionTitle: {
     color: colors.textPrimary,
     fontSize: 14,
     fontWeight: '700',
-    marginTop: 10,
-    marginBottom: 10,
+  },
+  authorityPill: {
+    paddingHorizontal: 7,
+    paddingVertical: 2,
+    borderRadius: 4,
+  },
+  authorityPillText: {
+    fontSize: 9,
+    fontWeight: '800',
+    letterSpacing: 0.5,
   },
   sectionCard: {
     padding: 16,
@@ -473,6 +629,26 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: colors.border,
     marginVertical: 12,
+  },
+  nonAdminInfoBox: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    backgroundColor: 'rgba(6, 182, 212, 0.05)',
+    borderWidth: 1,
+    borderColor: 'rgba(6, 182, 212, 0.15)',
+    borderRadius: 10,
+    padding: 12,
+  },
+  nonAdminTitle: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: colors.accent,
+    marginBottom: 4,
+  },
+  nonAdminDesc: {
+    fontSize: 12,
+    color: colors.textSecondary,
+    lineHeight: 17,
   },
   settingRow: {
     flexDirection: 'row',

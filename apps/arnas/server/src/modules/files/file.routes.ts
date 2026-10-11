@@ -280,6 +280,61 @@ export const fileRoutes: FastifyPluginAsync = async (fastify: FastifyInstance) =
     return reply.status(200).send(result);
   });
 
+  // POST /api/v1/files/:id/share-user (Direct User-to-User Sharing by Email)
+  fastify.post('/:id/share-user', {
+    schema: {
+      tags: ['File Manager'],
+      summary: 'Share a file or folder directly with another user by email',
+      security: [{ bearerAuth: [] }],
+      params: {
+        type: 'object',
+        properties: { id: { type: 'string' } },
+        required: ['id'],
+      },
+    },
+  }, async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const { email, permission } = request.body as { email: string; permission?: 'READ' | 'WRITE' };
+    if (!email) {
+      return reply.status(400).send({ message: 'Target user email is required.' });
+    }
+    const result = await fileService.shareFileWithUser(request.user.id, id, email, permission || 'READ');
+    return reply.status(200).send(result);
+  });
+
+  // GET /api/v1/files/shared-with-me
+  fastify.get('/shared-with-me', {
+    schema: {
+      tags: ['File Manager'],
+      summary: 'List files and folders shared with the current user',
+      security: [{ bearerAuth: [] }],
+    },
+  }, async (request, reply) => {
+    const result = await fileService.listSharedWithMe(request.user.id);
+    return reply.status(200).send(result);
+  });
+
+  // DELETE /api/v1/files/:id/share-user/:targetUserId
+  fastify.delete('/:id/share-user/:targetUserId', {
+    schema: {
+      tags: ['File Manager'],
+      summary: 'Revoke file sharing permission from a user',
+      security: [{ bearerAuth: [] }],
+      params: {
+        type: 'object',
+        properties: {
+          id: { type: 'string' },
+          targetUserId: { type: 'string' },
+        },
+        required: ['id', 'targetUserId'],
+      },
+    },
+  }, async (request, reply) => {
+    const { id, targetUserId } = request.params as { id: string; targetUserId: string };
+    const result = await fileService.revokeFileShare(request.user.id, id, targetUserId);
+    return reply.status(200).send(result);
+  });
+
   // GET /api/v1/files/nas/metrics
   fastify.get('/nas/metrics', {
     schema: {

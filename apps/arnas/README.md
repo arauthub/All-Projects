@@ -94,6 +94,26 @@
 8. **Immutable Compliance Audit Trail**:
    - Cryptographic log entries recording `FILE_UPLOAD`, `FILE_DELETE`, `STORAGE_NODE_ADDED`, and `E2EE_INITIALIZED` with timestamps and client IP.
 
+9. **Enterprise RBAC & Multi-Tenant Isolation**:
+   - **Role Separation**: Admins manage hardware mountings, external SSDs, cluster nodes, quotas, and audit logs; Normal members only manage their personal cloud content.
+   - **Strict Privacy Isolation**: Every user’s folders, photos, and files are partitioned into isolated namespaces. No user can view or stream another user’s content unless explicitly shared.
+   - **Zero-Knowledge Privacy**: Server-level tenant guards reject unauthorized download or stream attempts with `403 Forbidden`.
+
+10. **Direct User-to-User Granular Sharing**:
+   - **Email-Based Access Granting**: Share specific files or folders directly with other users via email with `READ` (View & Download) or `WRITE` (Edit & Manage) permissions.
+   - **Dedicated 'Shared With Me' Tab**: Separate view in Cloud Explorer displaying all files shared with the current user, showing owner and permission status.
+   - **Instant Revocation**: Owners can revoke direct access at any time with immediate effect.
+
+11. **Interactive Role-Based Site Guide & Flow Center**:
+   - **Dedicated Navigation Tab (`(tabs)/guide`)**: Comprehensive interactive help center that adapts dynamically based on user authority.
+   - **Admin Complete Flows**: Step-by-step interactive flows for Storage Cluster Setup, External SSD Hot-Plugging, S.M.A.R.T. Telemetry, Quota Allocation, and Disaster Recovery.
+   - **Normal User Guidelines**: Focused guides on Personal Cloud Organization, Geofenced Auto-Sync, Zero-Knowledge Encryption, and 30-Day Recycle Bin Recovery.
+   - **Perspective Switcher**: Instant toggle to preview both Administrator and Standard Member perspectives with interactive action launchers.
+
+12. **1-Click Automated Cloud Deployment (GCP & AWS)**:
+   - **Google Cloud Platform (GCP)**: Single-command deployment via `./deploy.sh --target gcp` to Cloud Run, Cloud SQL (PostgreSQL 16), and Google Cloud Storage (GCS).
+   - **Amazon Web Services (AWS)**: Single-command deployment via `./deploy.sh --target aws` to AWS ECS Fargate, Amazon RDS (PostgreSQL 16), and Amazon S3.
+   - **Dry-Run Validation**: Test configurations and IAM requirements safely with `--dry-run` before live execution.
 
 ---
 
@@ -140,7 +160,11 @@ npm run dev
 * **API Health Check**: `http://localhost:8080/health`
 * **Swagger Interactive Docs**: `http://localhost:8080/docs`
 
-### 2. Launch the Mobile Client (Expo)
+### 2. Seeded Test Accounts (Role Demonstration)
+* **Administrator**: `abhijeet@example.com` / `AdminPassword123!` (Full cluster & drive control)
+* **Standard Member**: `user@example.com` / `UserPassword123!` (Personal isolated storage)
+
+### 3. Launch the Mobile / Web Client (Expo)
 
 ```bash
 cd apps/arnas/mobile
@@ -148,8 +172,22 @@ npm install
 npm run web    # Or npx expo start --ios / android
 ```
 
-* **Web Preview**: `http://localhost:8081`
+* **Web Client Preview**: `http://localhost:8081`
 * **Metro Bundler**: `exp://localhost:8081`
+
+### 4. 1-Click Cloud Deployment (GCP & AWS)
+
+```bash
+cd apps/arnas
+
+# Google Cloud Platform (Cloud Run + Cloud SQL + GCS)
+./deploy.sh --target gcp --dry-run
+./deploy.sh --target gcp --project <your-project-id>
+
+# Amazon Web Services (ECS Fargate + RDS + S3)
+./deploy.sh --target aws --dry-run
+./deploy.sh --target aws --region us-east-1
+```
 
 ---
 

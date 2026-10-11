@@ -46,8 +46,31 @@ async function main() {
 
   console.log(`✅ Admin user seeded: ${adminUser.email} (${adminUser.id})`);
 
-  // Ensure disk directories exist for this user & family
+  // Ensure disk directories exist for admin user & family
   await storageService.ensureMemberDirs(family.id, adminUser.id);
+
+  // Create normal user (MEMBER)
+  const memberEmail = process.env.MEMBER_EMAIL || 'user@example.com';
+  const memberPassword = process.env.MEMBER_PASSWORD || 'UserPassword123!';
+  const memberPasswordHash = await bcrypt.hash(memberPassword, 10);
+
+  const memberUser = await prisma.user.upsert({
+    where: { email: memberEmail },
+    update: {
+      role: Role.MEMBER,
+    },
+    create: {
+      email: memberEmail,
+      name: 'Sarah Raut (Standard User)',
+      passwordHash: memberPasswordHash,
+      role: Role.MEMBER,
+      familyId: family.id,
+      storageQuotaBytes: BigInt(53687091200), // 50 GB
+    },
+  });
+
+  console.log(`✅ Normal member user seeded: ${memberUser.email} (${memberUser.id})`);
+  await storageService.ensureMemberDirs(family.id, memberUser.id);
 
   // Create Shared Family Vault folder root record in DB if not present
   const sharedVault = await prisma.fileItem.findFirst({

@@ -73,6 +73,11 @@ Here are highlights from my public [**All-Projects**](https://github.com/arauthu
 
 ---
 
+
+### 🚀 [Api Pulse Pro](https://github.com/arauthub/All-Projects/tree/main/extensions/api-pulse-pro)
+* **Category**: Browser Extension
+* High-performance enterprise project showcasing modern engineering standards.
+
 ## 💼 Career Snapshot
 
 * **Lead Software Engineer / AI Architect** — *Persistent Systems* (2023 – Present)

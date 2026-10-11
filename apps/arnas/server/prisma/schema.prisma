@@ -76,6 +76,8 @@ model User {
   files                   FileItem[]
   devices                 Device[]
   uploadSessions          UploadSession[]
+  receivedShares          FileShare[]     @relation("ReceivedShares")
+  givenShares             FileShare[]     @relation("GivenShares")
 
   @@index([familyId])
   @@map("users")
@@ -169,6 +171,7 @@ model FileItem {
   encryptedFileKey     String?       // AES-256 FEK encrypted with client public key
   encryptedMetadata    String?       // Encrypted filename and MIME
   replicas             FileReplica[]
+  shares               FileShare[]
   createdAt            DateTime      @default(now())
   updatedAt            DateTime      @updatedAt
 
@@ -223,4 +226,21 @@ model AuditLog {
   @@index([action])
   @@index([createdAt])
   @@map("audit_logs")
+}
+
+model FileShare {
+  id               String   @id @default(uuid())
+  fileItemId       String
+  fileItem         FileItem @relation(fields: [fileItemId], references: [id], onDelete: Cascade)
+  sharedWithUserId String
+  sharedWithUser   User     @relation("ReceivedShares", fields: [sharedWithUserId], references: [id], onDelete: Cascade)
+  sharedByUserId   String
+  sharedByUser     User     @relation("GivenShares", fields: [sharedByUserId], references: [id], onDelete: Cascade)
+  permission       String   @default("READ") // "READ" | "WRITE"
+  createdAt        DateTime @default(now())
+
+  @@unique([fileItemId, sharedWithUserId])
+  @@index([sharedWithUserId])
+  @@index([fileItemId])
+  @@map("file_shares")
 }

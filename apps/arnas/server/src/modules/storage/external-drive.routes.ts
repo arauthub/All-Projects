@@ -85,6 +85,9 @@ export const externalDriveRoutes: FastifyPluginAsync = async (fastify: FastifyIn
       security: [{ bearerAuth: [] }],
     },
   }, async (request, reply) => {
+    if (request.user.role !== 'ADMIN') {
+      return reply.status(403).send({ message: 'Only administrators can run drive benchmarks.' });
+    }
     const { mountPath } = benchmarkSchema.parse(request.body);
     const metrics = await externalDriveService.benchmarkDrive(mountPath);
     return reply.status(200).send(metrics);
@@ -114,6 +117,9 @@ export const externalDriveRoutes: FastifyPluginAsync = async (fastify: FastifyIn
       security: [{ bearerAuth: [] }],
     },
   }, async (request, reply) => {
+    if (request.user.role !== 'ADMIN') {
+      return reply.status(403).send({ message: 'Only administrators can mount simulated storage drives.' });
+    }
     const { preset, setAsPrimaryTarget } = simulateSchema.parse(request.body || {});
     let name = 'Samsung T7 Shield 2TB (USB-C SSD)';
     let mountName = 'Samsung_T7_SSD_2TB';
