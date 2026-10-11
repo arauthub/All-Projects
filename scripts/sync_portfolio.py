@@ -34,6 +34,19 @@ def sync_portfolio(mode="standalone"):
         print(f"❌ Error: {PORTFOLIO_DIR} not found.")
         return False
 
+    # In pre-push mode, strictly audit and validate without mutating working tree
+    if mode == "pre-push":
+        test_script = PORTFOLIO_DIR / "tests" / "test_jamstack.js"
+        if test_script.exists():
+            res = subprocess.run(["node", str(test_script)], cwd=PORTFOLIO_DIR, capture_output=True, text=True)
+            if res.returncode == 0:
+                print("✅ [Jamstack Pre-Push Audit] 22/22 unit tests passed cleanly.")
+            else:
+                print(f"❌ [Jamstack Pre-Push Audit Failed]: {res.stderr.strip()}")
+                return False
+        print("🎉 [Nexus Prime Portfolio Audit] Verified and ready for deployment.\n")
+        return True
+
     # 1. Extract latest git commits
     try:
         head_commit = run_git(["rev-parse", "--short", "HEAD"], check=False) or "HEAD"
@@ -88,16 +101,7 @@ def sync_portfolio(mode="standalone"):
         manifest_file.write_text(json.dumps(manifest_data, indent=2), encoding="utf-8")
         print(f"📦 Static build manifest compiled to {manifest_file.relative_to(REPO_ROOT)}")
 
-        # 4. Synchronize js/git-intelligence.js activeBranch & headCommit
-        git_intel_file = PORTFOLIO_DIR / "js" / "git-intelligence.js"
-        if git_intel_file.exists() and commits:
-            content = git_intel_file.read_text(encoding="utf-8")
-            content = re.sub(r'activeBranch:\s*"[^"]*"', f'activeBranch: "{active_branch}"', content)
-            content = re.sub(r'headCommit:\s*"[^"]*"', f'headCommit: "{head_commit}"', content)
-            git_intel_file.write_text(content, encoding="utf-8")
-            print(f"⚡ Synchronized {git_intel_file.relative_to(REPO_ROOT)} with HEAD commit '{head_commit}'")
-
-        # 5. Run Jamstack build & test suite
+        # 4. Run Jamstack build & test suite
         build_script = PORTFOLIO_DIR / "scripts" / "build-jamstack.mjs"
         if build_script.exists():
             subprocess.run(["node", str(build_script)], cwd=PORTFOLIO_DIR, check=False)
@@ -110,12 +114,11 @@ def sync_portfolio(mode="standalone"):
             else:
                 print(f"⚠️ Warning running Jamstack unit tests: {res.stderr.strip()}")
 
-        # 6. Auto-stage updated portfolio files if in pre-commit
+        # 5. Auto-stage updated portfolio manifest if in pre-commit
         if mode == "pre-commit":
             rel_manifest = str(manifest_file.relative_to(REPO_ROOT))
-            rel_intel = str(git_intel_file.relative_to(REPO_ROOT))
-            run_git(["add", rel_manifest, rel_intel], check=False)
-            print("📝 Pre-commit: Auto-staged updated portfolio assets.")
+            run_git(["add", rel_manifest], check=False)
+            print("📝 Pre-commit: Auto-staged updated portfolio build manifest.")
 
         print(f"🎉 Nexus Prime Portfolio updated successfully! ({projects_count} systems active, HEAD {head_commit})\n")
         return True

@@ -520,13 +520,12 @@ def main():
     profile_file = "PROFILE.md"
     readme_file = "README.md"
     portfolio_manifest = "apps/jamstack-frontend/data/build-manifest.json"
-    portfolio_intel = "apps/jamstack-frontend/js/git-intelligence.js"
-    doc_changes = run_git(["status", "--porcelain", cv_file, profile_file, readme_file, portfolio_manifest, portfolio_intel], check=False)
+    doc_changes = run_git(["status", "--porcelain", cv_file, profile_file, readme_file, portfolio_manifest], check=False)
 
     if doc_changes:
         if mode == "pre-commit":
             print("📝 Pre-commit: Auto-staging updated CV, Profile, README, and Portfolio assets...")
-            run_git(["add", cv_file, profile_file, readme_file, portfolio_manifest, portfolio_intel])
+            run_git(["add", cv_file, profile_file, readme_file, portfolio_manifest])
         elif mode == "pre-push":
             print("\n⚠️  [PRE-PUSH ABORTED] Documentation synchronization required.")
             print("Presubmit detected or generated updates in portfolio documentation.")
