@@ -42,6 +42,34 @@ To enable this workflow directly in GitHub Actions on your repository (`arauthub
    ```
 3. Alternatively, create `.github/workflows/ci.yml` directly in the GitHub web interface at `https://github.com/arauthub/All-Projects/actions/new`.
 
+## 🔒 Git Security Hooks & Historical Reference Purge
+
+### 1. Activating Git Security Hooks
+To enable pre-commit and pre-push hooks that block sensitive leaks (private keys, AWS tokens, GitHub PATs, OpenAI/Anthropic keys, unmasked `.env` files):
+```bash
+./scripts/setup-hooks.sh
+```
+This configures `git config core.hooksPath .githooks` so version-controlled hooks in `.githooks/` run automatically before every commit and push.
+
+### 2. Historical Secret Scanning & Complete Deletion
+To audit full git history across all commits and blobs:
+```bash
+python3 scripts/purge_sensitive_history.py --scan
+```
+
+If sensitive files or credentials ever need to be purged completely from git history (removing all historical references, rewriting commits, and expiring reflogs):
+```bash
+# Purge a sensitive file from all commits across all branches
+./scripts/purge-sensitive-history.sh --file path/to/sensitive-file
+
+# Redact a sensitive secret token from all historical commits
+./scripts/purge-sensitive-history.sh --secret "secret-token-to-scrub"
+```
+After running, force-push to update remote branches:
+```bash
+git push origin --force --all && git push origin --force --tags
+```
+
 ---
 
 ## 👤 Author

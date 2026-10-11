@@ -1,0 +1,13 @@
+#!/bin/bash
+# .githooks/pre-commit
+# Enforces pre-commit security: blocks commits containing sensitive information, credentials, or keys.
+
+set -e
+
+REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+
+if [ -f "$REPO_ROOT/scripts/presubmit.sh" ]; then
+  exec bash "$REPO_ROOT/scripts/presubmit.sh" --mode=pre-commit
+fi
+
+exit 0

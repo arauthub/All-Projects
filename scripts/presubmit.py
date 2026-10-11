@@ -23,13 +23,28 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 
 # Sensitive information regex patterns
 SECRET_PATTERNS = [
-    ("Private Key", re.compile(r"-----BEGIN (?:RSA|EC|DSA|OPENSSH|PGP) PRIVATE KEY-----")),
+    ("Private Key", re.compile(r"-----BEGIN (?:[A-Z0-9_-]+ )?PRIVATE KEY-----")),
     ("AWS Access Key ID", re.compile(r"(?:A3T[A-Z0-9]|AKIA|AGPA|AIDA|AROA|AIPA|ANPA|ANVA|ASIA)[A-Z0-9]{16}")),
-    ("AWS Secret Key Assignment", re.compile(r"(?i)aws_secret_access_key\s*=\s*['\"][A-Za-z0-9/\+=]{40}['\"]")),
+    ("AWS Secret Key Assignment", re.compile(r"""(?i)aws_secret_access_key\s*=\s*['"][A-Za-z0-9/\+=]{40}['"]""")),
     ("GitHub Personal Access Token", re.compile(r"(?:ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9_]{36,255}|github_pat_[A-Za-z0-9_]{82}")),
     ("Google API Key", re.compile(r"AIza[0-9A-Za-z\-_]{35}")),
+    ("OpenAI API Key", re.compile(r"sk-(?:proj-)?[A-Za-z0-9\-_]{32,}")),
+    ("Anthropic API Key", re.compile(r"sk-ant-[A-Za-z0-9\-_]{32,}")),
     ("Slack Token", re.compile(r"xox[baprs]-[0-9]{12}-[0-9]{12}-[a-zA-Z0-9]{24,32}")),
+    ("Stripe Secret Key", re.compile(r"(?:sk|rk)_(?:live|test)_[0-9a-zA-Z]{24,}")),
+    ("Generic High-Entropy Secret", re.compile(r"""(?i)(?:api_key|api_secret|client_secret|db_password)\s*[:=]\s*['"]([A-Za-z0-9\-_+=/.]{16,})['"]""")),
     ("Bearer JWT with Secret Signature", re.compile(r"eyJ[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.[A-Za-z0-9-_.+/=]{20,}")),
+]
+
+SENSITIVE_FILENAME_PATTERNS = [
+    re.compile(r"(?i)\.(?:pem|pkcs12|pfx|kdbx|key)$"),
+    re.compile(r"(?:^|/)(?:id_rsa|id_ed25519|id_ecdsa|credentials\.json)$"),
+]
+
+SAFE_EXCEPTIONS = [
+    "example", "replace", "dummy", "placeholder", "your_", "mock",
+    "change_me", "change_this", "super_secret", "test-", "test_",
+    "default", "todo", "env[", "process.env", "os.getenv", "os.environ"
 ]
 
 # File patterns to exclude from secret scans
@@ -54,21 +69,27 @@ def run_git(args, check=True):
     )
     return res.stdout.strip()
 
-def get_staged_or_unpushed_files():
+def get_staged_or_unpushed_files(mode="standalone"):
     """Get list of files modified in working tree, staged, or in unpushed commits."""
     files = set()
 
-    # 1. Unstaged & staged files
+    # 1. In pre-commit mode, prioritize staged files
+    if mode == "pre-commit":
+        staged_out = run_git(["diff", "--cached", "--name-only", "--diff-filter=ACM"], check=False)
+        for line in staged_out.splitlines():
+            if line.strip():
+                files.add(line.strip())
+
+    # 2. Unstaged & staged files
     status_out = run_git(["status", "--porcelain"], check=False)
     for line in status_out.splitlines():
         if len(line) > 3:
             filepath = line[3:].strip()
-            # Handle renames e.g. "R  old -> new"
             if "->" in filepath:
                 filepath = filepath.split("->")[-1].strip()
             files.add(filepath)
 
-    # 2. Files in unpushed commits compared to origin/main
+    # 3. Files in unpushed commits compared to origin/main
     try:
         remote_branch = run_git(["rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}"])
     except subprocess.CalledProcessError:
@@ -84,20 +105,54 @@ def get_staged_or_unpushed_files():
 
     return files
 
-def check_sensitive_information(files_to_check=None):
+def check_sensitive_information(files_to_check=None, mode="standalone"):
     """Scan files for secrets or sensitive information."""
     print("🔒 [Presubmit 1/4] Running sensitive information & security scan...")
     if files_to_check is None:
-        files_to_check = get_staged_or_unpushed_files()
+        files_to_check = get_staged_or_unpushed_files(mode=mode)
 
     violations = []
 
-    # Check for committed .env files
+    # 1. Check for committed .env files and sensitive filename extensions
     for rel_path in files_to_check:
         filename = os.path.basename(rel_path)
-        if filename.startswith(".env") and not filename.endswith(".example"):
+        # Block unmasked .env files
+        if filename.startswith(".env") and not any(filename.endswith(s) for s in [".example", ".sample", ".template"]):
             violations.append((rel_path, 1, "Unmasked .env file cannot be committed to Git!"))
+        # Block certificates, private keys, SSH identities
+        for pat in SENSITIVE_FILENAME_PATTERNS:
+            if pat.search(rel_path):
+                violations.append((rel_path, 1, f"Sensitive credential file blocked by policy: {rel_path}"))
 
+    # 2. Check staged diff directly if in pre-commit mode
+    if mode == "pre-commit":
+        try:
+            cached_diff = run_git(["diff", "--cached", "-U0"], check=False)
+            current_file = ""
+            current_line = 0
+            for raw_line in cached_diff.splitlines():
+                if raw_line.startswith("+++ b/"):
+                    current_file = raw_line[6:]
+                elif raw_line.startswith("@@"):
+                    # Extract line number from @@ ... +lineno ... @@
+                    m = re.search(r"\+(\d+)", raw_line)
+                    if m:
+                        current_line = int(m.group(1))
+                elif raw_line.startswith("+") and not raw_line.startswith("+++"):
+                    added_content = raw_line[1:]
+                    for name, pat in SECRET_PATTERNS:
+                        match = pat.search(added_content)
+                        if match:
+                            snippet = match.group(0)
+                            if any(safe in snippet.lower() for safe in SAFE_EXCEPTIONS) or any(safe in added_content.lower() for safe in SAFE_EXCEPTIONS):
+                                continue
+                            redacted = snippet[:6] + "..." + snippet[-4:] if len(snippet) > 10 else "***"
+                            violations.append((current_file or "staged", current_line, f"Staged {name}: {redacted}"))
+                    current_line += 1
+        except Exception as e:
+            print(f"⚠️ Warning scanning staged diff: {e}")
+
+    # 3. Check file contents on disk
     for rel_path in files_to_check:
         full_path = REPO_ROOT / rel_path
         if not full_path.is_file():
@@ -116,13 +171,11 @@ def check_sensitive_information(files_to_check=None):
         try:
             with open(full_path, "r", encoding="utf-8", errors="ignore") as f:
                 for line_no, line in enumerate(f, start=1):
-                    # Check regexes
                     for name, pat in SECRET_PATTERNS:
                         match = pat.search(line)
                         if match:
                             snippet = match.group(0)
-                            # Allow safe documentation placeholders
-                            if any(safe in snippet.lower() for safe in ["example", "replace", "dummy", "placeholder", "your_"]):
+                            if any(safe in snippet.lower() for safe in SAFE_EXCEPTIONS) or any(safe in line.lower() for safe in SAFE_EXCEPTIONS):
                                 continue
                             redacted = snippet[:6] + "..." + snippet[-4:] if len(snippet) > 10 else "***"
                             violations.append((rel_path, line_no, f"Possible {name}: {redacted}"))
@@ -131,10 +184,13 @@ def check_sensitive_information(files_to_check=None):
 
     if violations:
         print("\n🚨 [SECURITY ALERT] SENSITIVE INFORMATION DETECTED!")
-        print("Push aborted to protect against credential leaks.\n")
+        print(f"Commit / Push ABORTED to protect against credential leaks in {mode} mode.\n")
         for file, line, msg in violations:
             print(f"  ❌ {file}:{line} -> {msg}")
-        print("\nPlease remove or mask these secrets before pushing.")
+        print("\nRemediation:")
+        print("  1. Remove or mask these secrets from your files or git staging.")
+        print("  2. If sensitive information was previously committed to git history, run:")
+        print("     ./scripts/purge-sensitive-history.sh --file <path>   # or --secret <pattern>")
         return False
 
     print("✅ [Security Audit] Passed. No secrets or credentials detected.")
@@ -300,6 +356,16 @@ def sync_readme(projects):
     return True
 
 def main():
+    if "--scan-history" in sys.argv:
+        import purge_sensitive_history
+        violations = purge_sensitive_history.scan_git_history()
+        if violations:
+            print(f"\n🚨 [CRITICAL ALERT] Found {len(violations)} historical sensitive references!")
+            sys.exit(1)
+        else:
+            print("\n🎉 [ALL CLEAR] Zero secrets or sensitive files found in Git history!")
+            sys.exit(0)
+
     mode = "standalone"
     if "--mode=pre-commit" in sys.argv:
         mode = "pre-commit"
@@ -310,10 +376,10 @@ def main():
     print("=" * 60)
 
     # 1. Collect modified files
-    modified_files = get_staged_or_unpushed_files()
+    modified_files = get_staged_or_unpushed_files(mode=mode)
 
     # 2. Check sensitive information
-    if not check_sensitive_information(modified_files):
+    if not check_sensitive_information(modified_files, mode=mode):
         sys.exit(1)
 
     # 3. Discover projects

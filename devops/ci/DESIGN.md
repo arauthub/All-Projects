@@ -81,6 +81,30 @@ graph TD
 * Trigger conditions: `push` to `main`, `pull_request` to `main`.
 * Concurrency groups to cancel outdated in-flight builds on rapid commits.
 
+### 4.3. Version-Controlled Git Hooks Architecture (`.githooks/`)
+* **Pre-Commit Hook (`.githooks/pre-commit`)**:
+  * Intercepts `git commit` invocations before changes write to the local index.
+  * Audits staged files and staged hunks (`git diff --cached`) for sensitive tokens, unmasked `.env` files, and private keys.
+  * Strictly exits with status code `1` if violations exist, immediately aborting the commit.
+* **Pre-Push Hook (`.githooks/pre-push`)**:
+  * Intercepts `git push` invocations before transmission to upstream remotes.
+  * Audits unpushed commits (`origin/main...HEAD`) and synchronizes portfolio documentation.
+  * Strictly exits with status code `1` if unmasked credentials or secrets exist, immediately halting the push.
+* **Activation**:
+  * Activated globally or per-repo via `git config core.hooksPath .githooks` (managed via `scripts/setup-hooks.sh`).
+
+### 4.4. Historical Secret Purge & Reference Deletion Engine (`scripts/purge-sensitive-history.sh`)
+* **Purpose**: Completely expunges sensitive files or tokens from Git history across all commits, branches, and tags.
+* **Mechanism**:
+  1. Creates an isolated backup tag (`backup-before-purge-<pid>`).
+  2. Uses `git filter-branch` to rewrite commit trees:
+     - File purge: removes index entries across all commits (`git rm --cached --ignore-unmatch <pattern>`).
+     - Token purge: rewrites file contents across all commit trees, replacing secrets with `[REDACTED_BY_PRECOMMIT]`.
+  3. Purges all backup references in `refs/original/`.
+  4. Forces reflog expiration: `git reflog expire --expire=now --all`.
+  5. Prunes unreachable loose blobs: `git gc --prune=now --aggressive`.
+  6. Guarantees 0 remaining historical references.
+
 ---
 
 ## 5. Execution & Verification Runbook

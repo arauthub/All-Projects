@@ -258,6 +258,7 @@
     // Robust mock for chrome.runtime in case page is opened directly
     if (!window.chrome) window.chrome = {};
     if (!window.chrome.runtime) window.chrome.runtime = {};
+    window.chrome.runtime.id = 'anti-gravity-standalone-test';
     if (!window.chrome.runtime.onMessage) {
       window.chrome.runtime.onMessage = { addListener: () => {} };
     }

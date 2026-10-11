@@ -223,8 +223,9 @@ All-Projects/
 ## 📜 Repository Standards & Guidelines
 
 * **Code Organization**: Keep domain projects cleanly separated into their respective top-level folders (`extensions/`, `apps/`, `agents/`, `devops/`).
+* **Security & Git Hooks**: Enforce automated pre-commit and pre-push verification by running `./scripts/setup-hooks.sh`. Blocks commits or pushes containing private keys, API tokens, or unmasked `.env` files. Full history audit and reference purge available via `./scripts/purge-sensitive-history.sh`.
 * **Clean Commits**: Ensure build artifacts (`node_modules/`, `.angular/`, `__pycache__/`, `.sqlite3`) are kept out of git tracking (handled automatically by root `.gitignore`).
-* **Documentation**: Each project inside its subfolder maintains a standalone `README.md` for local-specific setup and dependencies.
+* **Documentation**: Each project inside its subfolder maintains a standalone `README.md` and `DESIGN.md` for architecture and local execution.
 
 ---
 
