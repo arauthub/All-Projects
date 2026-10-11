@@ -508,16 +508,25 @@ def main():
     if not sync_readme(projects):
         sys.exit(1)
 
-    # 9. Verify staging state
+    # 9. Sync Nexus Prime Portfolio Jamstack
+    scripts_dir = str(REPO_ROOT / "scripts")
+    if scripts_dir not in sys.path:
+        sys.path.insert(0, scripts_dir)
+    import sync_portfolio
+    sync_portfolio.sync_portfolio(mode=mode)
+
+    # 10. Verify staging state
     cv_file = "CV_Abhijeet_Raut.md"
     profile_file = "PROFILE.md"
     readme_file = "README.md"
-    doc_changes = run_git(["status", "--porcelain", cv_file, profile_file, readme_file], check=False)
+    portfolio_manifest = "apps/jamstack-frontend/data/build-manifest.json"
+    portfolio_intel = "apps/jamstack-frontend/js/git-intelligence.js"
+    doc_changes = run_git(["status", "--porcelain", cv_file, profile_file, readme_file, portfolio_manifest, portfolio_intel], check=False)
 
     if doc_changes:
         if mode == "pre-commit":
-            print("📝 Pre-commit: Auto-staging updated CV, Profile, and README...")
-            run_git(["add", cv_file, profile_file, readme_file])
+            print("📝 Pre-commit: Auto-staging updated CV, Profile, README, and Portfolio assets...")
+            run_git(["add", cv_file, profile_file, readme_file, portfolio_manifest, portfolio_intel])
         elif mode == "pre-push":
             print("\n⚠️  [PRE-PUSH ABORTED] Documentation synchronization required.")
             print("Presubmit detected or generated updates in portfolio documentation.")

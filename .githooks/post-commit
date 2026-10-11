@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# .githooks/post-commit
+# Automatically compiles and synchronizes Nexus Prime Jamstack portfolio after every commit.
+
+set -e
+
+REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+
+if [ -f "$REPO_ROOT/scripts/sync-portfolio.sh" ]; then
+  bash "$REPO_ROOT/scripts/sync-portfolio.sh"
+fi
+
+exit 0

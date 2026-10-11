@@ -3,9 +3,6 @@ name: Deploy Nexus Prime Jamstack to GitHub Pages
 on:
   push:
     branches: [ main ]
-    paths:
-      - 'apps/jamstack-frontend/**'
-      - '.github/workflows/deploy-jamstack.yml'
   workflow_dispatch:
 
 permissions:

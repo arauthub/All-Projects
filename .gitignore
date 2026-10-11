@@ -71,3 +71,5 @@ data/
 # Explicitly ensure source code directories are tracked
 !**/src/**/storage/
 !**/src/**/storage/**
+!apps/jamstack-frontend/data/
+!apps/jamstack-frontend/data/**

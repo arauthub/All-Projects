@@ -16,6 +16,7 @@ mkdir -p "$REPO_ROOT/.git/hooks"
 
 # Make hooks and presubmit scripts executable
 chmod +x "$REPO_ROOT/.githooks/pre-commit" 2>/dev/null || true
+chmod +x "$REPO_ROOT/.githooks/post-commit" 2>/dev/null || true
 chmod +x "$REPO_ROOT/.githooks/pre-push" 2>/dev/null || true
 chmod +x "$REPO_ROOT/.git/hooks/pre-commit" 2>/dev/null || true
 chmod +x "$REPO_ROOT/.git/hooks/pre-push" 2>/dev/null || true
@@ -23,6 +24,8 @@ chmod +x "$REPO_ROOT/scripts/presubmit.sh" 2>/dev/null || true
 chmod +x "$REPO_ROOT/scripts/presubmit.py" 2>/dev/null || true
 chmod +x "$REPO_ROOT/scripts/run-all-precommits.sh" 2>/dev/null || true
 chmod +x "$REPO_ROOT/scripts/purge-sensitive-history.sh" 2>/dev/null || true
+chmod +x "$REPO_ROOT/scripts/sync-portfolio.sh" 2>/dev/null || true
+chmod +x "$REPO_ROOT/scripts/sync_portfolio.py" 2>/dev/null || true
 
 # Point git core.hooksPath to version-controlled .githooks
 git config core.hooksPath .githooks
