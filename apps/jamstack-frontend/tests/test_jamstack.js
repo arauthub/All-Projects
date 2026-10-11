@@ -39,6 +39,13 @@ assert(fs.existsSync(path.join(APP_ROOT, 'js/git-intelligence.js')), 'js/git-int
 assert(fs.existsSync(path.join(APP_ROOT, 'README.md')), 'README.md exists');
 assert(fs.existsSync(path.join(APP_ROOT, 'DESIGN.md')), 'DESIGN.md exists');
 assert(fs.existsSync(path.join(APP_ROOT, '.env.example')), '.env.example exists');
+assert(fs.existsSync(path.join(APP_ROOT, 'assets/profile-photo.png')), 'assets/profile-photo.png exists');
+assert(fs.existsSync(path.join(APP_ROOT, 'assets/og-image.png')), 'assets/og-image.png exists');
+
+// Verify social meta & CV intro in index.html
+const indexHtmlContent = fs.readFileSync(path.join(APP_ROOT, 'index.html'), 'utf-8');
+assert(indexHtmlContent.includes('Abhijeet Raut — Lead Backend & AI/ML Engineer | Solutions Architect'), 'index.html title matches CV');
+assert(indexHtmlContent.includes('property="og:image" content="https://arauthub.github.io/portfolio/assets/og-image.png"'), 'index.html has og:image social card');
 
 // 2. Data Integrity Tests
 console.log('\n📊 2. Projects & Profile Data Integrity:');

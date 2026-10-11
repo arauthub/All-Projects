@@ -219,6 +219,70 @@ h1, h2, h3, h4, h5, h6 {
   animation: pulse-ring 2s infinite ease-in-out;
 }
 
+/* Hero Avatar with Quantum Glow */
+.hero-avatar-wrap {
+  position: relative;
+  width: 124px;
+  height: 124px;
+  margin: 0 auto 22px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-avatar-glow {
+  position: absolute;
+  inset: -10px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 245, 255, 0.45) 0%, rgba(139, 92, 246, 0.25) 55%, transparent 75%);
+  filter: blur(10px);
+  animation: pulse-ring 4s infinite ease-in-out;
+  pointer-events: none;
+}
+
+.hero-avatar-img {
+  width: 118px;
+  height: 118px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2.5px solid rgba(0, 245, 255, 0.85);
+  box-shadow: 0 8px 32px rgba(0, 245, 255, 0.25), 0 0 20px rgba(0, 245, 255, 0.35);
+  position: relative;
+  z-index: 2;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+}
+
+.hero-avatar-wrap:hover .hero-avatar-img {
+  transform: scale(1.06);
+  box-shadow: 0 12px 42px rgba(0, 245, 255, 0.45), 0 0 28px rgba(0, 245, 255, 0.6);
+  border-color: #00f5ff;
+}
+
+.hero-avatar-badge {
+  position: absolute;
+  bottom: 2px;
+  right: 6px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #070c18;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+  border: 1.5px solid rgba(0, 245, 255, 0.6);
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
+}
+
+.hero-avatar-badge .pulse-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 10px #10b981;
+  animation: pulse-ring 2s infinite ease-in-out;
+}
+
 .hero-name {
   font-size: 64px;
   font-weight: 900;

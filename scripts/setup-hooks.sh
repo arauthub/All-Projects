@@ -25,6 +25,7 @@ chmod +x "$REPO_ROOT/scripts/run-all-precommits.sh" 2>/dev/null || true
 chmod +x "$REPO_ROOT/scripts/purge-sensitive-history.sh" 2>/dev/null || true
 chmod +x "$REPO_ROOT/scripts/sync-portfolio.sh" 2>/dev/null || true
 chmod +x "$REPO_ROOT/scripts/sync_portfolio.py" 2>/dev/null || true
+chmod +x "$REPO_ROOT/scripts/generate_og_image.py" 2>/dev/null || true
 
 # Point git core.hooksPath to version-controlled .githooks
 git config core.hooksPath .githooks

@@ -40,7 +40,7 @@ def sync_portfolio(mode="standalone"):
         if test_script.exists():
             res = subprocess.run(["node", str(test_script)], cwd=PORTFOLIO_DIR, capture_output=True, text=True)
             if res.returncode == 0:
-                print("✅ [Jamstack Pre-Push Audit] 22/22 unit tests passed cleanly.")
+                print("✅ [Jamstack Pre-Push Audit] 26/26 unit tests passed cleanly.")
             else:
                 print(f"❌ [Jamstack Pre-Push Audit Failed]: {res.stderr.strip()}")
                 return False
@@ -110,7 +110,7 @@ def sync_portfolio(mode="standalone"):
         if test_script.exists():
             res = subprocess.run(["node", str(test_script)], cwd=PORTFOLIO_DIR, capture_output=True, text=True)
             if res.returncode == 0:
-                print("✅ [Jamstack Tests] 22/22 unit tests passed cleanly.")
+                print("✅ [Jamstack Tests] 26/26 unit tests passed cleanly.")
             else:
                 print(f"⚠️ Warning running Jamstack unit tests: {res.stderr.strip()}")
 

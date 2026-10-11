@@ -11,8 +11,10 @@ export const PROFILE_DATA = {
   github: "https://github.com/arauthub",
   githubUsername: "arauthub",
   portfolioRepo: "https://github.com/arauthub/portfolio",
+  profilePhoto: "assets/profile-photo.png",
+  ogImage: "assets/og-image.png",
   yearsOfExperience: 12,
-  summary: "Accomplished Lead Software Engineer and Solutions Architect with 12 years of hands-on experience architecting high-concurrency backend services, distributed systems, and modern AI/ML solutions. Proven track record of guiding cross-functional engineering teams from concept to production deployment.",
+  summary: "Accomplished Lead Software Engineer and Solutions Architect with 12 years of hands-on experience architecting high-concurrency backend services, distributed systems, and modern AI/ML solutions (Persistent Systems & Cybage Software). Proven track record of guiding cross-functional engineering teams from concept to production deployment.",
   
   careerStats: [
     { label: "Industry Experience", value: "12 Years", sub: "Enterprise & Scale" },
