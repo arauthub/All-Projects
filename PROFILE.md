@@ -80,6 +80,12 @@ Here are highlights from my public [**All-Projects**](https://github.com/arauthu
 
 ---
 
+### 🐳 [DevOps & CI Verification Pipeline](https://github.com/arauthub/All-Projects/tree/main/devops/ci)
+* **Stack**: GitHub Actions, Docker Compose, Python, Shell, Vitest, Pytest
+* Automated multi-stage presubmit verification pipeline validating secret detection, code integrity, Python multi-agent swarms, and containerized Docker topologies.
+
+---
+
 ## 💼 Career Snapshot
 
 * **Lead Software Engineer / AI Architect** — *Persistent Systems* (2023 – Present)

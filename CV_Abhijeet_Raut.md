@@ -123,6 +123,14 @@ Accomplished **Lead Software Engineer and Solutions Architect** with **12 years 
 
 ---
 
+### **10. CI/CD Automated Verification & Security Presubmit Pipeline**
+*Repository*: [`devops/ci/`](https://github.com/arauthub/All-Projects/tree/main/devops/ci) & [`devops/docker/`](https://github.com/arauthub/All-Projects/tree/main/devops/docker)  
+*Tech Stack*: GitHub Actions, Python, Shell, Docker Compose, Vitest, Pytest
+* Engineered automated presubmit security pipelines preventing credential leaks, private keys, and unmasked environment files before commit and push.
+* Established containerized multi-service topologies uniting decoupled Django REST backends, Angular SPAs, and persistent volumes.
+
+---
+
 ## Education
 
 * **Bachelor of Engineering (B.E.) in Computer Engineering**  

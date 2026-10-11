@@ -21,6 +21,7 @@ chmod +x "$REPO_ROOT/.git/hooks/pre-commit" 2>/dev/null || true
 chmod +x "$REPO_ROOT/.git/hooks/pre-push" 2>/dev/null || true
 chmod +x "$REPO_ROOT/scripts/presubmit.sh" 2>/dev/null || true
 chmod +x "$REPO_ROOT/scripts/presubmit.py" 2>/dev/null || true
+chmod +x "$REPO_ROOT/scripts/run-all-precommits.sh" 2>/dev/null || true
 chmod +x "$REPO_ROOT/scripts/purge-sensitive-history.sh" 2>/dev/null || true
 
 # Point git core.hooksPath to version-controlled .githooks
@@ -28,7 +29,7 @@ git config core.hooksPath .githooks
 
 echo "✅ Git core.hooksPath configured to: .githooks"
 echo "✅ Active hooks:"
-echo "   - Pre-Commit: Blocks sensitive leaks, unmasked .env files, private keys, and API tokens."
-echo "   - Pre-Push:   Validates unpushed commits and verifies portfolio synchronization."
+echo "   - Pre-Commit: Validates staged changes against secret leaks, project prerequisites, and code integrity."
+echo "   - Pre-Push:   Runs ALL pre-commit checks before pushing any project to remote."
 echo "=================================================="
 echo "🎉 Git security hooks successfully activated!"

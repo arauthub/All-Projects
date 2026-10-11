@@ -223,9 +223,13 @@ All-Projects/
 ## 📜 Repository Standards & Guidelines
 
 * **Code Organization**: Keep domain projects cleanly separated into their respective top-level folders (`extensions/`, `apps/`, `agents/`, `devops/`).
-* **Security & Git Hooks**: Enforce automated pre-commit and pre-push verification by running `./scripts/setup-hooks.sh`. Blocks commits or pushes containing private keys, API tokens, or unmasked `.env` files. Full history audit and reference purge available via `./scripts/purge-sensitive-history.sh`.
+* **Security & Git Pre-Commits**: Enforce automated pre-commit and pre-push verification by running `./scripts/setup-hooks.sh`.
+  * **Pre-Commit Hook (`.githooks/pre-commit`)**: Validates staged changes against secret leaks, project prerequisites, and code integrity on every commit.
+  * **Pre-Push Hook (`.githooks/pre-push`)**: Enforces that **ALL** pre-commit checks run before pushing any project or commit to remote.
+  * **Manual Suite Execution**: Run `./scripts/run-all-precommits.sh` anytime to validate the entire repository locally before pushing.
+  * **Historical Secret Scrubbing**: `./scripts/purge-sensitive-history.sh` performs deep Git object audits and rewrites history if secrets were ever committed.
 * **Clean Commits**: Ensure build artifacts (`node_modules/`, `.angular/`, `__pycache__/`, `.sqlite3`) are kept out of git tracking (handled automatically by root `.gitignore`).
-* **Documentation**: Each project inside its subfolder maintains a standalone `README.md` and `DESIGN.md` for architecture and local execution.
+* **Documentation & Technical Design**: Each project maintains a standalone `README.md`, Technical Design Document (`DESIGN.md`), and appropriate `.env.example` template.
 
 ---
 
