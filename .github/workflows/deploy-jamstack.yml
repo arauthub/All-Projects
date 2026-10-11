@@ -10,6 +10,8 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 concurrency:
   group: 'pages'
@@ -35,8 +37,19 @@ jobs:
           npm test
           npm run build
 
-      - name: Deploy to GitHub Pages (gh-pages branch)
+      - name: Deploy to gh-pages Branch
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: apps/jamstack-frontend
           branch: gh-pages
+
+      - name: Upload Pages Artifact (for GitHub Actions Mode)
+        uses: actions/upload-pages-artifact@v3
+        continue-on-error: true
+        with:
+          path: 'apps/jamstack-frontend'
+
+      - name: Deploy to GitHub Pages (for GitHub Actions Mode)
+        id: deployment
+        uses: actions/deploy-pages@v4
+        continue-on-error: true
