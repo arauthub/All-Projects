@@ -12,7 +12,7 @@ export const MONOREPO_PROJECTS = [
     badge: "Active Architecture",
     badgeColor: "cyan",
     relPath: "agents/myagents",
-    githubUrl: "https://github.com/arauthub/All-Projects/tree/main/agents/myagents",
+    githubUrl: "https://github.com/arauthub/portfolio/tree/main/agents/myagents",
     techStack: ["Python", "FastAPI", "Google ADK", "Vector RAG", "Google Cloud Run", "Docker", "SSE"],
     description: "Enterprise-grade multi-agent swarm platform featuring autonomous task decomposition into a topological Directed Acyclic Graph (DAG), coordinating 5 specialized agents (Nexus Commander, Scout Intelligence, Vanguard Architect, Sentinel Auditor, Aegis Synthesizer).",
     metrics: [
@@ -40,7 +40,7 @@ export const MONOREPO_PROJECTS = [
     badge: "Enterprise Grade",
     badgeColor: "emerald",
     relPath: "apps/arnas",
-    githubUrl: "https://github.com/arauthub/All-Projects/tree/main/apps/arnas",
+    githubUrl: "https://github.com/arauthub/portfolio/tree/main/apps/arnas",
     techStack: ["Fastify", "Node.js/TypeScript", "React Native", "Expo", "PostgreSQL", "Prisma", "S3/MinIO", "AES-256-GCM", "PBKDF2"],
     description: "Distributed self-hosted enterprise cloud storage platform featuring multi-server storage clustering, location-geofenced auto-sync (trusted sites + approved Wi-Fi only), full enterprise NAS suite, and client-side zero-knowledge end-to-end encryption.",
     metrics: [
@@ -68,7 +68,7 @@ export const MONOREPO_PROJECTS = [
     badge: "60 FPS Physics",
     badgeColor: "purple",
     relPath: "extensions/anti-gravity-browser",
-    githubUrl: "https://github.com/arauthub/All-Projects/tree/main/extensions/anti-gravity-browser",
+    githubUrl: "https://github.com/arauthub/portfolio/tree/main/extensions/anti-gravity-browser",
     techStack: ["Chrome Manifest V3", "Matter.js Physics", "JavaScript (ES6+)", "HTML5 Canvas", "CSS Transforms"],
     description: "Physics-driven browser extension that non-destructively extracts webpage DOM structures into an isolated 60 FPS 2D rigid-body zero-gravity physics sandbox with directional gravity inversion, tractor beams, and arcade mini-games.",
     metrics: [
@@ -96,7 +96,7 @@ export const MONOREPO_PROJECTS = [
     badge: "Developer Tooling",
     badgeColor: "amber",
     relPath: "extensions/api-pulse-pro",
-    githubUrl: "https://github.com/arauthub/All-Projects/tree/main/extensions/api-pulse-pro",
+    githubUrl: "https://github.com/arauthub/portfolio/tree/main/extensions/api-pulse-pro",
     techStack: ["JavaScript (ES6+)", "Manifest V3", "Chrome DevTools Protocol", "HTML5", "Scoped CSS3"],
     description: "Developer-grade browser network inspector and API mock engine providing zero-configuration capture of fetch/XHR traffic, in-page floating glassmorphic HUD, synthetic mock engine, and automated TypeScript snippet generation.",
     metrics: [
@@ -124,7 +124,7 @@ export const MONOREPO_PROJECTS = [
     badge: "Autonomous Ingestion",
     badgeColor: "cyan",
     relPath: "apps/workspace-curator",
-    githubUrl: "https://github.com/arauthub/All-Projects/tree/main/apps/workspace-curator",
+    githubUrl: "https://github.com/arauthub/portfolio/tree/main/apps/workspace-curator",
     techStack: ["Python", "FastAPI", "SQLite", "Server-Sent Events (SSE)", "Google Workspace APIs", "Heuristic NLP"],
     description: "Universal event-driven webhook engine supporting Google Drive push sync, Gmail Pub/Sub push envelopes, Calendar notifications, and real-time Docs/Sheets Google Apps Script streaming with autonomous executive TL;DR briefings.",
     metrics: [
@@ -152,7 +152,7 @@ export const MONOREPO_PROJECTS = [
     badge: "Retina Loupe",
     badgeColor: "purple",
     relPath: "extensions/diagram-image-lens",
-    githubUrl: "https://github.com/arauthub/All-Projects/tree/main/extensions/diagram-image-lens",
+    githubUrl: "https://github.com/arauthub/portfolio/tree/main/extensions/diagram-image-lens",
     techStack: ["Chrome Manifest V3", "JavaScript (ES6+)", "HTML5 Canvas", "CSS3"],
     description: "Precision diagram inspection suite featuring an interactive hover loupe (2x–16x zoom), fullscreen deep-zoom pan & scan lightbox, schematic dark mode inversion, and offline Retina area screen snipping.",
     metrics: [
@@ -179,7 +179,7 @@ export const MONOREPO_PROJECTS = [
     badge: "HTTP Telemetry",
     badgeColor: "emerald",
     relPath: "extensions/link-inspector-extension",
-    githubUrl: "https://github.com/arauthub/All-Projects/tree/main/extensions/link-inspector-extension",
+    githubUrl: "https://github.com/arauthub/portfolio/tree/main/extensions/link-inspector-extension",
     techStack: ["Chrome Manifest V3", "JavaScript (ES6+)", "Asynchronous Service Workers", "CSS3"],
     description: "High-performance browser extension providing real-time hover inspection, async HTTP status validation (200, 301, 404, 500), 1-click Wayback Machine recovery, UTM tracking parameter stripping, and dual CSV/JSON audit reports.",
     metrics: [
@@ -206,7 +206,7 @@ export const MONOREPO_PROJECTS = [
     badge: "Containerized",
     badgeColor: "cyan",
     relPath: "apps/flashapps",
-    githubUrl: "https://github.com/arauthub/All-Projects/tree/main/apps/flashapps",
+    githubUrl: "https://github.com/arauthub/portfolio/tree/main/apps/flashapps",
     techStack: ["Django REST Framework", "Angular", "Docker Compose", "SQLite", "Gunicorn", "Nginx"],
     description: "Fullstack containerized platform pairing a decoupled Django REST Framework backend with an Angular modern single-page application and unified Docker Compose orchestration.",
     metrics: [
@@ -230,7 +230,7 @@ export const MONOREPO_PROJECTS = [
     badge: "Enterprise CMS",
     badgeColor: "emerald",
     relPath: "apps/wagtailwind",
-    githubUrl: "https://github.com/arauthub/All-Projects/tree/main/apps/wagtailwind",
+    githubUrl: "https://github.com/arauthub/portfolio/tree/main/apps/wagtailwind",
     techStack: ["Python", "Django", "Wagtail CMS", "Tailwind CSS", "SCSS", "Docker"],
     description: "High-scalability enterprise content management platforms with custom streamfield blocks, dynamic caching, multi-app blog architectures, and sub-second page delivery.",
     metrics: [
@@ -254,7 +254,7 @@ export const MONOREPO_PROJECTS = [
     badge: "Modular Modules",
     badgeColor: "amber",
     relPath: "apps/wagtaildemo",
-    githubUrl: "https://github.com/arauthub/All-Projects/tree/main/apps/wagtaildemo",
+    githubUrl: "https://github.com/arauthub/portfolio/tree/main/apps/wagtaildemo",
     techStack: ["Python", "Django", "Wagtail CMS", "Cryptographic Generators"],
     description: "Specialized Django and Wagtail extension modules demonstrating custom model structures, streamfields, decoupled service integrations, and test generators.",
     metrics: [
@@ -276,7 +276,7 @@ export const MONOREPO_PROJECTS = [
     badge: "Security Gatekeeper",
     badgeColor: "rose",
     relPath: "devops/ci",
-    githubUrl: "https://github.com/arauthub/All-Projects/tree/main/devops/ci",
+    githubUrl: "https://github.com/arauthub/portfolio/tree/main/devops/ci",
     techStack: ["GitHub Actions", "Python", "Shell Scripting", "Docker Compose", "Vitest", "Pytest"],
     description: "Automated multi-stage presubmit verification pipeline validating secret detection, code integrity, Python multi-agent swarms, and containerized Docker topologies before commits and pushes.",
     metrics: [

@@ -86,7 +86,7 @@ export class CommandPalette {
 
     this.items.push({
       type: 'Link',
-      title: 'View GitHub Monorepo (arauthub/All-Projects)',
+      title: 'View GitHub Monorepo (arauthub/portfolio)',
       subtitle: 'Open repository in a new tab',
       icon: '🐙',
       action: () => window.open(PROFILE_DATA.portfolioRepo, '_blank')

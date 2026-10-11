@@ -10,7 +10,7 @@ export const PROFILE_DATA = {
   email: "theabhijeetraut@gmail.com",
   github: "https://github.com/arauthub",
   githubUsername: "arauthub",
-  portfolioRepo: "https://github.com/arauthub/All-Projects",
+  portfolioRepo: "https://github.com/arauthub/portfolio",
   yearsOfExperience: 12,
   summary: "Accomplished Lead Software Engineer and Solutions Architect with 12 years of hands-on experience architecting high-concurrency backend services, distributed systems, and modern AI/ML solutions. Proven track record of guiding cross-functional engineering teams from concept to production deployment.",
   
