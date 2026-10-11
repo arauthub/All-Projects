@@ -1,0 +1,27 @@
+{
+  "name": "nexus-quantum-jamstack",
+  "version": "1.0.0",
+  "description": "Futuristic Git-Integrated Jamstack Frontend & Intelligence Portal for Abhijeet Raut (Lead Backend, AI/ML Architect & Monorepo Systems)",
+  "main": "scripts/dev-server.mjs",
+  "type": "module",
+  "scripts": {
+    "start": "node scripts/dev-server.mjs",
+    "dev": "node scripts/dev-server.mjs",
+    "build": "node scripts/build-jamstack.mjs",
+    "test": "node tests/test_jamstack.js"
+  },
+  "keywords": [
+    "jamstack",
+    "git-integrated",
+    "futuristic",
+    "portfolio",
+    "monorepo",
+    "ai-agent",
+    "web-audio",
+    "matter-js",
+    "glassmorphism",
+    "fastest-frontend"
+  ],
+  "author": "Abhijeet Raut <theabhijeetraut@gmail.com>",
+  "license": "MIT"
+}
