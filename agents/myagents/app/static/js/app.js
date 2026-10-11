@@ -281,9 +281,33 @@ document.addEventListener("DOMContentLoaded", () => {
           </ul>
         </div>
       `;
+    } else if (tabId === "tab-scraper") {
+      const scraped = bb.scraped_extraction;
+      if (!scraped) {
+        contentHtml = `<div class="empty-placeholder"><div class="empty-icon">🕷️</div><div>No web scraping data in current mission memory.<br><span style="font-size:0.8rem">Launch a scraping mission or use Web Scraper Studio.</span></div></div>`;
+      } else {
+        const dataObj = typeof scraped === "object" ? (scraped.data || scraped) : scraped;
+        const dataStr = typeof dataObj === "object" ? JSON.stringify(dataObj, null, 2) : String(dataObj);
+        contentHtml = `
+          <div class="markdown-body">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+              <h3 style="margin:0;">🕷️ Extracted Web Intelligence</h3>
+              <button class="btn btn-secondary" id="btn-copy-tab-scraped">📋 Copy Data</button>
+            </div>
+            <pre style="background:#080c15; border:1px solid var(--border-subtle); padding:1rem; border-radius:var(--radius-sm); font-family:var(--font-mono); font-size:0.82rem; max-height:420px; overflow-y:auto; white-space:pre-wrap; word-break:break-word;">${escapeHtml(dataStr)}</pre>
+          </div>
+        `;
+        setTimeout(() => {
+          document.getElementById("btn-copy-tab-scraped")?.addEventListener("click", () => {
+            navigator.clipboard.writeText(dataStr);
+            alert("Extracted web data copied to clipboard!");
+          });
+        }, 50);
+      }
     } else if (tabId === "tab-research") {
       const findings = bb.research_findings || "Awaiting research output...";
       contentHtml = `<div class="markdown-body">${formatMarkdownBasic(findings)}</div>`;
+
     } else if (tabId === "tab-architecture") {
       const arch = bb.architecture_blueprint || "Awaiting architectural blueprint...";
       contentHtml = `<div class="markdown-body">${formatMarkdownBasic(arch)}</div>`;
@@ -330,7 +354,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Bind Tab Click Handlers
   document.getElementById("btn-tab-plan")?.addEventListener("click", () => setActiveTab("tab-plan"));
+  document.getElementById("btn-tab-scraper")?.addEventListener("click", () => setActiveTab("tab-scraper"));
   document.getElementById("btn-tab-research")?.addEventListener("click", () => setActiveTab("tab-research"));
+
   document.getElementById("btn-tab-architecture")?.addEventListener("click", () => setActiveTab("tab-architecture"));
   document.getElementById("btn-tab-critique")?.addEventListener("click", () => setActiveTab("tab-critique"));
   document.getElementById("btn-tab-presentation")?.addEventListener("click", () => setActiveTab("tab-presentation"));
@@ -427,8 +453,201 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // 10. Web Scraper Studio Modal & Controller
+  const scraperModal = document.getElementById("scraper-modal");
+  const btnOpenScraper = document.getElementById("btn-open-scraper");
+  const btnCloseScraper = document.getElementById("btn-close-scraper-modal");
+  const scraperUrlInput = document.getElementById("scraper-url-input");
+  const scraperFormatSelect = document.getElementById("scraper-format-select");
+  const scraperGoalInput = document.getElementById("scraper-goal-input");
+  const scraperCustomSchemaContainer = document.getElementById("scraper-custom-schema-container");
+  const scraperCustomSchemaInput = document.getElementById("scraper-custom-schema-input");
+  const btnScraperAudit = document.getElementById("btn-scraper-audit");
+  const btnScraperRun = document.getElementById("btn-scraper-run");
+  const scraperResultsBox = document.getElementById("scraper-results-box");
+  const scraperStatusBadges = document.getElementById("scraper-status-badges");
+  const scraperOutputCode = document.getElementById("scraper-output-code");
+  const btnCopyScraper = document.getElementById("btn-copy-scraper-result");
+  const btnDownloadScraper = document.getElementById("btn-download-scraper-result");
+
+  btnOpenScraper?.addEventListener("click", () => scraperModal.classList.add("active"));
+  btnCloseScraper?.addEventListener("click", () => scraperModal.classList.remove("active"));
+
+  // Quick Preset Chips
+  document.querySelectorAll(".chip-btn").forEach(chip => {
+    chip.addEventListener("click", () => {
+      const url = chip.getAttribute("data-url");
+      if (url && scraperUrlInput) {
+        scraperUrlInput.value = url;
+        if (chip.getAttribute("data-test") === "ssrf") {
+          runScraperAudit();
+        }
+      }
+    });
+  });
+
+  // Toggle Custom Schema Container
+  scraperFormatSelect?.addEventListener("change", () => {
+    if (scraperCustomSchemaContainer) {
+      scraperCustomSchemaContainer.style.display = scraperFormatSelect.value === "custom" ? "flex" : "none";
+    }
+  });
+
+  // Run SSRF Audit
+  async function runScraperAudit() {
+    const url = scraperUrlInput.value.trim();
+    if (!url) {
+      alert("Please enter a public URL to audit.");
+      return;
+    }
+    btnScraperAudit.disabled = true;
+    btnScraperAudit.innerHTML = "<span>⏳ Auditing...</span>";
+
+    try {
+      const res = await fetch("/api/scraper/audit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url }),
+      });
+      const data = await res.json();
+      scraperResultsBox.style.display = "flex";
+
+      if (data.safe) {
+        scraperStatusBadges.innerHTML = `
+          <span class="brand-badge" style="background:rgba(16,185,129,0.15); color:var(--accent-emerald); border-color:rgba(16,185,129,0.3);">
+            ✅ SSRF SAFE
+          </span>
+          <span style="font-size:0.75rem; color:var(--text-muted); font-family:var(--font-mono);">
+            Scheme: ${(data.scheme || '').toUpperCase()} | Resolved: ${(data.resolved_ips || []).join(', ')}
+          </span>
+        `;
+      } else {
+        scraperStatusBadges.innerHTML = `
+          <span class="brand-badge" style="background:rgba(239,68,68,0.15); color:#f87171; border-color:rgba(239,68,68,0.3);">
+            🚨 SSRF VIOLATION BLOCKED
+          </span>
+          <span style="font-size:0.75rem; color:#f87171; font-family:var(--font-mono);">
+            ${(data.reasons || []).join('; ')}
+          </span>
+        `;
+      }
+      scraperOutputCode.textContent = JSON.stringify(data, null, 2);
+    } catch (e) {
+      alert(`Audit failed: ${e.message}`);
+    } finally {
+      btnScraperAudit.disabled = false;
+      btnScraperAudit.innerHTML = "<span>🔍 Audit SSRF</span>";
+    }
+  }
+
+  btnScraperAudit?.addEventListener("click", runScraperAudit);
+
+  // Run Full Scraper & Extractor
+  btnScraperRun?.addEventListener("click", async () => {
+    const url = scraperUrlInput.value.trim();
+    if (!url) {
+      alert("Please enter a target public URL to scrape.");
+      return;
+    }
+
+    const fmt = scraperFormatSelect.value;
+    const goal = scraperGoalInput.value.trim();
+    let customSchema = null;
+
+    if (fmt === "custom" && scraperCustomSchemaInput.value.trim()) {
+      try {
+        customSchema = JSON.parse(scraperCustomSchemaInput.value.trim());
+      } catch (err) {
+        alert("Invalid custom schema JSON format.");
+        return;
+      }
+    }
+
+    btnScraperRun.disabled = true;
+    btnScraperRun.innerHTML = "<span>🕷️ Scraping & Extracting...</span>";
+    scraperResultsBox.style.display = "flex";
+    scraperStatusBadges.innerHTML = `<span style="font-size:0.8rem; color:var(--accent-cyan)">Connecting to safe client & parsing DOM...</span>`;
+    scraperOutputCode.textContent = "Fetching content safely with zero-trust SSRF validation...";
+
+    try {
+      const res = await fetch("/api/scraper/scrape", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          url,
+          output_format: fmt,
+          custom_schema: customSchema,
+          extraction_goal: goal || null,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        scraperStatusBadges.innerHTML = `
+          <span class="brand-badge" style="background:rgba(239,68,68,0.15); color:#f87171; border-color:rgba(239,68,68,0.3);">
+            ❌ SCRAPING FAILED
+          </span>
+          <span style="font-size:0.75rem; color:#f87171; font-family:var(--font-mono);">${data.error || 'Request rejected.'}</span>
+        `;
+        scraperOutputCode.textContent = JSON.stringify(data, null, 2);
+        return;
+      }
+
+      // Success
+      scraperStatusBadges.innerHTML = `
+        <span class="brand-badge" style="background:rgba(16,185,129,0.15); color:var(--accent-emerald); border-color:rgba(16,185,129,0.3);">
+          ✅ HTTP ${data.status_code || 200} OK
+        </span>
+        <span class="brand-badge" style="background:rgba(56,189,248,0.15); color:var(--accent-cyan); border-color:rgba(56,189,248,0.3);">
+          ⚡ ${data.response_time_ms} ms
+        </span>
+        <span style="font-size:0.75rem; color:var(--text-muted); font-family:var(--font-mono);">
+          Size: ${((data.content_length_bytes || 0) / 1024).toFixed(1)} KB | Format: ${fmt.toUpperCase()}
+        </span>
+      `;
+
+      if (typeof data.data === "object") {
+        scraperOutputCode.textContent = JSON.stringify(data.data, null, 2);
+      } else {
+        scraperOutputCode.textContent = String(data.data);
+      }
+    } catch (e) {
+      scraperStatusBadges.innerHTML = `<span style="color:#f87171">Network error: ${e.message}</span>`;
+      scraperOutputCode.textContent = `Error: ${e.message}`;
+    } finally {
+      btnScraperRun.disabled = false;
+      btnScraperRun.innerHTML = "<span>🕷️ Scrape & Extract</span>";
+    }
+  });
+
+  // Copy Scraper Result
+  btnCopyScraper?.addEventListener("click", () => {
+    if (scraperOutputCode.textContent) {
+      navigator.clipboard.writeText(scraperOutputCode.textContent);
+      alert("Scraped output copied to clipboard!");
+    }
+  });
+
+  // Download Scraper Result
+  btnDownloadScraper?.addEventListener("click", () => {
+    if (!scraperOutputCode.textContent) return;
+    const fmt = scraperFormatSelect.value;
+    const isMd = fmt === "markdown";
+    const ext = isMd ? "md" : "json";
+    const mime = isMd ? "text/markdown" : "application/json";
+    const blob = new Blob([scraperOutputCode.textContent], { type: mime });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `scraped_content_${Date.now()}.${ext}`;
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
   // Initial Load
   loadSystemStatus();
   loadScenarios();
   setActiveTab("tab-plan");
 });
+

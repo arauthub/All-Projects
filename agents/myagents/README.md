@@ -20,10 +20,12 @@
 
 2. **Modular Multi-Agent Swarm (Google ADK Architecture)**:
    - 🧠 **Nexus Commander (Orchestrator)**: Autonomous mission decomposition into an asynchronous Directed Acyclic Graph (DAG) with dependency contracts.
+   - 🕷️ **CyberScrape Sentinel (Web Scraper)**: Enterprise web scraper with Zero-Trust SSRF defense, DOM sanitization, and multi-format extraction (JSON, Markdown, Summary, Key-Value, CSV, Custom Schemas).
    - 🔍 **Scout Intelligence (Researcher)**: Semantic Vector Store RAG querying cloud best practices, BeyondCorp Zero-Trust standards, and capacity metrics.
    - 🏛️ **Vanguard Architect (Systems Engineer)**: Designs scalable microservice topologies, data models, and generates formatted Mermaid.js diagrams.
-   - 🛡️ **Sentinel Auditor (Critic)**: Adversarial security and quality review; audits for cold starts, SPOF, and calculates quantitative quality scores (0–100).
+   - 🛡️ **Sentinel Auditor (Critic)**: Adversarial security and quality review; audits for cold starts, SPOF, prompt-injection bleed, and calculates quantitative quality scores (0–100).
    - 🎯 **Aegis Synthesizer (Executive Delivery)**: Compiles deliverables into stakeholder briefings and generates an **Interactive Presentation Slide Deck**.
+
 
 3. **In-Memory Semantic Vector Store (RAG)**:
    - Built-in TF-IDF vectorizer and cosine similarity matching engine.
@@ -146,10 +148,15 @@ agents/myagents/
 │   ├── memory.py                       # Blackboard Shared Memory & Traces
 │   ├── vector_store.py                 # In-Memory Cosine Similarity Vector Store
 │   ├── llm_adapter.py                  # Dual Engine (Local Simulator & Gemini Live)
-│   └── tools.py                        # Autonomous Tool Registry
+│   ├── tools.py                        # Autonomous Tool Registry
+│   ├── scraper_engine.py               # Enterprise Web Scraper & Multi-Format Extractor
+│   └── security/
+│       ├── __init__.py
+│       └── ssrf_guard.py               # Zero-Trust SSRF & Cloud Metadata Defense Guard
 │
 ├── agents_pool/                        # Specialized Domain Agents
 │   ├── orchestrator_agent.py           # Nexus Commander
+│   ├── scraper_agent.py                # CyberScrape Sentinel
 │   ├── researcher_agent.py             # Scout Intelligence
 │   ├── architect_agent.py              # Vanguard Architect
 │   ├── critic_agent.py                 # Sentinel Auditor
@@ -165,17 +172,48 @@ agents/myagents/
 │   ├── docker-compose.yml              # Local Docker Compose File
 │   └── deploy_to_gcp.sh                # 1-Click GCP Cloud Run Script
 │
-├── tests/                              # Automated Test Suite
+├── tests/                              # Automated Test Suite (28 Tests)
 │   ├── test_vector_store.py
 │   ├── test_tools.py
-│   └── test_orchestrator.py
+│   ├── test_orchestrator.py
+│   ├── test_ssrf_guard.py              # SSRF & IP/Protocol Blacklist Tests
+│   └── test_scraper.py                 # Scraper Engine & DOM Extraction Tests
 │
-├── requirements.txt                    # Python Dependencies
-├── .env.example                        # Configuration Template
-└── README.md                           # Documentation & Architecture
+├── requirements.txt                    # Python Dependencies (FastAPI, Pydantic, BS4)
+└── .env.example                        # Fork & Run Configuration Template
 ```
 
 ---
+
+## 🕷️ Enterprise Web Scraper API & CLI
+
+### 1. Zero-Key "Fork & Run" Guarantee
+Anyone can fork this repository and execute web scraping missions immediately:
+- **Zero-Key Mode (Default)**: Uses deterministic DOM sanitization and heuristic extraction without requiring any API keys or paid accounts.
+- **Gemini Live Mode**: Set `GEMINI_API_KEY` in `.env` (or via the UI Settings modal) to leverage Google Gemini 1.5 Pro / Flash for complex reasoning and bespoke schema transformations.
+
+### 2. REST API Endpoints
+
+#### Preflight SSRF Security Audit
+```bash
+curl -X POST http://localhost:8080/api/scraper/audit \
+  -H "Content-Type: application/json" \
+  -d '{"url": "https://news.ycombinator.com"}'
+```
+
+#### Scrape & Extract Public Web Page
+```bash
+curl -X POST http://localhost:8080/api/scraper/scrape \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "https://news.ycombinator.com",
+    "output_format": "json"
+  }'
+```
+Supported `output_format` values: `json`, `markdown`, `summary`, `key_value`, `csv`, `custom`.
+
+---
+
 
 ## 👤 Author
 

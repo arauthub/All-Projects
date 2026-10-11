@@ -30,7 +30,9 @@ All-Projects/
 │   ├── flashapps/                      # Fullstack Django (REST API) + Angular Single Page App
 │   ├── wagtailwind/                    # Wagtail CMS styled with Tailwind CSS
 │   ├── mytail/                         # Wagtail CMS Multi-app Blog & Account System
-│   └── wagtaildemo/                    # Wagtail Extension & Django Modules
+│   ├── wagtaildemo/                    # Wagtail Extension & Django Modules
+│   ├── workspace-curator/              # WorkspaceCurator Pro: Google Workspace Webhook & Curation Engine
+│   └── jamstack-frontend/              # Nexus Prime: Quantum Jamstack & Git Intelligence Portal
 │
 ├── agents/                             # 🤖 AI Agents & Workflows
 │   └── myagents/                       # Google ADK Agent samples & integration workflows
@@ -46,6 +48,7 @@ All-Projects/
 
 | Project | Category | Primary Tech Stack | Technical Design | Description |
 | :--- | :--- | :--- | :--- | :--- |
+| [**Nexus Prime**](apps/jamstack-frontend/) | Git Jamstack & Frontend Portal | HTML5, Vanilla CSS, Modern ES Modules, Web Audio API | [DESIGN.md](apps/jamstack-frontend/DESIGN.md) | Futuristic living engineering command center featuring real-time Git commit telemetry, 60 FPS quantum particle nexus canvas, 3D card tilt physics, 5 interactive browser-native Holodeck architecture sandboxes, and an in-browser Cyber Quantum CLI terminal. |
 | [**API Pulse Pro**](extensions/api-pulse-pro/) | Browser Extension & DevTools Studio | JavaScript (ES6+), Manifest V3, Chrome DevTools Protocol, HTML5, CSS3 | [DESIGN.md](extensions/api-pulse-pro/DESIGN.md) | Real-time network traffic inspector, POST payload interceptor, live API replay with browser cookies/session, in-browser synthetic mock engine, JWT decoder, JSON diffing, and auto-generated TypeScript & cURL/Axios/Python snippets. |
 | [**ARNAS Enterprise Cloud NAS**](apps/arnas/) | Distributed Storage & Mobile Sync | Fastify, React Native / Expo, PostgreSQL, Prisma, S3/MinIO, AES-256-GCM, Expo Location | [DESIGN.md](apps/arnas/DESIGN.md) | Distributed private cloud storage with multi-server storage clustering, location-geofenced auto-sync (trusted locations + trusted Wi-Fi only), full NAS suite (folder hierarchy, search, in-place rename, duplicate, 30-day recycle bin, expiring share links, live S.M.A.R.T. telemetry, IOPS), instant ingest + fan-out replication, zero-knowledge E2EE (AES-256-GCM), and cross-platform iOS & Android support. |
 | [**Anti-Gravity Web Browser**](extensions/anti-gravity-browser/) | Browser Extension & Game | JavaScript (ES6+), Manifest V3, Matter.js, HTML5 Canvas, CSS3 | [DESIGN.md](extensions/anti-gravity-browser/DESIGN.md) | Converts any webpage into a 2D zero-gravity physics sandbox with Matter.js rigid-body dynamics, directional gravity inversion, tractor beams, Asteroids arcade combat, and Katamari web absorption. |
@@ -55,6 +58,7 @@ All-Projects/
 | [**Wagtailwind**](apps/wagtailwind/) | CMS Platform | Wagtail, Django, Tailwind CSS, Docker | [DESIGN.md](apps/wagtailwind/DESIGN.md) | Enterprise-grade Wagtail Content Management System integrated with Tailwind CSS utility styling. |
 | [**Mytail Blog**](apps/mytail/) | CMS Platform | Wagtail, Django, SCSS, Tailwind CSS | [DESIGN.md](apps/mytail/DESIGN.md) | Feature-rich Wagtail CMS instance with custom blog architectures, accounts, and responsive layouts. |
 | [**Wagtail Demo**](apps/wagtaildemo/) | Backend Module | Python, Django | [DESIGN.md](apps/wagtaildemo/DESIGN.md) | Specialized Django and Wagtail extension modules demonstrating custom model structures, streamfields, and cryptographic test generators. |
+| [**WorkspaceCurator Pro**](apps/workspace-curator/) | Fullstack App & Webhook Engine | Python, FastAPI, SQLite, SSE, HTML5/CSS3 | [DESIGN.md](apps/workspace-curator/DESIGN.md) | Event-driven Google Workspace webhook receiver (Drive, Gmail Pub/Sub, Docs, Sheets, Calendar, Forms), automated NLP/LLM content analysis, and multi-channel curation (Markdown, Slack, Email, JSON-LD, RSS feed, live SSE dashboard). |
 | [**MyAgents Multi-Agent Orchestrator**](agents/myagents/) | AI & Multi-Agent Swarm | Python, FastAPI, Google ADK, Vector RAG, Cloud Run, SSE | [DESIGN.md](agents/myagents/DESIGN.md) | Enterprise multi-agent orchestration framework with autonomous task DAG decomposition, zero-config local simulation reasoning, in-memory semantic vector store RAG, executive slide presentation generator, and 1-click Google Cloud Run deployment. |
 | [**Docker Orchestration**](devops/docker/) | DevOps & Infra | Docker Compose, Alpine Linux | [DESIGN.md](devops/docker/DESIGN.md) | Multi-container composition uniting backend APIs, frontend clients, and media storage. |
 | [**CI Verification Pipeline**](devops/ci/) | DevOps & Automation | GitHub Actions, Python, Vitest, Pytest | [DESIGN.md](devops/ci/DESIGN.md) | Multi-stage automated validation pipeline validating security, credential leak prevention, Python multi-agent swarms, and Fastify server test suites. |

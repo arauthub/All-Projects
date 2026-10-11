@@ -15,10 +15,12 @@ Single-prompt Large Language Model (LLM) applications fail on complex enterprise
 1. **Autonomous Mission Decomposition (DAG)**: Decomposes high-level technical initiatives into an asynchronous Directed Acyclic Graph with clear data dependencies.
 2. **Specialized Multi-Agent Swarm**:
    * **Nexus Commander (Orchestrator)**: Mission coordinator and DAG scheduler.
+   * **CyberScrape Sentinel (Web Scraper)**: Enterprise web scraper with zero-trust SSRF defense, DOM script/tracker sanitization, and multi-format extraction (JSON, Markdown, Summary, Key-Value, CSV, Custom Schemas).
    * **Scout Intelligence (Researcher)**: In-memory Semantic Vector RAG search across cloud architecture standards.
    * **Vanguard Architect (Systems Engineer)**: Generates microservice topologies and Mermaid diagrams.
    * **Sentinel Auditor (Critic)**: Adversarial security analysis, identifying single points of failure (SPOF) and scoring quality (0–100).
    * **Aegis Synthesizer (Delivery Lead)**: Compiles deliverables and generates an **Interactive Presentation Slide Deck**.
+
 3. **Dual Execution Engine**:
    * **Offline Local Simulation**: Zero-API-key reasoning engine simulating multi-turn Gemini tool use out-of-the-box.
    * **Live Google Gemini Adapter**: Connects directly to Google Gemini 1.5 Pro / Flash when `GEMINI_API_KEY` is provided.
@@ -105,18 +107,61 @@ graph TD
   3. Architecture Topology & Mermaid Flowchart
   4. Adversarial Audit, Security Hardening & Quality Score
   5. Implementation Roadmap & Milestones
-* Includes full keyboard navigation (`Left`, `Right`, `Esc`), fullscreen presenter mode, and standalone HTML download.
+### 4.4. Autonomous Web Scraper & Semantic Extraction Engine (`core/scraper_engine.py`)
+* Ingests any public website URL with zero-trust safety checks.
+* Sanitizes DOM trees: decomposes dangerous tags (`<script>`, `<style>`, `<iframe>`, `<svg>`, `<canvas>`, `<object>`), stripping trackers, ad containers, and cookie consent overlays.
+* Extracts rich semantic metadata:
+  * OpenGraph (`og:title`, `og:description`, `og:image`, `og:url`)
+  * Twitter Cards (`twitter:title`, `twitter:description`, `twitter:image`)
+  * Schema.org JSON-LD microdata (`Article`, `Product`, `Organization`, `FAQPage`)
+  * Heading hierarchy (`h1`–`h6`)
+  * HTML Tables into structured matrix datasets (`headers`, `rows`)
+  * Hyperlink graph (internal vs. external classification)
+* Multi-format export pipeline:
+  * **Structured JSON**: Standardized enterprise JSON schema.
+  * **Markdown**: GitHub-Flavored Markdown with tables and links.
+  * **Executive Summary**: Key takeaways and core topic sections.
+  * **Key-Value Entities**: Extracted contacts (emails, phones), pricing mentions, and social channels.
+  * **Tabular CSV**: Export of all HTML tables.
+  * **Custom Schema**: Client-defined target JSON schema matching.
 
 ---
 
-## 5. Security & Isolation
+## 5. Security Architecture, SSRF Defense & Threat Mitigation
 
-1. **Zero-Key Offline Guarantee**:
-   * No API keys are required to run, test, or evaluate the application.
-2. **Environment Variable Isolation**:
-   * `GEMINI_API_KEY` is loaded strictly via environment variables or `.env` files; never committed to Git.
-3. **Sandboxed Tool Execution**:
-   * Tools (Capacity Calculator, Mermaid Generator) operate within strict algorithmic boundaries with input schema validation.
+### 5.1. Multi-Tier SSRF (Server-Side Request Forgery) Defense (`core/security/ssrf_guard.py`)
+Allowing arbitrary public URL input exposes applications to severe SSRF vulnerabilities. The framework enforces an air-tight multi-layer defense:
+1. **Strict Protocol Whitelisting**:
+   * Accepts ONLY `http` and `https`.
+   * Outright rejects `file:`, `ftp:`, `data:`, `gopher:`, `ldap:`, `dict:`, `javascript:`.
+2. **Cloud Metadata Shielding**:
+   * Explicitly blocks `169.254.169.254` (Google Cloud / AWS / Azure instance metadata endpoint), `metadata.google.internal`, and `metadata.goog`.
+   * Prevents extraction of Google Cloud IAM service account tokens or instance credentials.
+3. **Loopback & Private Network IP Blacklisting**:
+   * Resolves target hostnames via `socket.getaddrinfo()` and checks ALL resolved IPs against Python's `ipaddress` module.
+   * Blocks Loopback (`127.0.0.0/8`, `::1`), RFC1918 Private subnets (`10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`), Link-Local (`169.254.0.0/16`, `fe80::/10`), Multicast (`224.0.0.0/4`), Carrier-Grade NAT (`100.64.0.0/10`), and IPv4-mapped IPv6 (`::ffff:127.0.0.1`).
+4. **Manual Redirect Hop Validation**:
+   * Disables blind automatic redirect following. Intercepts HTTP 301/302/303/307/308 responses.
+   * Audits each redirect target hop against the SSRF guard before following (max 5 hops) to prevent redirect-based SSRF bypasses.
+5. **Payload Budgeting & DoS Protection**:
+   * Enforces a hard 5 MB payload stream limit to prevent zip bombs, huge video downloads, or memory exhaustion.
+   * Enforces 12-second total network timeout to prevent slowloris connection starvation.
+
+### 5.2. Indirect Prompt Injection Defense
+* Untrusted external web content scraped from the internet is never concatenated raw into LLM system prompts.
+* All scraped data is wrapped inside strict isolation boundaries:
+  ```xml
+  <untrusted_scraped_content url="...">
+  ... external raw text ...
+  </untrusted_scraped_content>
+  ```
+* Clear meta-instructions instruct the model to treat content inside the tags strictly as passive data to extract, never as executable instructions or system directives.
+* The independent Sentinel Critic agent reviews extracted deliverables for prompt injection bleed or instruction leakage.
+
+### 5.3. Zero-Key Offline & Fork-Ready Guarantee
+* Operates 100% offline out-of-the-box using local heuristic parsers and simulated reasoning.
+* Automatically transitions to live Google Gemini 1.5 Pro/Flash as soon as `GEMINI_API_KEY` is set in the environment or `.env`.
+
 
 ---
 

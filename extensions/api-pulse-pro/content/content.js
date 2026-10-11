@@ -72,7 +72,7 @@
     // Floating Pill Capsule
     pillEl = document.createElement('div');
     pillEl.className = 'api-pulse-pill';
-    pillEl.title = 'API Pulse Pro - Click to open inspector (Alt+Shift+A)';
+    pillEl.title = 'API Pulse Pro - Click to open inspector (Alt+Shift+P)';
     pillEl.innerHTML = `
       <div class="api-pulse-icon-wrap">
         <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
@@ -284,13 +284,33 @@
       });
     });
 
-    // Keyboard Shortcuts
+    // Keyboard Shortcuts (Safe & non-conflicting: Alt+Shift+P for Pulse)
     window.addEventListener('keydown', (e) => {
-      if ((e.metaKey || e.altKey) && (e.key === 'a' || e.key === 'A')) {
+      // Never intercept standard typing or text selection shortcuts (Ctrl+A, Cmd+A, etc.)
+      const isEditable = e.target && (
+        e.target.isContentEditable ||
+        ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)
+      );
+
+      // Close drawer on Escape if it is currently open
+      if (e.key === 'Escape' && drawerEl && drawerEl.classList.contains('open')) {
+        e.preventDefault();
+        closeDrawer();
+        return;
+      }
+
+      // Toggle drawer strictly with Alt+Shift+P (P for Pulse)
+      // Never trigger on Cmd+A, Ctrl+A, Alt+A, or standard text selection
+      if (
+        !isEditable &&
+        e.altKey &&
+        e.shiftKey &&
+        !e.ctrlKey &&
+        !e.metaKey &&
+        (e.key === 'p' || e.key === 'P' || e.code === 'KeyP')
+      ) {
         e.preventDefault();
         toggleDrawer();
-      } else if (e.key === 'Escape' && drawerEl.classList.contains('open')) {
-        closeDrawer();
       }
     });
   }

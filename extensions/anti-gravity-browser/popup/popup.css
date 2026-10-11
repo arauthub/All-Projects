@@ -87,6 +87,90 @@ body {
   box-shadow: 0 0 10px rgba(34, 197, 94, 0.2);
 }
 
+.badge-unsupported {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.15);
+}
+
+/* Notice Banner */
+.notice-banner {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.18), rgba(239, 68, 68, 0.12));
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  border-radius: 12px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  backdrop-filter: blur(12px);
+  animation: noticeFadeIn 0.25s ease-out;
+}
+
+@keyframes noticeFadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.notice-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.notice-icon {
+  font-size: 13px;
+}
+
+.notice-title {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #fbbf24;
+  letter-spacing: 0.3px;
+}
+
+.notice-desc {
+  font-size: 10.5px;
+  line-height: 1.4;
+  color: #cbd5e1;
+  margin-bottom: 8px;
+}
+
+.notice-desc code {
+  background: rgba(0, 0, 0, 0.35);
+  padding: 1px 4px;
+  border-radius: 4px;
+  color: #f59e0b;
+  font-family: monospace;
+  font-size: 10px;
+}
+
+.notice-action-btn {
+  width: 100%;
+  padding: 6px 10px;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  border: none;
+  border-radius: 8px;
+  color: #0f172a;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.notice-action-btn:hover {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+.notice-action-btn:active {
+  transform: translateY(0);
+}
+
 /* Master Power Card */
 .power-card {
   display: flex;

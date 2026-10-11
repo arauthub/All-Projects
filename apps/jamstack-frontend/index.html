@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexus Prime | Git-Integrated Quantum Jamstack — Abhijeet Raut</title>
+  <meta name="description" content="Futuristic Git-integrated Jamstack web frontend & command center showcasing autonomous AI agent swarms, distributed cloud storage NAS, Chrome Manifest V3 extensions, and enterprise distributed systems by Lead Architect Abhijeet Raut.">
+  <meta name="keywords" content="Jamstack, Git, AI Agents, Python, FastAPI, Go, Wagtail, Docker, AES-256-GCM, Matter.js, Solutions Architect">
+  <meta name="author" content="Abhijeet Raut">
+
+  <!-- OpenGraph / Social Cards -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Nexus Prime | Git-Integrated Quantum Jamstack — Abhijeet Raut">
+  <meta property="og:description" content="Ultra-fast, futuristic, living engineering showcase for Abhijeet Raut (12 Years Lead Backend & AI/ML Engineer).">
+  <meta property="og:url" content="https://github.com/arauthub/All-Projects">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌌</text></svg>">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/sandboxes.css">
+</head>
+<body>
+
+  <!-- Living 60 FPS Particle Constellation Canvas -->
+  <canvas id="quantum-canvas"></canvas>
+  <div class="bg-nebula-glow"></div>
+
+  <!-- FIXED HEADER HUD -->
+  <header class="site-hud" id="main-hud">
+    <div class="hud-container">
+      <a href="#hero-section" class="hud-brand" id="hud-brand-link">
+        <div class="hud-logo-icon">Ω</div>
+        <div class="hud-brand-text">
+          <span class="hud-brand-title">NEXUS PRIME</span>
+          <span class="hud-brand-sub">QUANTUM JAMSTACK</span>
+        </div>
+      </a>
+
+      <!-- Git & Telemetry Status Indicators -->
+      <div class="hud-telemetry" id="hud-telemetry-group">
+        <div class="hud-item" id="hud-branch-item" title="Active Monorepo Branch">
+          <span>BRANCH:</span> <code id="hud-branch">main</code>
+        </div>
+        <div class="hud-item" id="hud-commit-item" title="Head Commit Hash">
+          <span>COMMIT:</span> <code id="hud-commit">a9756b6</code>
+        </div>
+        <div class="hud-item interactive" id="hud-presubmit-badge" title="Click to view Presubmit Security Audit">
+          <span class="hud-dot"></span>
+          <span>PRESUBMIT: 5/5 CLEAN</span>
+        </div>
+        <div class="hud-item" id="hud-clock-item" title="UTC Synchronized Telemetry Clock">
+          <span id="hud-clock">2026-10-11 14:10:00 UTC</span>
+        </div>
+      </div>
+
+      <!-- Action Controls: Audio & Search -->
+      <div class="hud-actions">
+        <button class="btn-hud-audio" id="btn-audio-toggle" title="Toggle Web Audio Cyber Synthesizer (Shortcut: M)">
+          <div class="audio-bars" id="hud-audio-bars">
+            <span></span><span></span><span></span><span></span>
+          </div>
+          <span class="audio-label">AUDIO OFF</span>
+        </button>
+
+        <button class="btn-hud-palette" id="btn-open-palette" title="Global Spotlight Search (Cmd+K)">
+          <span>🔍</span>
+          <span class="kbd-shortcut">⌘K</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN VIEWPORT -->
+  <main id="main-content">
+
+    <!-- 1. LIVING HERO SECTION -->
+    <section class="hero-section" id="hero-section">
+      <div class="container">
+        <div class="hero-content">
+          <div class="hero-badge-row">
+            <div class="hero-pill">
+              <span class="pulse-dot"></span>
+              <span>12 YEARS INDUSTRY EXPERIENCE</span>
+            </div>
+            <div class="hero-pill">
+              <span>PERSISTENT SYSTEMS &amp; CYBAGE SOFTWARE</span>
+            </div>
+            <div class="hero-pill">
+              <span>LEAD BACKEND &amp; AI/ML ARCHITECT</span>
+            </div>
+          </div>
+
+          <h1 class="hero-name" id="hero-main-title">ABHIJEET RAUT</h1>
+
+          <div class="hero-subtitle-box">
+            <span class="hero-typewriter" id="hero-typewriter">Architecting Autonomous Multi-Agent AI Swarms &amp; RAG Pipelines</span>
+            <span class="hero-cursor"></span>
+          </div>
+
+          <p class="hero-bio">
+            Accomplished Lead Solutions Architect with 12 years of hands-on mastery designing high-concurrency distributed backends, autonomous multi-agent pipelines (Google ADK, LangChain), zero-knowledge E2EE cloud storage, and developer-grade Chrome Manifest V3 extensions.
+          </p>
+
+          <div class="hero-cta-group">
+            <a href="#projects-section" class="btn-primary" id="btn-hero-projects">
+              <span>⚡</span> Explore Systems Catalog (11)
+            </a>
+            <button class="btn-secondary" id="btn-hero-swarm">
+              <span>🤖</span> Launch Agent Swarm DAG
+            </button>
+            <a href="#terminal-section" class="btn-secondary" id="btn-hero-terminal">
+              <span>💻</span> Cyber Terminal CLI
+            </a>
+            <button class="btn-secondary" id="btn-open-cv">
+              <span>📄</span> Executive Dossier &amp; CV
+            </button>
+          </div>
+
+          <!-- Hero KPIs -->
+          <div class="hero-stats-grid" id="hero-stats-grid">
+            <!-- Hydrated by app.js -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. LIVE GIT INTELLIGENCE STREAM -->
+    <section class="git-section" id="git-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-badge">Git &amp; Monorepo Telemetry</span>
+          <h2 class="section-title">Live Repository Intelligence Stream</h2>
+          <p class="section-desc">
+            Directly synchronized with <code>arauthub/All-Projects</code> on GitHub with sub-millisecond edge pre-rendering and fallback.
+          </p>
+        </div>
+
+        <div class="git-header-bar">
+          <div class="git-source-tag">
+            <span>DATA FEED:</span>
+            <span class="git-live-badge" id="git-live-badge">Jamstack Static Edge Cache</span>
+          </div>
+          <div class="git-source-tag">
+            <span>MONOREPO REPOSITORIES:</span>
+            <strong class="text-white">apps/ • extensions/ • agents/ • devops/</strong>
+          </div>
+        </div>
+
+        <div class="git-commits-stream" id="git-commits-list">
+          <!-- Commit cards hydrated by app.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. HOLODECK SYSTEMS CATALOG -->
+    <section class="projects-section" id="projects-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-badge">Monorepo Architectures</span>
+          <h2 class="section-title">Holodeck Systems Catalog</h2>
+          <p class="section-desc">
+            Explore 11 production-grade software platforms, multi-agent frameworks, browser extensions, and containerized topologies with interactive simulators.
+          </p>
+        </div>
+
+        <!-- Filter & Search Toolbar -->
+        <div class="projects-toolbar">
+          <div class="filters-row" id="project-filters-row">
+            <!-- Hydrated by app.js -->
+          </div>
+          <div class="search-box-wrap">
+            <span class="search-icon-inside">🔍</span>
+            <input type="text" id="project-search-input" class="cyber-search-input" placeholder="Search systems, stack, keywords..." />
+          </div>
+        </div>
+
+        <!-- 3D Holographic Projects Grid -->
+        <div class="projects-grid" id="projects-grid">
+          <!-- Hydrated by app.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. MONOREPO EXPLORER & CODE VIEWER -->
+    <section class="explorer-section" id="explorer-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-badge">Monorepo Topology</span>
+          <h2 class="section-title">Interactive Monorepo Code Browser</h2>
+          <p class="section-desc">
+            Browse the directory hierarchy and inspect production source code modules directly in your browser.
+          </p>
+        </div>
+
+        <div id="monorepo-explorer-container">
+          <!-- Hydrated by monorepo-tree.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. CAREER TIMELINE & LEADERSHIP DOSSIER -->
+    <section class="career-section" id="career-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-badge">12-Year Leadership Journey</span>
+          <h2 class="section-title">Career Milestones &amp; Architecture Leadership</h2>
+          <p class="section-desc">
+            A decade of delivering high-impact enterprise backends, AI transformations, and technical mentorship.
+          </p>
+        </div>
+
+        <div class="timeline-track" id="career-timeline-container">
+          <!-- Hydrated by app.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. SKILLS ARSENAL -->
+    <section class="skills-section" id="skills-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-badge">Technical Arsenal</span>
+          <h2 class="section-title">Core Competencies &amp; System Mastery</h2>
+          <p class="section-desc">
+            Deep technical expertise across Autonomous Agents, Python/Go Microservices, Cloud Security, and Chrome Extension APIs.
+          </p>
+        </div>
+
+        <div class="skills-grid" id="skills-arsenal-container">
+          <!-- Hydrated by app.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. CYBER QUANTUM TERMINAL -->
+    <section class="terminal-section" id="terminal-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-badge">Interactive Shell</span>
+          <h2 class="section-title">Cyber Quantum Terminal</h2>
+          <p class="section-desc">
+            Keyboard-interactive developer CLI. Type <code class="text-cyan">help</code>, <code class="text-cyan">projects</code>, <code class="text-cyan">git log</code>, <code class="text-cyan">presubmit</code>, or <code class="text-cyan">matrix</code>.
+          </p>
+        </div>
+
+        <div class="terminal-shell">
+          <div class="terminal-top-bar">
+            <div class="terminal-controls">
+              <span class="term-close"></span>
+              <span class="term-min"></span>
+              <span class="term-max"></span>
+            </div>
+            <div class="terminal-title">nexus-terminal://quantum-sh (zsh)</div>
+            <div class="hud-dot"></div>
+          </div>
+          <div class="terminal-body" id="term-output">
+            <div class="term-line"><span class="text-cyan">🌌 NEXUS PRIME QUANTUM TERMINAL v1.0.0</span></div>
+            <div class="term-line text-dim">Type 'help' to inspect available system commands.</div>
+          </div>
+          <div class="terminal-input-row">
+            <span class="term-prompt">nexus@quantum:~$</span>
+            <input type="text" id="term-input" class="term-input" placeholder="type command (e.g. 'projects', 'git log', 'matrix', 'presubmit')..." autofocus autocomplete="off" spellcheck="false" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- SITE FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-copy">
+          <strong>NEXUS PRIME</strong> • Architected by <strong class="text-white">Abhijeet Raut</strong>. MIT License • Clean Presubmit Verified.
+        </div>
+        <div class="footer-links">
+          <a href="mailto:theabhijeetraut@gmail.com">theabhijeetraut@gmail.com</a>
+          <a href="https://github.com/arauthub" target="_blank">GitHub (@arauthub)</a>
+          <a href="https://github.com/arauthub/All-Projects" target="_blank">Portfolio Monorepo</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODALS -->
+
+  <!-- 1. Holodeck Interactive Sandbox Modal -->
+  <div class="nexus-modal" id="holodeck-modal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content-card">
+      <button class="modal-close-btn modal-close" title="Close Sandbox">✕</button>
+      <div id="holodeck-content"></div>
+    </div>
+  </div>
+
+  <!-- 2. Technical Design Document (DESIGN.md) Modal -->
+  <div class="nexus-modal" id="design-modal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content-card">
+      <button class="modal-close-btn modal-close" title="Close Document">✕</button>
+      <div id="design-modal-body"></div>
+    </div>
+  </div>
+
+  <!-- 3. Curriculum Vitae Dossier Modal -->
+  <div class="nexus-modal" id="cv-modal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content-card">
+      <button class="modal-close-btn modal-close" title="Close Dossier">✕</button>
+      <div class="design-modal-header">
+        <span class="sandbox-badge cyan">Executive Dossier</span>
+        <h2>Abhijeet Raut — Curriculum Vitae</h2>
+        <p class="text-dim">Lead Backend &amp; AI/ML Engineer | Solutions Architect (12 Years Experience)</p>
+      </div>
+      <div class="design-content-block">
+        <h3>Executive Summary</h3>
+        <p>Accomplished Lead Software Engineer and Solutions Architect with 12 years of hands-on experience architecting high-concurrency backend services, distributed systems, and modern AI/ML solutions.</p>
+        <p><strong>Persistent Systems (3 Years):</strong> Driving enterprise AI adoption, autonomous agent architectures (Google ADK, LangChain), and cloud-native microservice backends in Python and Go.</p>
+        <p><strong>Cybage Software (9 Years):</strong> Designing scalable enterprise platforms, Django/Wagtail CMS ecosystems, and RESTful/event-driven API architectures.</p>
+        
+        <h3>Key Technical Competencies</h3>
+        <ul>
+          <li><strong>Autonomous AI &amp; LLMs:</strong> Google ADK, LangGraph, CrewAI, RAG Pipelines, Vector DBs (ChromaDB, Pinecone, pgvector), Semantic Search</li>
+          <li><strong>Backend Frameworks:</strong> Python (FastAPI, Django, Flask, Wagtail CMS), Go, GraphQL, Celery, Redis, RabbitMQ</li>
+          <li><strong>Distributed Storage &amp; Cryptography:</strong> Fastify, Prisma, PostgreSQL, S3/MinIO, Zero-Knowledge AES-256-GCM, PBKDF2</li>
+          <li><strong>DevOps &amp; Cloud:</strong> Docker Compose, Kubernetes, CI/CD GitHub Actions, Google Cloud Run, AWS</li>
+        </ul>
+
+        <h3>Contact &amp; Repository Coordinates</h3>
+        <p>Email: <a href="mailto:theabhijeetraut@gmail.com" class="term-link">theabhijeetraut@gmail.com</a></p>
+        <p>GitHub: <a href="https://github.com/arauthub" target="_blank" class="term-link">https://github.com/arauthub</a></p>
+        <p>Portfolio Monorepo: <a href="https://github.com/arauthub/All-Projects" target="_blank" class="term-link">arauthub/All-Projects</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Global Spotlight Command Palette (Cmd+K) -->
+  <div class="command-palette-modal" id="command-palette-modal">
+    <div class="modal-backdrop"></div>
+    <div class="palette-box">
+      <div class="palette-input-wrap">
+        <span>🔍</span>
+        <input type="text" id="palette-input" class="palette-input" placeholder="Type a command, project, or skill (e.g. 'Swarm', 'ARNAS', 'Docker')..." autocomplete="off" spellcheck="false" />
+        <span class="kbd-shortcut">ESC</span>
+      </div>
+      <div class="palette-results" id="palette-results"></div>
+    </div>
+  </div>
+
+  <!-- ES Modules Entrypoint -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

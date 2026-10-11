@@ -25,9 +25,84 @@ document.addEventListener('DOMContentLoaded', async () => {
   const btnTutorial = document.getElementById('btn-tutorial');
   const btnClosePopup = document.getElementById('btn-close-popup');
   const stageButtons = document.querySelectorAll('.stage-pill');
+  const pageNotice = document.getElementById('page-notice');
+  const noticeTitle = document.getElementById('notice-title');
+  const noticeDesc = document.getElementById('notice-desc');
+  const btnOpenDemo = document.getElementById('btn-open-demo');
 
   let activeTabId = null;
+  let activeTabUrl = '';
   let currentGravity = { x: 0, y: 0, strength: 1.0, isZeroG: true };
+
+  /**
+   * Checks if URL cannot be scripted by Chrome extensions
+   */
+  function isRestrictedUrl(url) {
+    if (!url) return true;
+    const lower = url.toLowerCase();
+    return (
+      lower.startsWith('chrome://') ||
+      lower.startsWith('chrome-extension://') ||
+      lower.startsWith('edge://') ||
+      lower.startsWith('about:') ||
+      lower.startsWith('devtools://') ||
+      lower.startsWith('view-source:') ||
+      lower.includes('chromewebstore.google.com') ||
+      lower.includes('chrome.google.com/webstore')
+    );
+  }
+
+  function showNotice(title, desc, actionText = 'Launch Test Playground 🚀', actionUrl = 'test-page/index.html') {
+    if (!pageNotice) return;
+    if (noticeTitle) noticeTitle.textContent = title;
+    if (noticeDesc) noticeDesc.innerHTML = desc;
+    if (btnOpenDemo) {
+      btnOpenDemo.textContent = actionText;
+      btnOpenDemo.onclick = () => {
+        if (typeof chrome !== 'undefined' && chrome.tabs && chrome.tabs.create) {
+          const targetUrl = actionUrl.startsWith('http') || actionUrl.startsWith('chrome')
+            ? actionUrl
+            : chrome.runtime.getURL(actionUrl);
+          chrome.tabs.create({ url: targetUrl });
+        } else {
+          window.open('../test-page/index.html', '_blank');
+        }
+      };
+    }
+    pageNotice.style.display = 'block';
+  }
+
+  function hideNotice() {
+    if (pageNotice) pageNotice.style.display = 'none';
+  }
+
+  function handleUnsupportedPage(url, specificError = '') {
+    updateUIInactive();
+    statusBadge.textContent = 'RESTRICTED';
+    statusBadge.className = 'badge badge-unsupported';
+    masterToggle.disabled = true;
+    masterToggle.title = 'Cannot activate on internal browser pages';
+
+    let title = '⚠️ Page Cannot Be Scripted';
+    let desc = 'Chrome security prohibits extensions on internal system pages (<code>chrome://</code>, Web Store, settings). Open any standard website to activate Anti-Gravity!';
+    let actionText = 'Launch Test Playground 🚀';
+    let actionUrl = 'test-page/index.html';
+
+    const lower = (url || '').toLowerCase();
+    if (lower.startsWith('file://') || specificError.includes('file://')) {
+      title = '📁 Local File Restricted';
+      desc = 'Local file detected (<code>file://</code>). To run Anti-Gravity on local files, enable <b>"Allow access to file URLs"</b> in extension settings.';
+      actionText = 'Open Extension Settings ⚙️';
+      actionUrl = 'chrome://extensions/?id=' + (chrome.runtime?.id || '');
+    } else if (lower.includes('popup.html')) {
+      title = '🧪 Popup Preview Tab';
+      desc = 'Viewing popup directly in tab. Click the Anti-Gravity puzzle icon on any regular webpage to play!';
+    } else if (specificError) {
+      desc = `Chrome blocked injection on this tab: <i>${specificError}</i>. Try opening Wikipedia, GitHub, or our playground!`;
+    }
+
+    showNotice(title, desc, actionText, actionUrl);
+  }
 
   // Get active tab
   if (typeof chrome !== 'undefined' && chrome.tabs && chrome.tabs.query) {
@@ -35,7 +110,23 @@ document.addEventListener('DOMContentLoaded', async () => {
       const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
       if (tab && tab.id) {
         activeTabId = tab.id;
-        queryTabStatus();
+        activeTabUrl = tab.url || '';
+
+        if (isRestrictedUrl(activeTabUrl)) {
+          // If active tab in current window is restricted (e.g. popup opened in tab or devtools), check lastFocusedWindow
+          const [focusedTab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+          if (focusedTab && focusedTab.id !== tab.id && !isRestrictedUrl(focusedTab.url)) {
+            activeTabId = focusedTab.id;
+            activeTabUrl = focusedTab.url || '';
+            queryTabStatus();
+          } else {
+            handleUnsupportedPage(activeTabUrl);
+          }
+        } else {
+          queryTabStatus();
+        }
+      } else {
+        updateUIInactive();
       }
     } catch (e) {
       updateUIInactive();
@@ -43,19 +134,28 @@ document.addEventListener('DOMContentLoaded', async () => {
   } else {
     // Standalone preview fallback state
     updateUIInactive();
+    showNotice(
+      '🧪 Standalone Preview Mode',
+      'Viewing popup outside Chrome extension environment. Open our Test Playground or install the extension to test on live websites!',
+      'Launch Playground 🚀',
+      '../test-page/index.html'
+    );
   }
 
   /**
    * Fetch current state from content script
    */
   async function queryTabStatus() {
+    hideNotice();
+    masterToggle.disabled = false;
+    masterToggle.title = '';
     try {
       const res = await chrome.tabs.sendMessage(activeTabId, { action: 'GET_STATUS' });
       if (res) {
         updateUIFromState(res);
       }
     } catch (err) {
-      // Content script may not be running yet or page is chrome://
+      // Content script may not be running yet
       updateUIInactive();
     }
   }
@@ -161,7 +261,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Master Power Switch
   masterToggle.addEventListener('change', async () => {
-    if (!activeTabId) return;
+    if (!activeTabId || isRestrictedUrl(activeTabUrl)) {
+      handleUnsupportedPage(activeTabUrl);
+      masterToggle.checked = false;
+      return;
+    }
+
+    hideNotice();
 
     try {
       const res = await chrome.tabs.sendMessage(activeTabId, { action: 'TOGGLE_ANTIGRAVITY' });
@@ -181,6 +287,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         queryTabStatus();
       } catch (injectErr) {
         console.warn('Cannot activate on this page:', injectErr);
+        handleUnsupportedPage(activeTabUrl, injectErr?.message || '');
         masterToggle.checked = false;
       }
     }

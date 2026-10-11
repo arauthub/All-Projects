@@ -19,7 +19,7 @@
   },
   "action": {
     "default_popup": "popup/popup.html",
-    "default_title": "API Pulse Pro (Alt+Shift+A)",
+    "default_title": "API Pulse Pro (Alt+Shift+P)",
     "default_icon": {
       "16": "assets/icon16.png",
       "32": "assets/icon32.png",
@@ -74,15 +74,15 @@
   "commands": {
     "toggle-hud": {
       "suggested_key": {
-        "default": "Alt+Shift+A",
-        "mac": "Command+Shift+A"
+        "default": "Alt+Shift+P",
+        "mac": "Alt+Shift+P"
       },
       "description": "Toggle In-Page API Pulse HUD"
     },
     "open-studio": {
       "suggested_key": {
         "default": "Alt+Shift+S",
-        "mac": "Command+Shift+S"
+        "mac": "Alt+Shift+S"
       },
       "description": "Open Full API Pulse Studio"
     }

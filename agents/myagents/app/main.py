@@ -52,6 +52,16 @@ class VectorSearchRequest(BaseModel):
     query: str
     top_k: Optional[int] = 3
 
+class ScrapeUrlRequest(BaseModel):
+    url: str
+    output_format: Optional[str] = "json"
+    custom_schema: Optional[Dict[str, Any]] = None
+    extraction_goal: Optional[str] = None
+
+class AuditUrlRequest(BaseModel):
+    url: str
+
+
 @app.get("/", response_class=HTMLResponse)
 async def serve_index():
     """Serve the single-page rich user interface."""
@@ -150,3 +160,90 @@ async def update_llm_config(req: LLMConfigRequest):
         "model": orchestrator.llm_adapter.model,
         "message": "Configuration updated successfully.",
     }
+
+@app.post("/api/scraper/audit")
+async def audit_target_url(req: AuditUrlRequest):
+    """Perform preflight SSRF and security audit on target URL."""
+    if not req.url or not req.url.strip():
+        raise HTTPException(status_code=400, detail="URL cannot be empty.")
+    audit_res = orchestrator.tool_registry.execute("url_security_audit", {"url": req.url.strip()})
+    return audit_res.get("result", {})
+
+@app.post("/api/scraper/scrape")
+async def scrape_target_url(req: ScrapeUrlRequest):
+    """Scrape and extract public website content into requested or standard format."""
+    if not req.url or not req.url.strip():
+        raise HTTPException(status_code=400, detail="Target URL cannot be empty.")
+
+    exec_res = orchestrator.tool_registry.execute(
+        "web_scraper_extract",
+        {
+            "url": req.url.strip(),
+            "output_format": req.output_format or "json",
+            "custom_schema": req.custom_schema,
+            "extraction_goal": req.extraction_goal,
+        }
+    )
+
+    result_data = exec_res.get("result", {})
+    if not exec_res.get("success") or not result_data.get("success", False):
+        return JSONResponse(
+            status_code=400,
+            content={
+                "success": False,
+                "error": result_data.get("error") or exec_res.get("error", "Failed to scrape URL."),
+                "security_audit": result_data.get("security_audit", {}),
+            }
+        )
+
+    return result_data
+
+
+@app.get("/api/scraper/formats")
+async def get_supported_formats():
+    """Return supported export formats and extraction capabilities."""
+    return {
+        "formats": [
+            {
+                "id": "json",
+                "name": "Standard Structured JSON",
+                "description": "Comprehensive document object including metadata, OpenGraph, JSON-LD, headings, paragraphs, tables, links, and stats.",
+            },
+            {
+                "id": "markdown",
+                "name": "GitHub-Flavored Markdown",
+                "description": "Clean, formatted Markdown ready for LLM ingestion, documentation, or RAG embeddings.",
+            },
+            {
+                "id": "summary",
+                "name": "Executive Summary & Bullet Takeaways",
+                "description": "Distilled executive summary with top 5 factual takeaways and core topic sections.",
+            },
+            {
+                "id": "key_value",
+                "name": "Key-Value Entities & Contacts",
+                "description": "Normalized dictionary of detected emails, phone numbers, pricing, social channels, and canonical meta.",
+            },
+            {
+                "id": "csv",
+                "name": "Tabular Data (CSV)",
+                "description": "Structured matrix extraction of all HTML tables found on the page.",
+            },
+            {
+                "id": "custom",
+                "name": "Custom Target JSON Schema",
+                "description": "User-defined JSON schema mapping fields directly from page content.",
+            },
+        ],
+        "security_features": [
+            "Strict protocol enforcement (HTTP/HTTPS only)",
+            "RFC1918 Private IP range blocking",
+            "Cloud metadata (169.254.169.254) isolation",
+            "Loopback & localhost exploit prevention",
+            "Manual redirect hop validation (max 5 hops)",
+            "Payload size capping (5MB stream cap)",
+            "Anti-prompt-injection boundary tagging",
+            "Script & Tracker DOM sanitization",
+        ],
+    }
+

@@ -86,6 +86,19 @@ Here are highlights from my public [**All-Projects**](https://github.com/arauthu
 
 ---
 
+
+### 🚀 [WorkspaceCurator Pro: Google Workspace Webhook & Curation Engine](https://github.com/arauthub/All-Projects/tree/main/apps/workspace-curator)
+* **Category**: Fullstack App & Autonomous Ingestion Engine
+* **Tech Stack**: Python, FastAPI, SQLite, Server-Sent Events, Google Workspace APIs, Heuristic NLP, Google Apps Script
+* Universal webhook engine supporting Google Drive push sync (`changes.watch`), Gmail Pub/Sub push envelopes, Calendar notifications, and real-time Docs/Sheets Google Apps Script streaming.
+* Autonomous intelligence engine transforming raw multi-product updates into executive TL;DR briefings, action item task matrices, quantified metrics, Markdown/Slack/Email exports, and universal RSS feeds.
+
+
+### 🌌 [Nexus Prime: Quantum Jamstack & Git Intelligence Portal](https://github.com/arauthub/All-Projects/tree/main/apps/jamstack-frontend)
+* **Category**: Git-Integrated Jamstack Frontend & Command Center
+* **Tech Stack**: HTML5, Vanilla CSS (Glassmorphism), ES Modules, Web Audio API, Canvas 2D, GitHub REST API
+* Ultra-fast living engineering command center featuring real-time Git commit telemetry, 60 FPS quantum particle nexus canvas, 3D card tilt physics, 5 interactive browser-native Holodeck architecture sandboxes, and an in-browser Cyber Quantum CLI terminal.
+
 ## 💼 Career Snapshot
 
 * **Lead Software Engineer / AI Architect** — *Persistent Systems* (2023 – Present)

@@ -1,22 +1,39 @@
 /**
  * app/static/js/graph.js
- * Multi-Agent DAG Pipeline Visualizer with Active Pulse Telemetry and Filtering.
+ * Multi-Agent DAG Pipeline Visualizer with Active Pulse Telemetry, Dynamic Pipelines, and Filtering.
  */
+
+const KNOWN_AGENTS = {
+  orchestrator: { id: "orchestrator", name: "Nexus Commander", role: "Mission Orchestration", icon: "🧠", color: "#6366f1" },
+  scraper: { id: "scraper", name: "CyberScrape Sentinel", role: "Web Scraper & SSRF Guard", icon: "🕷️", color: "#38bdf8" },
+  researcher: { id: "researcher", name: "Scout Intelligence", role: "Vector RAG & Sizing", icon: "🔍", color: "#06b6d4" },
+  architect: { id: "architect", name: "Vanguard Architect", role: "Cloud Systems & Mermaid", icon: "🏛️", color: "#10b981" },
+  critic: { id: "critic", name: "Sentinel Auditor", role: "Adversarial Audit & Safety", icon: "🛡️", color: "#f59e0b" },
+  synthesizer: { id: "synthesizer", name: "Aegis Synthesizer", role: "Deliverable & Slides Deck", icon: "🎯", color: "#ec4899" },
+};
 
 class DAGVisualizer {
   constructor(containerId, onAgentClick) {
     this.container = document.getElementById(containerId);
     this.onAgentClick = onAgentClick;
     this.agents = [
-      { id: "orchestrator", name: "Nexus Commander", role: "Mission Orchestration", icon: "🧠", color: "#6366f1" },
-      { id: "researcher", name: "Scout Intelligence", role: "Vector RAG & Sizing", icon: "🔍", color: "#06b6d4" },
-      { id: "architect", name: "Vanguard Architect", role: "Cloud Systems & Mermaid", icon: "🏛️", color: "#10b981" },
-      { id: "critic", name: "Sentinel Auditor", role: "Adversarial Quality & SOC2", icon: "🛡️", color: "#f59e0b" },
-      { id: "synthesizer", name: "Aegis Synthesizer", role: "Deliverable & Slides Deck", icon: "🎯", color: "#ec4899" },
+      KNOWN_AGENTS.orchestrator,
+      KNOWN_AGENTS.scraper,
+      KNOWN_AGENTS.researcher,
+      KNOWN_AGENTS.architect,
+      KNOWN_AGENTS.critic,
+      KNOWN_AGENTS.synthesizer,
     ];
     this.activeAgentId = null;
     this.completedAgentIds = new Set();
     this.render();
+  }
+
+  setPipeline(agentIds) {
+    if (Array.isArray(agentIds) && agentIds.length > 0) {
+      this.agents = agentIds.map(id => KNOWN_AGENTS[id] || { id, name: id, role: "Specialist", icon: "🤖", color: "#38bdf8" });
+      this.render();
+    }
   }
 
   render() {

@@ -6,7 +6,7 @@ Pune, India • theabhijeetraut@gmail.com • [GitHub: github.com/arauthub](http
 
 ## Executive Summary
 
-> 📌 **Portfolio Monorepo Synchronization**: Verified up to date with repository on `2026-10-11 13:14 UTC` • Presubmit Suite Clean
+> 📌 **Portfolio Monorepo Synchronization**: Verified up to date with repository on `2026-10-11 14:13 UTC` • Presubmit Suite Clean
 
 Accomplished **Lead Software Engineer and Solutions Architect** with **12 years of hands-on experience** architecting high-concurrency backend services, distributed systems, and modern AI/ML solutions. 
 - **3 years at Persistent Systems** driving enterprise AI adoption, autonomous agent architectures (Google ADK, LangChain), and cloud-native microservice backends.
@@ -130,6 +130,21 @@ Accomplished **Lead Software Engineer and Solutions Architect** with **12 years 
 * Established containerized multi-service topologies uniting decoupled Django REST backends, Angular SPAs, and persistent volumes.
 
 ---
+
+
+### **WorkspaceCurator Pro: Google Workspace Webhook & Curation Engine**
+*Repository*: [`apps/workspace-curator/`](https://github.com/arauthub/All-Projects/tree/main/apps/workspace-curator)  
+*Tech Stack*: Python, FastAPI, SQLite, Server-Sent Events (SSE), Google Workspace APIs, Heuristic NLP, Google Apps Script
+* Architected universal event-driven webhook ingestion framework capturing push notifications across Google Docs, Sheets, Drive (`changes.watch`), Gmail (Pub/Sub), Calendar, and Forms.
+* Engineered autonomous content curation and NLP pipeline delivering executive TL;DR briefings, action item task matrices with assignees/deadlines, quantified metric extraction, and P0 urgency classifiers.
+* Implemented multi-format delivery engines: live reactive SSE glassmorphic web dashboard, 1-click Markdown/Slack/Email exports, universal RSS feed (`/feed.rss`), and outbound dispatchers.
+
+
+### **Nexus Prime: Quantum Jamstack & Git Intelligence Portal**
+*Repository*: [`apps/jamstack-frontend/`](https://github.com/arauthub/All-Projects/tree/main/apps/jamstack-frontend)  
+*Tech Stack*: HTML5, Vanilla CSS (Glassmorphism), Modern ES Modules, Web Audio API, Canvas 2D, Git REST API
+* Architected a futuristic, zero-framework Jamstack portal featuring sub-millisecond edge pre-rendering, bi-directional Git telemetry, living 60 FPS interactive particle constellation canvas, and Web Audio cyber synthesis.
+* Built interactive in-browser Holodeck simulators for multi-agent DAG swarms, Matter.js zero-G physics, ARNAS client-side zero-knowledge AES-256-GCM encryption, and a keyboard-driven Cyber Quantum CLI terminal.
 
 ## Education
 

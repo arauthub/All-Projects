@@ -66,3 +66,45 @@ jobs:
           cd apps/arnas/server
           npm install
           npm test
+
+  workspace-curator-tests:
+    name: WorkspaceCurator Webhook & Curation Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+
+      - name: Install Dependencies
+        run: |
+          cd apps/workspace-curator
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run WorkspaceCurator Unit & Integration Tests
+        run: |
+          cd apps/workspace-curator
+          python -m unittest discover -s tests -p "test_*.py"
+
+  jamstack-frontend-tests:
+    name: Nexus Prime Jamstack Frontend Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run Jamstack Unit & Structure Tests
+        run: |
+          cd apps/jamstack-frontend
+          npm test
+          npm run build
+

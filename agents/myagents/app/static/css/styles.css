@@ -836,3 +836,23 @@ body {
   font-size: 2.5rem;
   opacity: 0.6;
 }
+
+/* Quick Presets Chip Buttons */
+.chip-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  border-radius: var(--radius-full);
+  padding: 0.25rem 0.65rem;
+  font-size: 0.72rem;
+  font-family: var(--font-main);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.chip-btn:hover {
+  background: rgba(56, 189, 248, 0.15);
+  color: var(--accent-cyan);
+  border-color: rgba(56, 189, 248, 0.4);
+}
+

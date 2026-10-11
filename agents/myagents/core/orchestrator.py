@@ -17,6 +17,7 @@ from agents_pool.researcher_agent import ResearcherAgent
 from agents_pool.architect_agent import ArchitectAgent
 from agents_pool.critic_agent import CriticAgent
 from agents_pool.synthesizer_agent import SynthesizerAgent
+from agents_pool.scraper_agent import ScraperAgent
 
 class MultiAgentOrchestrator:
     def __init__(self, api_key: Optional[str] = None):
@@ -31,7 +32,9 @@ class MultiAgentOrchestrator:
             "architect": ArchitectAgent(self.tool_registry, self.llm_adapter),
             "critic": CriticAgent(self.tool_registry, self.llm_adapter),
             "synthesizer": SynthesizerAgent(self.tool_registry, self.llm_adapter),
+            "scraper": ScraperAgent(self.tool_registry, self.llm_adapter),
         }
+
 
         # Active & Historical Missions
         self.missions: Dict[str, MissionMemory] = {}
@@ -69,16 +72,28 @@ class MultiAgentOrchestrator:
             "timestamp": time.time(),
         }
 
-        # Defined topological execution sequence
-        pipeline = [
-            ("orchestrator", "Decompose the user mission objective into atomic tasks, assign domain agents, and establish execution DAG."),
-            ("researcher", "Retrieve relevant cloud architecture patterns, capacity benchmarks, and zero-trust standards from vector store."),
-            ("architect", "Engineer the comprehensive production cloud architecture, microservices topology, and Mermaid diagram."),
-            ("critic", "Conduct rigorous adversarial audit evaluating security, latency, cold starts, and cost optimization."),
-            ("synthesizer", "Consolidate all findings into final executive briefing and generate interactive presentation slides."),
-        ]
+        # Dynamically determine topological execution sequence
+        obj_lower = memory.objective.lower()
+        is_scraping = any(k in obj_lower for k in ["scrape", "scraping", "crawl", "crawler", "http://", "https://", "web page", "extract from url", "public site"])
+
+        if is_scraping:
+            pipeline = [
+                ("orchestrator", "Decompose the web scraping mission, define security guardrails, and schedule execution DAG."),
+                ("scraper", "Perform preflight SSRF audit, fetch target URL safely, strip boilerplates, and extract structured data."),
+                ("critic", "Conduct adversarial data integrity audit, check schema adherence, and verify prompt-injection defense."),
+                ("synthesizer", "Consolidate extracted web intelligence, package deliverable, and generate presentation deck."),
+            ]
+        else:
+            pipeline = [
+                ("orchestrator", "Decompose the user mission objective into atomic tasks, assign domain agents, and establish execution DAG."),
+                ("researcher", "Retrieve relevant cloud architecture patterns, capacity benchmarks, and zero-trust standards from vector store."),
+                ("architect", "Engineer the comprehensive production cloud architecture, microservices topology, and Mermaid diagram."),
+                ("critic", "Conduct rigorous adversarial audit evaluating security, latency, cold starts, and cost optimization."),
+                ("synthesizer", "Consolidate all findings into final executive briefing and generate interactive presentation slides."),
+            ]
 
         total_steps = len(pipeline)
+
         for step_idx, (agent_id, task_desc) in enumerate(pipeline, start=1):
             agent = self.agents.get(agent_id)
             if not agent:
@@ -148,4 +163,12 @@ class MultiAgentOrchestrator:
                 "objective": "Deploy a multi-tier customer support agent swarm capable of intent classification, vector store knowledge retrieval, policy compliance checks, and personalized executive synthesis.",
                 "recommended_agents": ["Nexus Commander", "Scout Intelligence", "Vanguard Architect", "Sentinel Auditor", "Aegis Synthesizer"],
             },
+            {
+                "id": "autonomous-web-scraping",
+                "title": "🕷️ Enterprise Web Scraper & Intelligence Swarm (Zero-Trust SSRF)",
+                "description": "Autonomous public web extraction: audits against SSRF/cloud metadata vectors, strips ads/boilerplates, extracts tables, and formats structured JSON/Markdown.",
+                "objective": "Scrape and extract structured intelligence from public URL https://news.ycombinator.com into standard JSON format with headings, top stories, links, and executive summary.",
+                "recommended_agents": ["Nexus Commander", "CyberScrape Sentinel", "Sentinel Auditor", "Aegis Synthesizer"],
+            },
         ]
+

@@ -29,7 +29,7 @@ Stop digging through cluttered DevTools tabs filled with hundreds of static imag
 * Shows live counters: e.g. `12 APIs | 4 POST | 0 ERR`.
 * Flashes an animated pulse dot on every new request.
 * Click to open an instant In-Page Quick Drawer without opening DevTools!
-* Completely draggable anywhere on screen; toggle anytime with **Alt+Shift+A** (or **Cmd+Shift+A** on Mac).
+* Completely draggable anywhere on screen; toggle anytime with **Alt+Shift+P**.
 
 #### 3. In-Browser Request Replayer
 * Ever wanted to tweak a POST body or headers and re-send it with the user's active session cookies and CORS credentials?

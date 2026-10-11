@@ -156,8 +156,8 @@ sequenceDiagram
    * Click **POST Checkout**: Verify nested JSON payload, generate TypeScript interface.
    * Click **500 Server Error**: Verify instant red error badge in HUD and Studio stream.
    * Click **Simulate Slow API**: Verify timing waterfall displays >1200ms latency.
-3. Press `Cmd+Shift+A` (Mac) or `Alt+Shift+A` (Win): Verify in-page HUD drawer expands smoothly.
-4. Press `Cmd+Shift+S` (Mac) or `Alt+Shift+S` (Win): Verify API Studio workbench opens in a dedicated tab.
+3. Press `Alt+Shift+P`: Verify in-page HUD drawer expands smoothly without conflicting with native Ctrl+A / Cmd+A selection.
+4. Press `Alt+Shift+S`: Verify API Studio workbench opens in a dedicated tab.
 
 ### Packaging
 ```bash

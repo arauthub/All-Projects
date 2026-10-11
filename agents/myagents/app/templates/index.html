@@ -31,9 +31,13 @@
       <div class="status-badge" id="mode-badge">
         <span class="status-indicator"></span> Autonomous Simulation (Zero-Key)
       </div>
+      <button class="btn btn-secondary" id="btn-open-scraper">
+        <span>🕷️ Web Scraper Studio</span>
+      </button>
       <button class="btn btn-secondary" id="btn-open-vector-store">
         <span>🔍 Vector Store</span>
       </button>
+
       <button class="btn btn-secondary" id="btn-open-gcp-deploy">
         <span>🚀 1-Click GCP Deploy</span>
       </button>
@@ -132,11 +136,13 @@
           <!-- Navigation Tabs -->
           <div class="tabs-header">
             <button class="tab-btn active" id="btn-tab-plan">Plan</button>
+            <button class="tab-btn" id="btn-tab-scraper">🕷️ Scraped</button>
             <button class="tab-btn" id="btn-tab-research">Research</button>
             <button class="tab-btn" id="btn-tab-architecture">Architecture</button>
             <button class="tab-btn" id="btn-tab-critique">Audit</button>
             <button class="tab-btn" id="btn-tab-presentation">📊 Deck</button>
           </div>
+
         </div>
         <div class="tab-content-area" id="tab-content-area">
           <!-- Populated by app.js -->
@@ -255,6 +261,91 @@
       </div>
     </div>
   </div>
+
+  <!-- Enterprise Web Scraper Studio Modal -->
+  <div class="modal-overlay" id="scraper-modal">
+    <div class="standard-modal" style="max-width: 880px; max-height: 88vh; overflow-y: auto;">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div style="display:flex; align-items:center; gap:0.65rem;">
+          <span style="font-size:1.4rem;">🕷️</span>
+          <div>
+            <h2 style="font-size:1.25rem; font-weight:700;">CyberScrape Sentinel Studio</h2>
+            <div style="font-size:0.72rem; color:var(--text-muted);">Enterprise Autonomous Web Scraper & Semantic Extractor</div>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:0.5rem;">
+          <span class="brand-badge" style="background:rgba(56,189,248,0.15); color:var(--accent-cyan); border-color:rgba(56,189,248,0.3);">SSRF Protected</span>
+          <button class="btn btn-secondary" id="btn-close-scraper-modal">✕</button>
+        </div>
+      </div>
+
+      <p style="font-size:0.85rem; color:var(--text-secondary); line-height:1.5;">
+        Input any public site URL to scrape clean content with automated SSRF prevention, DOM script/tracker sanitization, 
+        and format conversion. Operates 100% offline via local heuristics, or leverages live Google Gemini API when configured.
+      </p>
+
+      <!-- URL Input & Quick Presets -->
+      <div style="display:flex; flex-direction:column; gap:0.5rem;">
+        <label style="font-size:0.8rem; font-weight:600; color:var(--text-muted);">Target Public URL:</label>
+        <div class="input-group">
+          <input type="url" id="scraper-url-input" class="prompt-input" placeholder="https://news.ycombinator.com or https://en.wikipedia.org/wiki/Artificial_intelligence">
+          <button class="btn btn-secondary" id="btn-scraper-audit" title="Audit URL security without scraping">
+            <span>🔍 Audit SSRF</span>
+          </button>
+          <button class="btn btn-primary" id="btn-scraper-run">
+            <span>🕷️ Scrape & Extract</span>
+          </button>
+        </div>
+        <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap; font-size:0.75rem; color:var(--text-muted);">
+          <span>Quick Presets:</span>
+          <button class="chip-btn" data-url="https://news.ycombinator.com">Hacker News</button>
+          <button class="chip-btn" data-url="https://en.wikipedia.org/wiki/Artificial_intelligence">Wikipedia: AI</button>
+          <button class="chip-btn" data-url="https://cloud.google.com/run">Google Cloud Run</button>
+          <button class="chip-btn" data-url="http://169.254.169.254/computeMetadata/v1/" style="border-color:rgba(239,68,68,0.4); color:#f87171;">⚠️ Test SSRF Defense</button>
+        </div>
+      </div>
+
+      <!-- Format and Goal Selector -->
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+        <div style="display:flex; flex-direction:column; gap:0.4rem;">
+          <label style="font-size:0.8rem; font-weight:600; color:var(--text-muted);">Output Structure / Format:</label>
+          <select id="scraper-format-select" style="background:#080c15; border:1px solid var(--border-subtle); color:white; padding:0.55rem 0.75rem; border-radius:var(--radius-sm); font-family:var(--font-main);">
+            <option value="json" selected>Standard Structured JSON (Metadata, Headings, Tables, Links)</option>
+            <option value="markdown">GitHub-Flavored Markdown (Clean Content & Tables)</option>
+            <option value="summary">Executive Summary & Key Takeaways</option>
+            <option value="key_value">Key-Value Entities (Emails, Contacts, Pricing, Socials)</option>
+            <option value="csv">Tabular CSV Data (HTML Tables Export)</option>
+            <option value="custom">Custom Target JSON Schema</option>
+          </select>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:0.4rem;">
+          <label style="font-size:0.8rem; font-weight:600; color:var(--text-muted);">Extraction Focus / Goal (Optional):</label>
+          <input type="text" id="scraper-goal-input" class="prompt-input" style="background:#080c15; border:1px solid var(--border-subtle); padding:0.55rem 0.75rem; border-radius:var(--radius-sm);" placeholder="e.g. 'Extract all headlines and points'">
+        </div>
+      </div>
+
+      <!-- Custom Schema Container -->
+      <div id="scraper-custom-schema-container" style="display:none; flex-direction:column; gap:0.4rem;">
+        <label style="font-size:0.8rem; font-weight:600; color:var(--text-muted);">Custom Target JSON Schema:</label>
+        <textarea id="scraper-custom-schema-input" class="prompt-input" style="background:#080c15; border:1px solid var(--border-subtle); padding:0.6rem; border-radius:var(--radius-sm); font-family:var(--font-mono); font-size:0.8rem; height:80px;" placeholder='{\n  "title": "string",\n  "contact_emails": ["string"],\n  "pricing_plans": [{"tier": "string", "price": "string"}]\n}'></textarea>
+      </div>
+
+      <!-- Output / Results Container -->
+      <div id="scraper-results-box" style="display:none; flex-direction:column; gap:0.75rem; margin-top:0.5rem; background:#080c15; border:1px solid var(--border-subtle); border-radius:var(--radius-md); padding:1rem;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
+          <div id="scraper-status-badges" style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;"></div>
+          <div style="display:flex; gap:0.5rem;">
+            <button class="btn btn-secondary" id="btn-copy-scraper-result">📋 Copy</button>
+            <button class="btn btn-secondary" id="btn-download-scraper-result">📥 Download</button>
+          </div>
+        </div>
+
+        <pre id="scraper-output-code" style="font-family:var(--font-mono); font-size:0.82rem; color:#e2e8f0; background:rgba(0,0,0,0.4); padding:1rem; border-radius:var(--radius-sm); max-height:340px; overflow-y:auto; overflow-x:auto; white-space:pre-wrap; word-break:break-word;"></pre>
+      </div>
+    </div>
+  </div>
+
 
   <!-- Scripts -->
   <script src="/static/js/presentation.js"></script>

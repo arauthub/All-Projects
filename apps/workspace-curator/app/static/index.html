@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WorkspaceCurator Pro - Google Workspace Webhook Ingestion &amp; AI Curation Engine</title>
+  <meta name="description" content="Automated Google Workspace webhook receiver and curation engine that reads Docs, Sheets, Drive, Gmail, Calendar, and Forms, analyzes intelligence, and generates executive briefings, Markdown, and Slack digests.">
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%200%20100%20100%22><text y=%22.9em%22 font-size=%2290%22>🌐</text></svg>">
+</head>
+<body>
+
+  <!-- Top App Header -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand-wrapper">
+        <div class="brand-logo-glow" id="brandLogo">⚡</div>
+        <div class="brand-titles">
+          <h1>WorkspaceCurator Pro</h1>
+          <p class="brand-subtitle">Google Workspace Webhook Ingestion, AI Analysis &amp; Content Curation Engine</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- Live SSE indicator -->
+        <div class="live-indicator" id="liveSSEIndicator">
+          <span class="pulsing-dot"></span>
+          <span>LIVE INGESTION</span>
+        </div>
+
+        <!-- Telemetry Stats -->
+        <div class="stats-pill-group" id="headerStatsGroup">
+          <div class="stat-item">
+            <span>Total Curated:</span>
+            <strong id="statTotalCurated">0</strong>
+          </div>
+          <div class="stat-item">
+            <span>High Urgency:</span>
+            <strong id="statUrgentCount" style="color: var(--accent-rose);">0</strong>
+          </div>
+        </div>
+
+        <!-- Quick Action Modals -->
+        <button class="btn-header" id="btnOpenAppsScript" onclick="openAppsScriptModal()">
+          <span>📋</span>
+          <span>Google Apps Script</span>
+        </button>
+        <button class="btn-header" id="btnOpenSettings" onclick="openSettingsModal()">
+          <span>⚙️</span>
+          <span>Forwarding &amp; RSS</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-wrapper">
+    <!-- Filter and Search Bar -->
+    <section class="filter-bar" aria-label="Filters and Search">
+      <nav class="product-chips" id="productFilterChips" aria-label="Filter by Google Workspace Product">
+        <button class="chip-btn active" data-product="all" id="filterChipAll">🌐 All Workspace</button>
+        <button class="chip-btn" data-product="docs" id="filterChipDocs">📄 Google Docs</button>
+        <button class="chip-btn" data-product="sheets" id="filterChipSheets">📊 Google Sheets</button>
+        <button class="chip-btn" data-product="gmail" id="filterChipGmail">✉️ Gmail</button>
+        <button class="chip-btn" data-product="calendar" id="filterChipCalendar">📅 Google Calendar</button>
+        <button class="chip-btn" data-product="forms" id="filterChipForms">📝 Google Forms</button>
+        <button class="chip-btn" data-product="drive" id="filterChipDrive">📁 Google Drive</button>
+      </nav>
+
+      <div class="search-and-controls">
+        <div class="search-input-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="searchInput" placeholder="Search curated briefs, tags, metrics..." aria-label="Search curated content" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Two-Column Workbench Layout -->
+    <section class="curation-grid">
+      <!-- Left Column: Curated Intelligence Stream -->
+      <section class="feed-panel" id="curatedFeedPanel" aria-label="Curated Stream">
+        <div class="feed-header-bar">
+          <h2>
+            <span>Curated Intelligence Stream</span>
+            <span class="feed-counter" id="feedCountDisplay">0 items</span>
+          </h2>
+        </div>
+
+        <div id="curatedFeedList" class="feed-list" aria-live="polite">
+          <!-- Populated dynamically by app.js -->
+        </div>
+      </section>
+
+      <!-- Right Column: Interactive Google Workspace Simulator -->
+      <aside class="workbench-panel" id="simulatorPanel" aria-label="Webhook Simulator">
+        <div class="workbench-card">
+          <h3>
+            <span>🧪</span>
+            <span>Workspace Webhook Simulator</span>
+          </h3>
+          <p class="card-subtext">
+            Simulate realistic Google Workspace webhooks or paste custom payloads to observe instant AI extraction, parsing, and curation.
+          </p>
+
+          <div class="preset-dropdown-wrap">
+            <label for="presetSelect" class="form-label">Scenario Presets</label>
+            <select id="presetSelect" class="custom-select">
+              <!-- Populated by presets.js -->
+            </select>
+          </div>
+
+          <div class="form-row">
+            <div>
+              <label for="simProduct" class="form-label">Google Product</label>
+              <select id="simProduct" class="custom-select">
+                <option value="docs">Google Docs</option>
+                <option value="sheets">Google Sheets</option>
+                <option value="gmail">Gmail</option>
+                <option value="calendar">Google Calendar</option>
+                <option value="forms">Google Forms</option>
+                <option value="drive">Google Drive</option>
+              </select>
+            </div>
+            <div>
+              <label for="simSender" class="form-label">Author / Sender</label>
+              <input type="text" id="simSender" class="custom-input" placeholder="user@company.com" value="elena@enterprise.tech">
+            </div>
+          </div>
+
+          <div style="margin-bottom: 0.85rem;">
+            <label for="simTitle" class="form-label">Document / Event Title</label>
+            <input type="text" id="simTitle" class="custom-input" placeholder="e.g. Q3 Strategic Roadmap" value="Q3 Strategic Product Roadmap & Multi-Region Expansion">
+          </div>
+
+          <div style="margin-bottom: 0.85rem;">
+            <label for="simUrl" class="form-label">Document Canonical URL</label>
+            <input type="url" id="simUrl" class="custom-input" placeholder="https://docs.google.com/..." value="https://docs.google.com/document/d/1xK9_mQ_Q3_Strategic_Roadmap_2026/edit">
+          </div>
+
+          <div style="margin-bottom: 0.85rem;">
+            <label for="simContent" class="form-label">Raw Document / Event Content</label>
+            <textarea id="simContent" class="custom-textarea" placeholder="Paste raw text, spreadsheet row data, email body, or form questions..."></textarea>
+          </div>
+
+          <button id="btnDispatchSim" class="btn-dispatch" onclick="dispatchSimulation()">
+            <span>🚀</span>
+            <span>Dispatch Simulated Webhook</span>
+          </button>
+        </div>
+
+        <!-- Google Apps Script Quick Connect Box -->
+        <div class="workbench-card">
+          <h3>
+            <span>🔗</span>
+            <span>Real Google Workspace Setup</span>
+          </h3>
+          <p class="card-subtext">
+            Connect live Google Docs, Sheets, or Forms directly to this webhook endpoint in under 30 seconds.
+          </p>
+          <div class="connector-box">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 0.78rem; font-weight: 700; color: #94a3b8;">Universal Apps Script Trigger:</span>
+              <button class="btn-copy" onclick="copyAppsScriptCode()">📋 Copy Script</button>
+            </div>
+            <pre class="connector-code-preview" id="appsScriptCodePreview">// In Google Doc/Sheet/Form:
+// Click Extensions > Apps Script and paste google_apps_script.js
+const CURATOR_URL = "http://localhost:8090/api/v1/webhook/google";
+function onEdit(e) { /* Auto push cell changes */ }
+function onFormSubmit(e) { /* Auto push surveys */ }</pre>
+            <button class="btn-header" style="width: 100%; justify-content: center;" onclick="openAppsScriptModal()">
+              📖 View Full Setup Instructions &rarr;
+            </button>
+          </div>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <!-- Inspection Modal -->
+  <div class="modal-overlay" id="inspectModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modalTitle">Curated Item Inspection</h3>
+        <button class="btn-close" onclick="closeInspectModal()" aria-label="Close Modal">&times;</button>
+      </div>
+
+      <div class="modal-tabs" role="tablist">
+        <button class="tab-btn active" data-tab="markdown" onclick="setModalTab('markdown')">Markdown Report</button>
+        <button class="tab-btn" data-tab="slack" onclick="setModalTab('slack')">Slack Digest</button>
+        <button class="tab-btn" data-tab="email" onclick="setModalTab('email')">Email Briefing</button>
+        <button class="tab-btn" data-tab="json_ld" onclick="setModalTab('json_ld')">JSON-LD</button>
+        <button class="tab-btn" data-tab="raw" onclick="setModalTab('raw')">Raw Webhook Ingest</button>
+      </div>
+
+      <div class="modal-body" id="modalTabContent">
+        <!-- Injected dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Google Apps Script Universal Setup Modal -->
+  <div class="modal-overlay" id="appsScriptModal" role="dialog" aria-modal="true" aria-labelledby="appsScriptModalTitle">
+    <div class="modal-card" style="max-width: 860px;">
+      <div class="modal-header">
+        <h3 id="appsScriptModalTitle">Google Workspace Webhook Integration Guide</h3>
+        <button class="btn-close" onclick="closeAppsScriptModal()" aria-label="Close Modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1rem;">
+          WorkspaceCurator Pro accepts push notifications and webhooks from every Google Workspace product through three standard methods:
+        </p>
+
+        <h4 style="color: var(--accent-cyan); font-size: 0.95rem; margin-bottom: 0.4rem;">Method 1: 1-Click Google Apps Script (Docs, Sheets &amp; Forms)</h4>
+        <ol style="margin-left: 1.2rem; color: #cbd5e1; font-size: 0.84rem; line-height: 1.7; margin-bottom: 1.2rem;">
+          <li>Open your Google Doc, Sheet, or Form.</li>
+          <li>Click <strong>Extensions &gt; Apps Script</strong> in the Google Workspace top menu.</li>
+          <li>Delete any existing starter code in <code>Code.gs</code> and paste the script below.</li>
+          <li>Set <code>CURATOR_WEBHOOK_URL</code> to your WorkspaceCurator endpoint (or tunnel URL).</li>
+          <li>For Sheets/Forms: Click <strong>Triggers (alarm clock icon)</strong> &gt; <strong>Add Trigger</strong> and select <code>onEdit</code> or <code>onFormSubmit</code>.</li>
+        </ol>
+
+        <div class="copy-row">
+          <button class="btn-copy" onclick="copyAppsScriptCode()">📋 Copy Full Apps Script Code</button>
+        </div>
+        <pre class="format-code-block" style="max-height: 280px; overflow-y: auto;">/**
+ * WorkspaceCurator Pro - Google Apps Script Universal Trigger
+ */
+const CURATOR_WEBHOOK_URL = "http://localhost:8090/api/v1/webhook/google";
+
+function onEdit(e) {
+  if (!e) return;
+  const sheet = SpreadsheetApp.getActiveSpreadsheet();
+  const range = e.range;
+  const payload = {
+    product: "sheets",
+    title: sheet.getName() + " (" + sheet.getActiveSheet().getName() + ")",
+    sender: Session.getActiveUser().getEmail() || "Collaborator",
+    content: "Cell edit at " + range.getA1Notation() + ": " + (e.value || "[cleared]"),
+    url: sheet.getUrl()
+  };
+  UrlFetchApp.fetch(CURATOR_WEBHOOK_URL, {
+    method: "post",
+    contentType: "application/json",
+    payload: JSON.stringify(payload)
+  });
+}
+
+function onFormSubmit(e) {
+  if (!e) return;
+  const form = FormApp.getActiveForm();
+  const responses = {};
+  e.response.getItemResponses().forEach(item => {
+    responses[item.getItem().getTitle()] = item.getResponse();
+  });
+  UrlFetchApp.fetch(CURATOR_WEBHOOK_URL, {
+    method: "post",
+    contentType: "application/json",
+    payload: JSON.stringify({
+      product: "forms",
+      title: form ? form.getName() : "Form Response",
+      sender: e.response.getRespondentEmail() || "Survey Respondent",
+      responses: responses
+    })
+  });
+}</pre>
+
+        <h4 style="color: var(--accent-cyan); font-size: 0.95rem; margin-top: 1.4rem; margin-bottom: 0.4rem;">Method 2: Google Drive &amp; Calendar Push Notifications (changes.watch)</h4>
+        <p style="color: #cbd5e1; font-size: 0.84rem; line-height: 1.6; margin-bottom: 0.8rem;">
+          Register a channel watch by calling the Google Drive API with your webhook URL:
+        </p>
+        <pre class="format-code-block" style="color: #34d399;">POST https://www.googleapis.com/drive/v3/changes/watch
+Authorization: Bearer [ACCESS_TOKEN]
+Content-Type: application/json
+
+{
+  "id": "my-channel-uuid-123",
+  "type": "web_hook",
+  "address": "https://your-domain.com/api/v1/webhook/google",
+  "token": "wk-secret-curator-token"
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Outbound Forwarding & RSS Settings Modal -->
+  <div class="modal-overlay" id="settingsModal" role="dialog" aria-modal="true" aria-labelledby="settingsModalTitle">
+    <div class="modal-card" style="max-width: 650px;">
+      <div class="modal-header">
+        <h3 id="settingsModalTitle">Curation Forwarding &amp; RSS Integration</h3>
+        <button class="btn-close" onclick="closeSettingsModal()" aria-label="Close Modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="color: var(--text-muted); font-size: 0.84rem; margin-bottom: 1.2rem;">
+          Make curated intelligence easily consumable by downstream systems: automated webhook forwarders (Slack, Discord, Zapier) and universal RSS subscription.
+        </p>
+
+        <div style="margin-bottom: 1.2rem;">
+          <label class="form-label" for="settingForwarderUrl">Outbound Webhook URL (Slack, Discord, Zapier, n8n)</label>
+          <input type="url" id="settingForwarderUrl" class="custom-input" placeholder="https://hooks.slack.com/services/..." />
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1.5rem;">
+          <input type="checkbox" id="settingForwarderEnabled" class="action-checkbox" />
+          <label for="settingForwarderEnabled" style="font-size: 0.85rem; color: var(--text-main); cursor: pointer;">
+            Enable automatic outbound forwarding for all newly curated events
+          </label>
+        </div>
+
+        <div style="background: rgba(0, 0, 0, 0.25); padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); margin-bottom: 1.5rem;">
+          <h4 style="font-size: 0.84rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">Universal Endpoints for Downstream Consumption:</h4>
+          <div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.4rem;">
+            Inbound Google Webhook URL: <br><code id="webhookEndpointUrl" style="color: #67e8f9;">http://localhost:8090/api/v1/webhook/google</code>
+          </div>
+          <div style="font-size: 0.78rem; color: var(--text-muted);">
+            Curated RSS Feed (Feedly / Outlook / Slack RSS Bot): <br><code id="rssFeedUrl" style="color: #67e8f9;">http://localhost:8090/api/v1/feed.rss</code>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 0.6rem;">
+          <button class="btn-header" onclick="closeSettingsModal()">Cancel</button>
+          <button class="btn-header primary" onclick="saveSettings()">Save Configuration</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="/static/js/presets.js"></script>
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

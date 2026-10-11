@@ -28,7 +28,7 @@ Standard browser DevTools Network tabs are cluttered with hundreds of script chu
    - Flashes an animated pulse dot whenever new traffic arrives.
    - Draggable anywhere on the screen (remembers position).
    - Expandable into an **In-Page Quick Inspector drawer** without opening DevTools!
-   - Keyboard shortcut: <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>A</kbd> (Mac: <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>A</kbd>).
+   - Keyboard shortcut: <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> (Mac: <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>).
 
 3. **🚀 Full-Screen API Studio Workbench (`studio/studio.html`)**
    - Dedicated full-page developer workstation.
@@ -147,8 +147,8 @@ api-pulse-pro/
 
 | Shortcut | Description |
 |---|---|
-| <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>A</kbd> (<kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>A</kbd>) | Toggle In-Page Floating HUD & Quick Drawer |
-| <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd> (<kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>S</kbd>) | Launch Full API Pulse Studio Workbench |
+| <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> | Toggle In-Page Floating HUD & Quick Drawer (Non-conflicting with native Cmd/Ctrl+A) |
+| <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd> | Launch Full API Pulse Studio Workbench |
 | <kbd>⌘</kbd> + <kbd>K</kbd> / <kbd>Ctrl</kbd> + <kbd>K</kbd> | Focus Universal Search in Studio |
 | <kbd>Escape</kbd> | Close In-Page Drawer or Open Modals |
 

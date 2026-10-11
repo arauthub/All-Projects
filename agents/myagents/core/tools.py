@@ -9,6 +9,9 @@ import json
 import math
 from typing import Dict, Any, Callable, List, Optional
 from core.vector_store import VectorStore
+from core.security.ssrf_guard import SSRFGuard
+from core.scraper_engine import WebScraperEngine
+
 
 class ToolRegistry:
     def __init__(self, vector_store: Optional[VectorStore] = None):
@@ -136,6 +139,51 @@ class ToolRegistry:
             func=self._tool_generate_mermaid,
         )
 
+        # 6. Autonomous Web Scraper & Semantic Content Extractor
+        self.register(
+            name="web_scraper_extract",
+            description="Scrape content from any public website URL with SSRF protection, clean boilerplate/ads, and return structured data in requested format (JSON, Markdown, Summary, Key-Value, CSV, or Custom Schema).",
+            parameters={
+                "type": "object",
+                "properties": {
+                    "url": {"type": "string", "description": "The target public web URL (e.g. 'https://en.wikipedia.org/wiki/Artificial_intelligence')"},
+                    "output_format": {"type": "string", "enum": ["json", "markdown", "summary", "key_value", "csv", "custom"], "description": "Output formatting structure (default 'json')"},
+                    "custom_schema": {"type": "object", "description": "Optional dictionary specifying custom keys to extract"},
+                    "extraction_goal": {"type": "string", "description": "Optional focus or intent for the extraction"},
+                },
+                "required": ["url"],
+            },
+            func=self._tool_web_scraper_extract,
+        )
+
+        # 7. URL Security & SSRF Preflight Auditor
+        self.register(
+            name="url_security_audit",
+            description="Perform preflight security analysis on a URL: validates protocols, checks DNS resolution, and audits against SSRF, cloud metadata theft, and private intranet ranges.",
+            parameters={
+                "type": "object",
+                "properties": {
+                    "url": {"type": "string", "description": "Target URL to inspect"},
+                },
+                "required": ["url"],
+            },
+            func=self._tool_url_security_audit,
+        )
+
+        # 8. HTML Tabular Dataset Extractor
+        self.register(
+            name="html_table_extractor",
+            description="Extract and parse HTML tables from a public URL into structured JSON rows/columns and CSV format.",
+            parameters={
+                "type": "object",
+                "properties": {
+                    "url": {"type": "string", "description": "Target URL containing HTML data tables"},
+                },
+                "required": ["url"],
+            },
+            func=self._tool_html_table_extractor,
+        )
+
     def _tool_vector_search(self, query: str, top_k: int = 3) -> Dict[str, Any]:
         results = self.vector_store.search(query, top_k=top_k)
         return {
@@ -226,3 +274,79 @@ class ToolRegistry:
             "diagram_type": diagram_type,
             "mermaid_syntax": full_syntax,
         }
+
+    def _tool_url_security_audit(self, url: str) -> Dict[str, Any]:
+        """Perform preflight SSRF and cloud metadata audit on a URL."""
+        return SSRFGuard.audit_url(url)
+
+    def _tool_web_scraper_extract(
+        self,
+        url: str,
+        output_format: str = "json",
+        custom_schema: Optional[Dict[str, Any]] = None,
+        extraction_goal: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        """Safely fetch and extract web page content into required format."""
+        fetch_res = SSRFGuard.fetch_url_safely(url)
+        if not fetch_res.success:
+            return {
+                "success": False,
+                "url": url,
+                "error": fetch_res.error,
+                "security_audit": fetch_res.security_audit,
+            }
+
+        parsed = WebScraperEngine.parse_page(fetch_res.content, base_url=fetch_res.final_url)
+        fmt = (output_format or "json").lower().strip()
+
+        if fmt == "markdown":
+            formatted_data = WebScraperEngine.to_markdown(parsed)
+        elif fmt == "summary":
+            formatted_data = WebScraperEngine.to_summary(parsed)
+        elif fmt == "key_value":
+            formatted_data = WebScraperEngine.to_key_value(parsed)
+        elif fmt == "csv":
+            formatted_data = WebScraperEngine.to_csv(parsed)
+        elif fmt == "custom" and custom_schema:
+            formatted_data = WebScraperEngine.extract_custom_schema(parsed, custom_schema)
+        else:
+            # Default: structured JSON
+            formatted_data = WebScraperEngine.to_structured_json(parsed)
+
+        return {
+            "success": True,
+            "url": url,
+            "final_url": fetch_res.final_url,
+            "status_code": fetch_res.status_code,
+            "response_time_ms": fetch_res.response_time_ms,
+            "content_length_bytes": fetch_res.content_length_bytes,
+            "format": fmt,
+            "extraction_goal": extraction_goal,
+            "data": formatted_data,
+            "metadata": parsed.get("metadata"),
+            "stats": parsed.get("stats"),
+        }
+
+    def _tool_html_table_extractor(self, url: str) -> Dict[str, Any]:
+        """Extract and format HTML tables from a target URL."""
+        fetch_res = SSRFGuard.fetch_url_safely(url)
+        if not fetch_res.success:
+            return {
+                "success": False,
+                "url": url,
+                "error": fetch_res.error,
+                "security_audit": fetch_res.security_audit,
+            }
+
+        parsed = WebScraperEngine.parse_page(fetch_res.content, base_url=fetch_res.final_url)
+        tables = parsed.get("tables", [])
+        csv_data = WebScraperEngine.to_csv(parsed)
+
+        return {
+            "success": True,
+            "url": url,
+            "table_count": len(tables),
+            "tables": tables,
+            "csv_formatted": csv_data,
+        }
+

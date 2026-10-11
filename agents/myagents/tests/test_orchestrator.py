@@ -12,13 +12,15 @@ class TestOrchestrator(unittest.TestCase):
 
     def test_agent_swarm_initialization(self):
         agents = self.orchestrator.get_agent_specs()
-        self.assertEqual(len(agents), 5)
+        self.assertEqual(len(agents), 6)
         agent_ids = [a["id"] for a in agents]
         self.assertIn("orchestrator", agent_ids)
         self.assertIn("researcher", agent_ids)
         self.assertIn("architect", agent_ids)
         self.assertIn("critic", agent_ids)
         self.assertIn("synthesizer", agent_ids)
+        self.assertIn("scraper", agent_ids)
+
 
     def test_full_mission_lifecycle(self):
         memory = self.orchestrator.create_mission(

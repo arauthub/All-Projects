@@ -346,6 +346,8 @@ def get_project_title(project_id):
         "link-inspector-extension": "Link Inspector Pro & Broken Link Checker (Chrome Manifest V3)",
         "api-pulse-pro": "API Pulse Pro: Network Traffic Inspector & Replay Studio (Chrome Manifest V3)",
         "myagents": "Autonomous AI Agent Orchestration Framework (MyAgents)",
+        "workspace-curator": "WorkspaceCurator: Google Workspace Webhook Ingestion & AI Curation Engine",
+        "jamstack-frontend": "Nexus Prime: Quantum Jamstack & Git Intelligence Portal",
         "docker": "Docker Orchestration & Multi-Container Infrastructure",
         "ci": "CI/CD Automated Presubmit & Verification Pipeline",
     }

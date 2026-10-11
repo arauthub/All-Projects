@@ -39,6 +39,10 @@ async function toggleAntiGravityOnTab(tabId) {
       updateBadge(tabId, response?.isActive);
     } catch (injectErr) {
       console.warn('[Anti-Gravity Web] Cannot inject on this page:', injectErr.message);
+      // Flash temporary warning badge so user gets instant visual feedback
+      chrome.action.setBadgeText({ tabId, text: 'N/A' });
+      chrome.action.setBadgeBackgroundColor({ tabId, color: '#f59e0b' });
+      setTimeout(() => updateBadge(tabId, false), 2200);
     }
   }
 }

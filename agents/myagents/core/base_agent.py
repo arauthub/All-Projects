@@ -99,6 +99,11 @@ class BaseAgent:
                     context_data["calc_result"] = tool_res["result"]["result"]
                 elif tool_name == "generate_mermaid_diagram" and tool_res["success"]:
                     context_data["diagram"] = tool_res["result"]["mermaid_syntax"]
+                elif tool_name == "web_scraper_extract" and tool_res["success"]:
+                    context_data["scraped_data"] = tool_res["result"]
+                elif tool_name == "url_security_audit" and tool_res["success"]:
+                    context_data["audit_result"] = tool_res["result"]
+
 
                 # Log tool result
                 res_content = str(tool_res.get("result") or tool_res.get("error"))
@@ -144,6 +149,8 @@ class BaseAgent:
                         "status": step_result.get("status", "APPROVED"),
                         "critique": final_response,
                     })
+                elif self.agent_id == "scraper":
+                    memory.set_blackboard("scraped_extraction", step_result.get("scraped_data") or final_response)
                 elif self.agent_id == "synthesizer":
                     memory.set_blackboard("final_deliverable", final_response)
                     if step_result.get("presentation_deck"):
