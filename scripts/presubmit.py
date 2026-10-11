@@ -531,7 +531,7 @@ def main():
             print("\n⚠️  [PRE-PUSH ABORTED] Documentation synchronization required.")
             print("Presubmit detected or generated updates in portfolio documentation.")
             print("Please commit the changes before pushing:")
-            print("  git add CV_Abhijeet_Raut.md PROFILE.md README.md")
+            print("  git add CV_Abhijeet_Raut.md PROFILE.md README.md apps/jamstack-frontend/")
             print("  git commit -m 'docs: synchronize portfolio and project documentation'")
             print("  git push\n")
             sys.exit(1)

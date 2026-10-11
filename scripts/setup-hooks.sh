@@ -16,7 +16,6 @@ mkdir -p "$REPO_ROOT/.git/hooks"
 
 # Make hooks and presubmit scripts executable
 chmod +x "$REPO_ROOT/.githooks/pre-commit" 2>/dev/null || true
-chmod +x "$REPO_ROOT/.githooks/post-commit" 2>/dev/null || true
 chmod +x "$REPO_ROOT/.githooks/pre-push" 2>/dev/null || true
 chmod +x "$REPO_ROOT/.git/hooks/pre-commit" 2>/dev/null || true
 chmod +x "$REPO_ROOT/.git/hooks/pre-push" 2>/dev/null || true
