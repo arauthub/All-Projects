@@ -644,11 +644,108 @@ class NexusPrimeApp {
           if (designModal) designModal.classList.remove('active');
           const cvModal = document.getElementById('cv-modal');
           if (cvModal) cvModal.classList.remove('active');
+          const shareModal = document.getElementById('share-card-modal');
+          if (shareModal) shareModal.classList.remove('active');
           document.body.classList.remove('modal-open');
           soundSynth.playClick();
         }
       });
     });
+
+    // Share Card Modal Triggers
+    const openShareModal = () => {
+      soundSynth.playWarp();
+      const modal = document.getElementById('share-card-modal');
+      if (modal) {
+        modal.classList.add('active');
+        document.body.classList.add('modal-open');
+      }
+    };
+
+    document.getElementById('btn-open-share')?.addEventListener('click', openShareModal);
+    document.getElementById('btn-hero-share')?.addEventListener('click', openShareModal);
+    document.getElementById('btn-mobile-share')?.addEventListener('click', () => {
+      document.getElementById('mobile-nav-drawer')?.classList.remove('active');
+      document.getElementById('mobile-drawer-backdrop')?.classList.remove('active');
+      const hamburgerBtn = document.getElementById('btn-hamburger-toggle');
+      hamburgerBtn?.classList.remove('active');
+      hamburgerBtn?.setAttribute('aria-expanded', 'false');
+      openShareModal();
+    });
+
+    // Mobile Search Trigger
+    document.getElementById('btn-mobile-search')?.addEventListener('click', () => {
+      document.getElementById('mobile-nav-drawer')?.classList.remove('active');
+      document.getElementById('mobile-drawer-backdrop')?.classList.remove('active');
+      const hamburgerBtn = document.getElementById('btn-hamburger-toggle');
+      hamburgerBtn?.classList.remove('active');
+      hamburgerBtn?.setAttribute('aria-expanded', 'false');
+      soundSynth.playWarp();
+      const palette = document.getElementById('command-palette-modal');
+      if (palette) {
+        palette.classList.add('active');
+        document.body.classList.add('modal-open');
+        document.getElementById('palette-input')?.focus();
+      }
+    });
+
+    // Copy Share Link to Clipboard with Animated Feedback
+    const copyBtn = document.getElementById('btn-copy-share-url');
+    const copyInput = document.getElementById('share-url-copy-input');
+    const copyToast = document.getElementById('copy-toast-msg');
+    const copyIcon = document.getElementById('copy-status-icon');
+    const copyText = document.getElementById('copy-status-text');
+
+    copyBtn?.addEventListener('click', async () => {
+      soundSynth.playClick();
+      const urlToCopy = copyInput?.value || window.location.href;
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(urlToCopy);
+        } else if (copyInput) {
+          copyInput.select();
+          document.execCommand('copy');
+        }
+
+        if (copyIcon) copyIcon.textContent = '✓';
+        if (copyText) copyText.textContent = 'Copied!';
+        if (copyToast) copyToast.classList.add('show');
+
+        setTimeout(() => {
+          if (copyIcon) copyIcon.textContent = '📋';
+          if (copyText) copyText.textContent = 'Copy Link';
+          if (copyToast) copyToast.classList.remove('show');
+        }, 2400);
+      } catch (err) {
+        console.error('Failed to copy link:', err);
+      }
+    });
+
+    // Native Device Share sheet
+    const nativeShareBtn = document.getElementById('btn-native-share');
+    if (nativeShareBtn) {
+      nativeShareBtn.addEventListener('click', async () => {
+        soundSynth.playClick();
+        const shareData = {
+          title: 'Abhijeet Raut — Lead Backend & AI/ML Engineer | Solutions Architect',
+          text: 'Accomplished Lead Software Engineer and Solutions Architect with 12 years of hands-on experience (Persistent Systems & Cybage Software). Check out the interactive quantum portfolio & 14-project systems catalog:',
+          url: copyInput?.value || window.location.href
+        };
+
+        if (navigator.share) {
+          try {
+            await navigator.share(shareData);
+          } catch (err) {
+            if (err.name !== 'AbortError') {
+              console.error('Error sharing:', err);
+            }
+          }
+        } else {
+          // Fallback to copy link
+          copyBtn?.click();
+        }
+      });
+    }
 
     // CV Modal trigger
     document.getElementById('btn-open-cv')?.addEventListener('click', () => {
@@ -676,6 +773,7 @@ class NexusPrimeApp {
         HolodeckSandboxes.close();
         document.getElementById('design-modal')?.classList.remove('active');
         document.getElementById('cv-modal')?.classList.remove('active');
+        document.getElementById('share-card-modal')?.classList.remove('active');
         document.getElementById('mobile-nav-drawer')?.classList.remove('active');
         document.getElementById('mobile-drawer-backdrop')?.classList.remove('active');
         const hamburgerBtn = document.getElementById('btn-hamburger-toggle');

@@ -28,11 +28,81 @@
 
   <!-- Twitter / X Cards -->
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@arauthub">
+  <meta name="twitter:creator" content="@arauthub">
   <meta name="twitter:url" content="https://arauthub.github.io/portfolio/">
   <meta name="twitter:title" content="Abhijeet Raut — Lead Backend & AI/ML Engineer | Solutions Architect">
   <meta name="twitter:description" content="12 years of hands-on experience architecting high-concurrency backends, autonomous AI agent swarms (Google ADK), distributed cloud systems, and scalable enterprise platforms.">
   <meta name="twitter:image" content="https://arauthub.github.io/portfolio/assets/og-image.png">
   <meta name="twitter:image:alt" content="Abhijeet Raut — Lead Backend & AI/ML Engineer | Solutions Architect">
+
+  <!-- Schema.org JSON-LD Structured Data for Professional Rich Cards -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://arauthub.github.io/portfolio/#person",
+        "name": "Abhijeet Raut",
+        "jobTitle": "Lead Backend & AI/ML Engineer | Solutions Architect",
+        "description": "Accomplished Lead Software Engineer and Solutions Architect with 12 years of hands-on experience architecting high-concurrency backend services, distributed systems, and modern AI/ML solutions (Persistent Systems & Cybage Software).",
+        "url": "https://arauthub.github.io/portfolio/",
+        "image": {
+          "@type": "ImageObject",
+          "url": "https://arauthub.github.io/portfolio/assets/profile-photo.png",
+          "caption": "Abhijeet Raut — Lead Backend & AI/ML Engineer | Solutions Architect"
+        },
+        "sameAs": [
+          "https://github.com/arauthub",
+          "https://github.com/arauthub/portfolio"
+        ],
+        "knowsAbout": [
+          "Python",
+          "FastAPI",
+          "Django",
+          "Go",
+          "Autonomous AI Agents",
+          "Google ADK",
+          "Vector RAG",
+          "Distributed Systems",
+          "Docker",
+          "Cloud Architecture"
+        ],
+        "worksFor": {
+          "@type": "Organization",
+          "name": "Persistent Systems"
+        },
+        "alumniOf": [
+          {
+            "@type": "Organization",
+            "name": "Persistent Systems"
+          },
+          {
+            "@type": "Organization",
+            "name": "Cybage Software"
+          }
+        ]
+      },
+      {
+        "@type": "ProfilePage",
+        "@id": "https://arauthub.github.io/portfolio/",
+        "url": "https://arauthub.github.io/portfolio/",
+        "name": "Abhijeet Raut — Lead Backend & AI/ML Engineer | Solutions Architect",
+        "description": "Official interactive engineering portfolio and monorepo systems catalog of Abhijeet Raut.",
+        "primaryImageOfPage": {
+          "@type": "ImageObject",
+          "url": "https://arauthub.github.io/portfolio/assets/og-image.png",
+          "width": 1200,
+          "height": 630
+        },
+        "mainEntity": {
+          "@id": "https://arauthub.github.io/portfolio/#person"
+        }
+      }
+    ]
+  }
+  </script>
 
   <!-- Favicon -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌌</text></svg>">
@@ -75,25 +145,23 @@
         <a href="#terminal-section" class="hud-nav-link">Terminal</a>
       </nav>
 
-      <!-- Git & Telemetry Status Indicators -->
-      <div class="hud-telemetry" id="hud-telemetry-group">
-        <div class="hud-item" id="hud-branch-item" title="Active Monorepo Branch">
-          <span>BRANCH:</span> <code id="hud-branch">main</code>
-        </div>
-        <div class="hud-item" id="hud-commit-item" title="Head Commit Hash">
-          <span>COMMIT:</span> <code id="hud-commit">5f5e70c</code>
-        </div>
-        <div class="hud-item interactive" id="hud-presubmit-badge" title="Click to view Presubmit Security Audit">
-          <span class="hud-dot"></span>
-          <span>PRESUBMIT: 5/5 CLEAN</span>
-        </div>
-        <div class="hud-item" id="hud-clock-item" title="UTC Synchronized Telemetry Clock">
-          <span id="hud-clock">2026-10-14 14:50:00 UTC</span>
-        </div>
+      <!-- Spotlight Search Trigger Box -->
+      <div class="hud-search-wrap">
+        <button class="hud-search-box" id="btn-open-palette" aria-label="Global Spotlight Search (⌘K)" title="Global Spotlight Search (Cmd+K)">
+          <span class="hud-search-icon">🔍</span>
+          <span class="hud-search-placeholder">Search systems, skills...</span>
+          <kbd class="hud-search-kbd">⌘K</kbd>
+        </button>
       </div>
 
-      <!-- Action Controls: Audio, Search & Hamburger -->
+      <!-- Action Controls: Share, Audio, Presubmit & Hamburger -->
       <div class="hud-actions">
+        <!-- Professional Share Card Trigger -->
+        <button class="btn-hud-share" id="btn-open-share" title="Share Professional Executive Card">
+          <span class="hud-share-icon">📤</span>
+          <span class="hud-share-label">Share Card</span>
+        </button>
+
         <button class="btn-hud-audio" id="btn-audio-toggle" title="Toggle Web Audio Cyber Synthesizer (Shortcut: M)">
           <div class="audio-bars" id="hud-audio-bars">
             <span></span><span></span><span></span><span></span>
@@ -101,10 +169,10 @@
           <span class="audio-label">AUDIO OFF</span>
         </button>
 
-        <button class="btn-hud-palette" id="btn-open-palette" title="Global Spotlight Search (Cmd+K)">
-          <span>🔍</span>
-          <span class="kbd-shortcut">⌘K</span>
-        </button>
+        <div class="hud-item interactive" id="hud-presubmit-badge" title="Click to view Presubmit Security Audit">
+          <span class="hud-dot"></span>
+          <span>5/5 CLEAN</span>
+        </div>
 
         <!-- Slik Cyber Hamburger Toggle Button for Smaller Devices -->
         <button class="btn-hamburger" id="btn-hamburger-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobile-nav-drawer" title="Toggle navigation drawer">
@@ -185,6 +253,12 @@
 
     <!-- Mobile Drawer Quick Actions -->
     <div class="mobile-drawer-actions">
+      <button class="btn-mobile-action share" id="btn-mobile-share">
+        <span>📤</span> Share Professional Card View
+      </button>
+      <button class="btn-mobile-action search" id="btn-mobile-search">
+        <span>🔍</span> Spotlight Search (⌘K)
+      </button>
       <button class="btn-mobile-action primary" id="btn-mobile-open-cv">
         <span>📄</span> View Full CV Dossier
       </button>
@@ -250,9 +324,9 @@
             <button class="btn-secondary" id="btn-hero-swarm">
               <span>🤖</span> Launch Agent Swarm DAG
             </button>
-            <a href="#terminal-section" class="btn-secondary" id="btn-hero-terminal">
-              <span>💻</span> Cyber Terminal CLI
-            </a>
+            <button class="btn-secondary highlight-cyan" id="btn-hero-share" title="Share Professional Executive Card">
+              <span>📤</span> Share Card View
+            </button>
             <button class="btn-secondary" id="btn-open-cv">
               <span>📄</span> Executive Dossier &amp; CV
             </button>
@@ -487,6 +561,149 @@
         <span class="kbd-shortcut">ESC</span>
       </div>
       <div class="palette-results" id="palette-results"></div>
+    </div>
+  </div>
+
+  <!-- 5. Executive Share & Professional Card View Modal -->
+  <div class="nexus-modal" id="share-card-modal" aria-hidden="true" role="dialog" aria-labelledby="share-card-modal-title">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content-card share-card-modal-content">
+      <button class="modal-close-btn modal-close" title="Close Share Modal">✕</button>
+
+      <div class="share-modal-header">
+        <span class="sandbox-badge cyan">Executive Dossier &amp; Social Card</span>
+        <h2 id="share-card-modal-title">Share Professional Card View</h2>
+        <p class="share-modal-desc">
+          Live preview of the rich professional card generated when sharing this portfolio link across LinkedIn, WhatsApp, X, Slack, and recruiters.
+        </p>
+      </div>
+
+      <!-- Live Professional Card View Preview -->
+      <div class="professional-card-preview" id="prof-card-preview">
+        <div class="card-preview-ambient"></div>
+        <div class="card-preview-header">
+          <div class="card-preview-badge-pill">
+            <span class="card-preview-pulse"></span>
+            <span>12 YEARS INDUSTRY EXPERIENCE • LEAD SOLUTIONS ARCHITECT</span>
+          </div>
+          <div class="card-preview-company-badge">PERSISTENT SYSTEMS &amp; CYBAGE SOFTWARE</div>
+        </div>
+
+        <div class="card-preview-body">
+          <div class="card-preview-avatar-col">
+            <div class="card-preview-avatar-ring">
+              <img src="assets/profile-photo.png" alt="Abhijeet Raut" class="card-preview-avatar-img">
+              <div class="card-preview-verified-badge" title="Lead Solutions Architect • Verified">
+                <span class="card-preview-verified-dot"></span>
+              </div>
+            </div>
+            <div class="card-preview-role-tag">
+              <span class="tag-title">SOLUTIONS ARCHITECT</span>
+              <span class="tag-loc">PUNE, INDIA • VERIFIED</span>
+            </div>
+          </div>
+
+          <div class="card-preview-details-col">
+            <h3 class="card-preview-name">Abhijeet Raut</h3>
+            <div class="card-preview-title">Lead Backend &amp; AI/ML Engineer | Solutions Architect</div>
+            <div class="card-preview-tenure">
+              <span class="tenure-item">Persistent Systems (3 Yrs)</span>
+              <span class="tenure-dot">•</span>
+              <span class="tenure-item">Cybage Software (9 Yrs)</span>
+            </div>
+
+            <p class="card-preview-summary">
+              Accomplished Lead Software Engineer architecting high-concurrency backend services, distributed systems, and modern AI/ML solutions at enterprise scale.
+              Autonomous AI Multi-Agent Swarms (Google ADK) • Vector RAG • E2EE Cloud
+            </p>
+
+            <div class="card-preview-chips">
+              <span class="preview-chip highlight">Python (Expert)</span>
+              <span class="preview-chip">FastAPI</span>
+              <span class="preview-chip">Django</span>
+              <span class="preview-chip">Go</span>
+              <span class="preview-chip highlight">Agentic AI</span>
+              <span class="preview-chip">Vector RAG</span>
+              <span class="preview-chip">Docker</span>
+              <span class="preview-chip">DevOps</span>
+            </div>
+
+            <div class="card-preview-footer">
+              <div class="preview-meta-tag"><span class="meta-cyan">[REPO]</span> github.com/arauthub/portfolio</div>
+              <div class="preview-meta-tag"><span class="meta-cyan">[SITE]</span> arauthub.github.io/portfolio</div>
+              <div class="preview-meta-tag success"><span class="meta-emerald">[AUDIT]</span> 5/5 Presubmit Verified</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Copy Link Bar -->
+      <div class="share-link-bar-wrap">
+        <label class="share-link-label" for="share-url-copy-input">Shareable Portfolio URL</label>
+        <div class="share-link-input-group">
+          <span class="share-link-icon">🔗</span>
+          <input type="text" id="share-url-copy-input" class="share-link-input" readonly value="https://arauthub.github.io/portfolio/">
+          <button class="btn-copy-url" id="btn-copy-share-url" title="Copy URL to clipboard">
+            <span class="btn-copy-icon" id="copy-status-icon">📋</span>
+            <span class="btn-copy-text" id="copy-status-text">Copy Link</span>
+          </button>
+        </div>
+        <div class="copy-success-toast" id="copy-toast-msg" role="status">✓ Portfolio link copied to clipboard!</div>
+      </div>
+
+      <!-- Direct One-Click Sharing Channels -->
+      <div class="share-channels-section">
+        <h4 class="share-channels-title">Share Card View Directly:</h4>
+        <div class="share-channels-grid">
+          <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Farauthub.github.io%2Fportfolio%2F" target="_blank" rel="noopener noreferrer" class="channel-card linkedin" id="channel-linkedin">
+            <span class="channel-icon">💼</span>
+            <div class="channel-text">
+              <span class="channel-name">LinkedIn</span>
+              <span class="channel-desc">Share to professional network</span>
+            </div>
+          </a>
+
+          <a href="https://twitter.com/intent/tweet?text=Check%20out%20Abhijeet%20Raut%20%E2%80%94%20Lead%20Backend%20%26%20AI%2FML%20Engineer%20%7C%20Solutions%20Architect%20(12%20Yrs%20Exp)&url=https%3A%2F%2Farauthub.github.io%2Fportfolio%2F" target="_blank" rel="noopener noreferrer" class="channel-card twitter" id="channel-twitter">
+            <span class="channel-icon">𝕏</span>
+            <div class="channel-text">
+              <span class="channel-name">X (Twitter)</span>
+              <span class="channel-desc">Share to timeline</span>
+            </div>
+          </a>
+
+          <a href="https://api.whatsapp.com/send?text=Abhijeet%20Raut%20%E2%80%94%20Lead%20Backend%20%26%20AI%2FML%20Engineer%20%7C%20Solutions%20Architect%20Portfolio%3A%20https%3A%2F%2Farauthub.github.io%2Fportfolio%2F" target="_blank" rel="noopener noreferrer" class="channel-card whatsapp" id="channel-whatsapp">
+            <span class="channel-icon">💬</span>
+            <div class="channel-text">
+              <span class="channel-name">WhatsApp</span>
+              <span class="channel-desc">Send to recruiter or colleague</span>
+            </div>
+          </a>
+
+          <a href="mailto:?subject=Executive%20Portfolio%20%E2%80%94%20Abhijeet%20Raut%20(Lead%20Backend%20%26%20AI%2FML%20Architect)&body=Hi%2C%0A%0ACheck%20out%20Abhijeet%20Raut's%20interactive%20executive%20portfolio%20and%2014-project%20monorepo%20systems%20catalog%3A%0Ahttps%3A%2F%2Farauthub.github.io%2Fportfolio%2F%0A%0A12%20Years%20Industry%20Experience%20%E2%80%A2%20Persistent%20Systems%20%26%20Cybage%20Software" class="channel-card email" id="channel-email">
+            <span class="channel-icon">✉️</span>
+            <div class="channel-text">
+              <span class="channel-name">Email Dossier</span>
+              <span class="channel-desc">Send executive intro</span>
+            </div>
+          </a>
+
+          <button class="channel-card native" id="btn-native-share">
+            <span class="channel-icon">📱</span>
+            <div class="channel-text">
+              <span class="channel-name">System Share</span>
+              <span class="channel-desc">Device native share sheet</span>
+            </div>
+          </button>
+
+          <a href="assets/og-image.png" download="Abhijeet_Raut_Executive_Card.png" class="channel-card download" id="btn-download-card">
+            <span class="channel-icon">📥</span>
+            <div class="channel-text">
+              <span class="channel-name">Download Card</span>
+              <span class="channel-desc">Save 1200x630 PNG card</span>
+            </div>
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 
