@@ -1,14 +1,22 @@
 {
-  "buildTime": "2026-10-14T14:55:14.833Z",
+  "buildTime": "2026-10-14T15:31:11.573Z",
   "targetBranch": "main",
   "gitCommitCount": 15,
   "recentCommits": [
+    {
+      "hash": "5f5e70c",
+      "fullHash": "5f5e70c6918fd1392d0f6825672d7c4a92b1de42",
+      "author": "Abhijeet Raut",
+      "date": "2026-10-14 20:25:13 +0530",
+      "relativeDate": "36 minutes ago",
+      "message": "chore(portfolio): sync build manifest with responsive and landing scroll fix"
+    },
     {
       "hash": "804f49c",
       "fullHash": "804f49cb991727907cadf94bdd2534456e77245e",
       "author": "Abhijeet Raut",
       "date": "2026-10-14 20:10:10 +0530",
-      "relativeDate": "15 minutes ago",
+      "relativeDate": "51 minutes ago",
       "message": "fix(portfolio): ensure initial landing points to headshot and add responsive layouts"
     },
     {
@@ -58,14 +66,6 @@
       "date": "2026-10-11 20:31:28 +0530",
       "relativeDate": "3 days ago",
       "message": "feat(hooks): add automatic portfolio sync hook and universal deploy trigger"
-    },
-    {
-      "hash": "7690d7e",
-      "fullHash": "7690d7e1bb267a0ea17d8fbb6c229f29a120e410",
-      "author": "Abhijeet Raut",
-      "date": "2026-10-11 20:16:34 +0530",
-      "relativeDate": "3 days ago",
-      "message": "feat(deploy): add 1-click deployment script for root user site arauthub.github.io"
     }
   ],
   "systemsCount": 11,
