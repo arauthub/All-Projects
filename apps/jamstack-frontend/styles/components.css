@@ -25,6 +25,7 @@
   max-width: var(--container-max);
   margin: 0 auto;
   padding: 0 24px;
+  gap: 16px;
 }
 
 .hud-brand {
@@ -32,6 +33,7 @@
   align-items: center;
   gap: 12px;
   text-decoration: none;
+  flex-shrink: 0;
 }
 
 .hud-logo-icon {
@@ -46,11 +48,13 @@
   font-weight: 900;
   color: #060810;
   box-shadow: 0 0 16px var(--cyan-glow);
+  flex-shrink: 0;
 }
 
 .hud-brand-text {
   display: flex;
   flex-direction: column;
+  white-space: nowrap;
 }
 
 .hud-brand-title {
@@ -59,6 +63,8 @@
   font-weight: 800;
   color: #ffffff;
   letter-spacing: -0.01em;
+  white-space: nowrap;
+  line-height: 1.2;
 }
 
 .hud-brand-sub {
@@ -67,17 +73,20 @@
   color: var(--cyan);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  white-space: nowrap;
 }
 
 /* Desktop HUD Nav Links */
 .hud-nav-desktop {
   display: flex;
   align-items: center;
-  gap: 6px;
-  background: rgba(15, 23, 42, 0.55);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  gap: 4px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(0, 245, 255, 0.22);
   padding: 4px 6px;
   border-radius: var(--radius-full);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 16px rgba(0, 245, 255, 0.08);
+  flex-shrink: 0;
 }
 
 .hud-nav-link {
@@ -85,27 +94,35 @@
   text-decoration: none;
   font-family: var(--font-body);
   font-size: 13px;
-  font-weight: 500;
-  padding: 5px 12px;
+  font-weight: 600;
+  padding: 6px 14px;
   border-radius: var(--radius-full);
   transition: var(--transition-fast);
+  white-space: nowrap;
 }
 
 .hud-nav-link:hover {
   color: #ffffff;
   background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
 }
 
 .hud-nav-link.active {
-  color: var(--cyan);
-  background: rgba(0, 245, 255, 0.12);
-  box-shadow: 0 0 10px rgba(0, 245, 255, 0.15);
+  color: #060810;
+  background: linear-gradient(135deg, var(--cyan) 0%, #38bdf8 100%);
+  font-weight: 700;
+  box-shadow: 0 0 16px var(--cyan-glow);
 }
 
 .hud-telemetry {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+#hud-clock-item {
+  display: none !important;
 }
 
 .hud-item {
@@ -119,6 +136,8 @@
   padding: 6px 12px;
   border-radius: var(--radius-sm);
   border: 1px solid rgba(255, 255, 255, 0.06);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .hud-item code {
