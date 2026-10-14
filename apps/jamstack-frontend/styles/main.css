@@ -60,6 +60,8 @@
 html {
   scroll-behavior: smooth;
   color-scheme: dark;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 body {
@@ -69,6 +71,8 @@ body {
   font-size: 15px;
   line-height: 1.6;
   overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
   position: relative;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
@@ -459,14 +463,138 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Responsive */
 @media (max-width: 992px) {
-  .hero-name { font-size: 48px; }
-  .hero-stats-grid { grid-template-columns: repeat(2, 1fr); }
-  .section-title { font-size: 32px; }
+  .hero-section {
+    padding: 110px 0 60px 0;
+  }
+  .hero-name {
+    font-size: 50px;
+  }
+  .hero-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .section-title {
+    font-size: 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-section {
+    padding: 95px 0 50px 0;
+  }
+  .hero-name {
+    font-size: 40px;
+  }
+  .hero-subtitle-box {
+    min-height: 52px;
+  }
+  .hero-typewriter {
+    font-size: 18px;
+  }
+  .hero-bio {
+    font-size: 15px;
+    margin-bottom: 28px;
+  }
+  .hero-pill {
+    padding: 5px 12px;
+    font-size: 12px;
+  }
+  .hero-cta-group {
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+  .section-header {
+    margin-bottom: 36px;
+  }
+  .section-title {
+    font-size: 28px;
+  }
+  .section-desc {
+    font-size: 15px;
+  }
 }
 
 @media (max-width: 576px) {
-  .hero-name { font-size: 36px; }
-  .hero-stats-grid { grid-template-columns: 1fr; }
-  .hero-cta-group { flex-direction: column; width: 100%; }
-  .hero-cta-group .btn-primary, .hero-cta-group .btn-secondary { width: 100%; justify-content: center; }
+  .container {
+    padding: 0 16px;
+  }
+  .hero-section {
+    padding: 85px 0 40px 0;
+  }
+  .hero-avatar-wrap {
+    width: 108px;
+    height: 108px;
+    margin-bottom: 16px;
+  }
+  .hero-avatar-img {
+    width: 102px;
+    height: 102px;
+  }
+  .hero-avatar-badge {
+    width: 22px;
+    height: 22px;
+    bottom: 0px;
+    right: 4px;
+  }
+  .hero-name {
+    font-size: 32px;
+    letter-spacing: -0.02em;
+  }
+  .hero-subtitle-box {
+    min-height: 56px;
+    margin-bottom: 18px;
+  }
+  .hero-typewriter {
+    font-size: 16px;
+  }
+  .hero-bio {
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 0 4px;
+  }
+  .hero-badge-row {
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .hero-pill {
+    padding: 4px 10px;
+    font-size: 11px;
+  }
+  .hero-cta-group {
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 36px;
+  }
+  .hero-cta-group .btn-primary,
+  .hero-cta-group .btn-secondary {
+    width: 100%;
+    justify-content: center;
+    padding: 12px 20px;
+    font-size: 14px;
+  }
+  .hero-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .stat-card {
+    padding: 16px 10px;
+  }
+  .stat-val {
+    font-size: 24px;
+  }
+  .stat-label {
+    font-size: 12px;
+  }
+  .stat-sub {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 380px) {
+  .hero-name {
+    font-size: 28px;
+  }
+  .hero-stats-grid {
+    grid-template-columns: 1fr;
+  }
 }

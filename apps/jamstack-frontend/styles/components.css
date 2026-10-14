@@ -1175,3 +1175,329 @@
 .footer-links a:hover {
   color: var(--cyan);
 }
+
+/* ==========================================================================
+   RESPONSIVE COMPONENT LAYOUTS
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+  #hud-clock-item {
+    display: none;
+  }
+}
+
+@media (max-width: 860px) {
+  /* Projects Toolbar */
+  .projects-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .search-box-wrap {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .filters-row {
+    width: 100%;
+    justify-content: flex-start;
+    gap: 8px;
+  }
+
+  /* Monorepo Explorer */
+  .tree-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    min-height: auto;
+  }
+
+  .tree-sidebar {
+    max-height: 240px;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 16px;
+  }
+
+  .tree-preview-panel {
+    min-height: 280px;
+  }
+
+  .tree-code-wrap {
+    padding: 16px;
+    max-height: 380px;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Header HUD */
+  .site-hud {
+    height: 64px;
+  }
+
+  .hud-container {
+    padding: 0 16px;
+  }
+
+  #hud-commit-item {
+    display: none;
+  }
+
+  .hud-brand-title {
+    font-size: 15px;
+  }
+
+  .hud-brand-sub {
+    font-size: 10px;
+  }
+
+  .hud-item {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+
+  .btn-hud-audio {
+    padding: 5px 10px;
+    font-size: 10px;
+  }
+
+  .btn-hud-palette {
+    padding: 5px 10px;
+  }
+
+  /* Git Section */
+  .git-section {
+    padding: 50px 0;
+  }
+
+  .git-header-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+  }
+
+  .git-commits-stream {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .commit-card {
+    padding: 14px;
+  }
+
+  /* Projects Grid */
+  .projects-section {
+    padding: 50px 0;
+  }
+
+  .projects-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .project-holo-card {
+    padding: 20px 16px;
+  }
+
+  .card-metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .metric-item {
+    padding: 8px 10px;
+  }
+
+  .metric-val {
+    font-size: 14px;
+  }
+
+  .metric-lbl {
+    font-size: 10px;
+  }
+
+  .card-actions-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .btn-launch-sandbox,
+  .btn-view-design {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Career Timeline */
+  .career-section {
+    padding: 50px 0;
+  }
+
+  .timeline-track {
+    padding-left: 26px;
+  }
+
+  .timeline-dot {
+    left: -34px;
+    width: 14px;
+    height: 14px;
+    top: 20px;
+  }
+
+  .timeline-card {
+    padding: 18px 16px;
+    margin-bottom: 24px;
+  }
+
+  .timeline-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .period-badge {
+    align-self: flex-start;
+  }
+
+  .role-title {
+    font-size: 16px;
+  }
+
+  .highlights-list li {
+    font-size: 13px;
+    padding-left: 16px;
+  }
+
+  /* Skills Grid */
+  .skills-section {
+    padding: 50px 0;
+  }
+
+  .skills-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .skill-category-card {
+    padding: 18px 16px;
+  }
+
+  /* Terminal Section */
+  .terminal-section {
+    padding: 50px 0;
+  }
+
+  .terminal-shell {
+    border-radius: var(--radius-sm);
+  }
+
+  .terminal-body {
+    padding: 14px;
+    height: 300px;
+    font-size: 12px;
+  }
+
+  .terminal-input-row {
+    padding: 10px 14px;
+  }
+
+  .term-prompt {
+    font-size: 11px;
+  }
+
+  .term-input {
+    font-size: 12px;
+  }
+
+  /* Modals */
+  .nexus-modal {
+    padding: 14px;
+  }
+
+  .modal-content-card {
+    padding: 24px 16px;
+    max-height: 92vh;
+    border-radius: var(--radius-md);
+  }
+
+  .modal-close-btn {
+    top: 14px;
+    right: 14px;
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+  }
+
+  .command-palette-modal {
+    padding: 6vh 12px 0 12px;
+  }
+
+  .palette-box {
+    max-width: 100%;
+    border-radius: var(--radius-md);
+  }
+
+  .palette-input-wrap {
+    padding: 12px 14px;
+  }
+
+  .palette-input {
+    font-size: 14px;
+  }
+
+  .palette-results {
+    max-height: 300px;
+  }
+
+  /* Footer */
+  .site-footer {
+    padding: 40px 0 30px 0;
+  }
+
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 14px;
+  }
+
+  .footer-links {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+}
+
+@media (max-width: 520px) {
+  .hud-telemetry {
+    gap: 6px;
+  }
+
+  #hud-branch-item {
+    display: none;
+  }
+
+  .btn-hud-audio .audio-label {
+    display: none;
+  }
+
+  .btn-hud-palette .kbd-shortcut {
+    display: none;
+  }
+
+  .hud-logo-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+
+  .filter-pill {
+    padding: 5px 10px;
+    font-size: 11px;
+  }
+
+  .card-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+}

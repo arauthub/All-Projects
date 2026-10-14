@@ -22,6 +22,14 @@ class NexusPrimeApp {
   }
 
   async init() {
+    // 0. Ensure viewport lands at the top hero headshot
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+    if (!window.location.hash) {
+      window.scrollTo(0, 0);
+    }
+
     // 1. Initialize Living Quantum 60 FPS Particle Canvas
     new QuantumCanvas('quantum-canvas');
 
