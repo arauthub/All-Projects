@@ -137,6 +137,17 @@ h1, h2, h3, h4, h5, h6 {
   text-shadow: 0 0 20px var(--cyan-glow);
 }
 
+/* Smooth Section Scroll Alignment with Fixed Header */
+#hero-section,
+#git-stream-section,
+#projects-section,
+#explorer-section,
+#timeline-section,
+#skills-section,
+#terminal-section {
+  scroll-margin-top: 86px;
+}
+
 /* Section Header */
 .section-header {
   text-align: center;

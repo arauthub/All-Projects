@@ -210,13 +210,51 @@ class NexusPrimeApp {
     });
   }
 
-  // Active section indicator on scroll (Desktop HUD)
+  // Active section indicator on scroll (Desktop HUD) & Smooth Navigation
   initScrollSpy() {
     const navLinks = document.querySelectorAll('.hud-nav-link');
     if (!navLinks.length) return;
 
     const sections = ['hero-section', 'git-stream-section', 'projects-section', 'explorer-section', 'timeline-section', 'skills-section', 'terminal-section'];
 
+    // Desktop nav link click handlers with sound feedback & smooth scrolling
+    navLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        const href = link.getAttribute('href');
+        if (href && href.startsWith('#')) {
+          const targetId = href.substring(1);
+          const targetEl = document.getElementById(targetId);
+          if (targetEl) {
+            e.preventDefault();
+            soundSynth.playClick();
+            navLinks.forEach(l => l.classList.toggle('active', l === link));
+            targetEl.scrollIntoView({ behavior: 'smooth' });
+            if (history.pushState) {
+              history.pushState(null, '', href);
+            }
+          }
+        }
+      });
+    });
+
+    // Brand link scroll to hero
+    const brandLink = document.getElementById('hud-brand-link');
+    if (brandLink) {
+      brandLink.addEventListener('click', (e) => {
+        const heroEl = document.getElementById('hero-section');
+        if (heroEl) {
+          e.preventDefault();
+          soundSynth.playClick();
+          navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#hero-section'));
+          heroEl.scrollIntoView({ behavior: 'smooth' });
+          if (history.pushState) {
+            history.pushState(null, '', '#hero-section');
+          }
+        }
+      });
+    }
+
+    // ScrollSpy to update active state while scrolling
     window.addEventListener('scroll', () => {
       const scrollPos = window.scrollY + 120;
       for (let i = sections.length - 1; i >= 0; i--) {
