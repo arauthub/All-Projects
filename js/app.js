@@ -22,13 +22,14 @@ class NexusPrimeApp {
   }
 
   async init() {
-    // 0. Ensure viewport lands at the top hero headshot
+    // 0. Ensure viewport lands directly at the top hero headshot
     if ('scrollRestoration' in history) {
       history.scrollRestoration = 'manual';
     }
-    if (!window.location.hash) {
-      window.scrollTo(0, 0);
+    if (window.location.hash && window.location.hash !== '#hero-section') {
+      history.replaceState(null, '', window.location.pathname);
     }
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
 
     // 1. Instant Static Jamstack Hydration (0ms First Meaningful Paint)
     this.gitData = STATIC_GIT_SNAPSHOT;
@@ -128,7 +129,6 @@ class NexusPrimeApp {
       drawer?.classList.add('active');
       drawer?.setAttribute('aria-hidden', 'false');
       backdrop?.classList.add('active');
-      document.body.classList.add('modal-open');
       soundSynth.playClick();
     };
 
@@ -138,7 +138,6 @@ class NexusPrimeApp {
       drawer?.classList.remove('active');
       drawer?.setAttribute('aria-hidden', 'true');
       backdrop?.classList.remove('active');
-      document.body.classList.remove('modal-open');
     };
 
     hamburgerBtn?.addEventListener('click', () => {
@@ -157,6 +156,8 @@ class NexusPrimeApp {
     backdrop?.addEventListener('click', () => {
       closeDrawer();
     });
+
+    backdrop?.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
 
     // Close drawer on nav item tap and scroll smoothly
     navItems.forEach(item => {
