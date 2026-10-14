@@ -1,8 +1,16 @@
 {
-  "buildTime": "2026-10-14T14:40:10.783Z",
+  "buildTime": "2026-10-14T14:55:14.833Z",
   "targetBranch": "main",
   "gitCommitCount": 15,
   "recentCommits": [
+    {
+      "hash": "804f49c",
+      "fullHash": "804f49cb991727907cadf94bdd2534456e77245e",
+      "author": "Abhijeet Raut",
+      "date": "2026-10-14 20:10:10 +0530",
+      "relativeDate": "15 minutes ago",
+      "message": "fix(portfolio): ensure initial landing points to headshot and add responsive layouts"
+    },
     {
       "hash": "2db9704",
       "fullHash": "2db97049142a9c6333b2030998fc6f6c19605036",
@@ -58,14 +66,6 @@
       "date": "2026-10-11 20:16:34 +0530",
       "relativeDate": "3 days ago",
       "message": "feat(deploy): add 1-click deployment script for root user site arauthub.github.io"
-    },
-    {
-      "hash": "56bc531",
-      "fullHash": "56bc531d34ec8fb8aed52e1dd3015d930b2e4f50",
-      "author": "Abhijeet Raut",
-      "date": "2026-10-11 20:11:59 +0530",
-      "relativeDate": "3 days ago",
-      "message": "ci(deploy): configure universal dual-channel GitHub Pages deployment"
     }
   ],
   "systemsCount": 11,
