@@ -37,6 +37,11 @@
   <!-- Favicon -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌌</text></svg>">
 
+  <!-- Preconnect to Google Fonts for Fast Rendering -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap">
+
   <!-- Stylesheets -->
   <link rel="stylesheet" href="styles/main.css">
   <link rel="stylesheet" href="styles/components.css">
@@ -59,24 +64,35 @@
         </div>
       </a>
 
+      <!-- Desktop Nav Links -->
+      <nav class="hud-nav-desktop" id="hud-nav-desktop" aria-label="Main Navigation">
+        <a href="#hero-section" class="hud-nav-link active">Overview</a>
+        <a href="#git-stream-section" class="hud-nav-link">Stream</a>
+        <a href="#projects-section" class="hud-nav-link">Systems</a>
+        <a href="#explorer-section" class="hud-nav-link">Monorepo</a>
+        <a href="#timeline-section" class="hud-nav-link">Career</a>
+        <a href="#skills-section" class="hud-nav-link">Skills</a>
+        <a href="#terminal-section" class="hud-nav-link">Terminal</a>
+      </nav>
+
       <!-- Git & Telemetry Status Indicators -->
       <div class="hud-telemetry" id="hud-telemetry-group">
         <div class="hud-item" id="hud-branch-item" title="Active Monorepo Branch">
           <span>BRANCH:</span> <code id="hud-branch">main</code>
         </div>
         <div class="hud-item" id="hud-commit-item" title="Head Commit Hash">
-          <span>COMMIT:</span> <code id="hud-commit">a9756b6</code>
+          <span>COMMIT:</span> <code id="hud-commit">5f5e70c</code>
         </div>
         <div class="hud-item interactive" id="hud-presubmit-badge" title="Click to view Presubmit Security Audit">
           <span class="hud-dot"></span>
           <span>PRESUBMIT: 5/5 CLEAN</span>
         </div>
         <div class="hud-item" id="hud-clock-item" title="UTC Synchronized Telemetry Clock">
-          <span id="hud-clock">2026-10-11 14:10:00 UTC</span>
+          <span id="hud-clock">2026-10-14 14:50:00 UTC</span>
         </div>
       </div>
 
-      <!-- Action Controls: Audio & Search -->
+      <!-- Action Controls: Audio, Search & Hamburger -->
       <div class="hud-actions">
         <button class="btn-hud-audio" id="btn-audio-toggle" title="Toggle Web Audio Cyber Synthesizer (Shortcut: M)">
           <div class="audio-bars" id="hud-audio-bars">
@@ -89,9 +105,103 @@
           <span>🔍</span>
           <span class="kbd-shortcut">⌘K</span>
         </button>
+
+        <!-- Slik Cyber Hamburger Toggle Button for Smaller Devices -->
+        <button class="btn-hamburger" id="btn-hamburger-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobile-nav-drawer" title="Toggle navigation drawer">
+          <span class="hamburger-bar top-bar"></span>
+          <span class="hamburger-bar mid-bar"></span>
+          <span class="hamburger-bar bot-bar"></span>
+        </button>
       </div>
     </div>
   </header>
+
+  <!-- Mobile Cyber Navigation Drawer & Backdrop -->
+  <div class="mobile-drawer-backdrop" id="mobile-drawer-backdrop"></div>
+  <aside class="mobile-nav-drawer" id="mobile-nav-drawer" aria-hidden="true" role="dialog" aria-label="Navigation Menu">
+    <div class="mobile-drawer-header">
+      <div class="hud-brand">
+        <div class="hud-logo-icon">Ω</div>
+        <div class="hud-brand-text">
+          <span class="hud-brand-title">NEXUS PRIME</span>
+          <span class="hud-brand-sub">QUANTUM JAMSTACK</span>
+        </div>
+      </div>
+      <button class="mobile-drawer-close" id="btn-mobile-drawer-close" aria-label="Close navigation menu">✕</button>
+    </div>
+
+    <!-- Mobile Telemetry Pill Strip -->
+    <div class="mobile-drawer-telemetry">
+      <div class="mobile-telemetry-chip interactive" id="mobile-presubmit-chip">
+        <span class="hud-dot"></span>
+        <span>5/5 PRESUBMIT CLEAN</span>
+      </div>
+      <div class="mobile-telemetry-chip">
+        <span>BRANCH:</span> <code id="mobile-hud-branch">main</code>
+      </div>
+      <div class="mobile-telemetry-chip">
+        <span>COMMIT:</span> <code id="mobile-hud-commit">5f5e70c</code>
+      </div>
+    </div>
+
+    <!-- Navigation Links -->
+    <nav class="mobile-drawer-nav" aria-label="Mobile Navigation">
+      <a href="#hero-section" class="mobile-nav-item" data-target="hero-section">
+        <span class="nav-item-icon">⚡</span>
+        <span class="nav-item-text">Executive Overview</span>
+        <span class="nav-item-badge">12 Yrs</span>
+      </a>
+      <a href="#git-stream-section" class="mobile-nav-item" data-target="git-stream-section">
+        <span class="nav-item-icon">🐙</span>
+        <span class="nav-item-text">Git Live Stream</span>
+        <span class="nav-item-badge">Verified</span>
+      </a>
+      <a href="#projects-section" class="mobile-nav-item" data-target="projects-section">
+        <span class="nav-item-icon">📦</span>
+        <span class="nav-item-text">Systems Catalog</span>
+        <span class="nav-item-badge">11 Apps</span>
+      </a>
+      <a href="#explorer-section" class="mobile-nav-item" data-target="explorer-section">
+        <span class="nav-item-icon">📂</span>
+        <span class="nav-item-text">Monorepo Explorer</span>
+        <span class="nav-item-badge">Code</span>
+      </a>
+      <a href="#timeline-section" class="mobile-nav-item" data-target="timeline-section">
+        <span class="nav-item-icon">⏳</span>
+        <span class="nav-item-text">Career Timeline</span>
+        <span class="nav-item-badge">Persistent &amp; Cybage</span>
+      </a>
+      <a href="#skills-section" class="mobile-nav-item" data-target="skills-section">
+        <span class="nav-item-icon">🛡️</span>
+        <span class="nav-item-text">Skills Arsenal</span>
+        <span class="nav-item-badge">AI/ML &amp; Cloud</span>
+      </a>
+      <a href="#terminal-section" class="mobile-nav-item" data-target="terminal-section">
+        <span class="nav-item-icon">💻</span>
+        <span class="nav-item-text">Interactive Terminal</span>
+        <span class="nav-item-badge">CLI</span>
+      </a>
+    </nav>
+
+    <!-- Mobile Drawer Quick Actions -->
+    <div class="mobile-drawer-actions">
+      <button class="btn-mobile-action primary" id="btn-mobile-open-cv">
+        <span>📄</span> View Full CV Dossier
+      </button>
+      <button class="btn-mobile-action audio" id="btn-mobile-audio">
+        <div class="audio-bars" id="mobile-audio-bars">
+          <span></span><span></span><span></span><span></span>
+        </div>
+        <span class="audio-label">AUDIO OFF</span>
+      </button>
+      <a href="https://github.com/arauthub/portfolio" target="_blank" rel="noopener noreferrer" class="btn-mobile-action github">
+        <span>🐙</span> GitHub Repository
+      </a>
+      <a href="mailto:theabhijeetraut@gmail.com" class="btn-mobile-action email">
+        <span>✉️</span> theabhijeetraut@gmail.com
+      </a>
+    </div>
+  </aside>
 
   <!-- MAIN VIEWPORT -->
   <main id="main-content">

@@ -5,7 +5,7 @@
 
 import { MONOREPO_PROJECTS } from './projects-data.js';
 import { PROFILE_DATA } from './profile-data.js';
-import { getGitIntelligenceData } from './git-intelligence.js';
+import { getGitIntelligenceData, STATIC_GIT_SNAPSHOT } from './git-intelligence.js';
 import { QuantumCanvas } from './quantum-canvas.js';
 import { soundSynth } from './audio-synth.js';
 import { HolodeckSandboxes } from './holodeck-sandboxes.js';
@@ -18,7 +18,7 @@ class NexusPrimeApp {
     this.projects = MONOREPO_PROJECTS;
     this.activeCategory = 'all';
     this.searchQuery = '';
-    this.gitData = null;
+    this.gitData = STATIC_GIT_SNAPSHOT;
   }
 
   async init() {
@@ -30,13 +30,10 @@ class NexusPrimeApp {
       window.scrollTo(0, 0);
     }
 
-    // 1. Initialize Living Quantum 60 FPS Particle Canvas
-    new QuantumCanvas('quantum-canvas');
+    // 1. Instant Static Jamstack Hydration (0ms First Meaningful Paint)
+    this.gitData = STATIC_GIT_SNAPSHOT;
 
-    // 2. Fetch Git & GitHub Intelligence Layer
-    this.gitData = await getGitIntelligenceData();
-
-    // 3. Render Page Sections
+    // 2. Render Page Sections Immediately (Zero network delay)
     this.renderHeaderHUD();
     this.renderHeroSection();
     this.renderGitStream();
@@ -46,28 +43,45 @@ class NexusPrimeApp {
     this.renderSkillsArsenal();
     renderMonorepoExplorer('monorepo-explorer-container');
 
-    // 4. Initialize Interactive Tools
+    // 3. Initialize Interactive Controls, Navigation & Mobile Drawer
+    this.initMobileDrawer();
+    this.initScrollSpy();
     this.commandPalette = new CommandPalette();
     this.terminal = new CyberTerminal('terminal-section', 'term-input', 'term-output');
 
-    // 5. Bind Global Events, Audio & Keyboard Shortcuts
+    // 4. Initialize Living Particle Canvas (Smooth & Lightweight)
+    new QuantumCanvas('quantum-canvas');
+
+    // 5. Asynchronous Background Live Telemetry Fetch (Non-blocking)
+    getGitIntelligenceData().then(liveData => {
+      if (liveData && liveData.isLive) {
+        this.gitData = liveData;
+        this.updateLiveGitTelemetry();
+      }
+    }).catch(() => {});
+
+    // 6. Bind Global Events, Audio & Keyboard Shortcuts
     this.bindGlobalEvents();
     this.startLiveTelemetryClock();
 
-    console.log('%c🌌 NEXUS PRIME QUANTUM JAMSTACK INITIALIZED (60 FPS)', 'color: #00f5ff; font-weight: bold; font-size: 14px;');
+    console.log('%c🌌 NEXUS PRIME QUANTUM JAMSTACK INITIALIZED (INSTANT 0MS)', 'color: #00f5ff; font-weight: bold; font-size: 14px;');
   }
 
-  // 1. Header HUD
+  // 1. Header HUD & Navigation
   renderHeaderHUD() {
     const branchEl = document.getElementById('hud-branch');
     const commitEl = document.getElementById('hud-commit');
+    const mobileBranchEl = document.getElementById('mobile-hud-branch');
+    const mobileCommitEl = document.getElementById('mobile-hud-commit');
     const audioBtn = document.getElementById('btn-audio-toggle');
     const audioBars = document.getElementById('hud-audio-bars');
 
     if (branchEl) branchEl.textContent = this.gitData.activeBranch;
     if (commitEl) commitEl.textContent = this.gitData.headCommit;
+    if (mobileBranchEl) mobileBranchEl.textContent = this.gitData.activeBranch;
+    if (mobileCommitEl) mobileCommitEl.textContent = this.gitData.headCommit;
 
-    // Audio button state
+    // Synchronized Audio UI updater
     const updateAudioUI = () => {
       const isEnabled = soundSynth.isEnabled;
       if (audioBtn) {
@@ -76,6 +90,15 @@ class NexusPrimeApp {
       }
       if (audioBars) {
         audioBars.classList.toggle('animating', isEnabled);
+      }
+      const mobBtn = document.getElementById('btn-mobile-audio');
+      const mobBars = document.getElementById('mobile-audio-bars');
+      if (mobBtn) {
+        mobBtn.classList.toggle('active', isEnabled);
+        mobBtn.querySelector('.audio-label').textContent = isEnabled ? 'AUDIO ON' : 'AUDIO OFF';
+      }
+      if (mobBars) {
+        mobBars.classList.toggle('animating', isEnabled);
       }
     };
 
@@ -87,9 +110,148 @@ class NexusPrimeApp {
     });
   }
 
+  // Mobile Cyber Navigation Drawer Controller
+  initMobileDrawer() {
+    const hamburgerBtn = document.getElementById('btn-hamburger-toggle');
+    const drawer = document.getElementById('mobile-nav-drawer');
+    const backdrop = document.getElementById('mobile-drawer-backdrop');
+    const closeBtn = document.getElementById('btn-mobile-drawer-close');
+    const navItems = document.querySelectorAll('.mobile-nav-item');
+    const mobileAudioBtn = document.getElementById('btn-mobile-audio');
+    const mobileAudioBars = document.getElementById('mobile-audio-bars');
+    const mobileCvBtn = document.getElementById('btn-mobile-open-cv');
+    const mobilePresubmitChip = document.getElementById('mobile-presubmit-chip');
+
+    const openDrawer = () => {
+      hamburgerBtn?.classList.add('active');
+      hamburgerBtn?.setAttribute('aria-expanded', 'true');
+      drawer?.classList.add('active');
+      drawer?.setAttribute('aria-hidden', 'false');
+      backdrop?.classList.add('active');
+      document.body.classList.add('modal-open');
+      soundSynth.playClick();
+    };
+
+    const closeDrawer = () => {
+      hamburgerBtn?.classList.remove('active');
+      hamburgerBtn?.setAttribute('aria-expanded', 'false');
+      drawer?.classList.remove('active');
+      drawer?.setAttribute('aria-hidden', 'true');
+      backdrop?.classList.remove('active');
+      document.body.classList.remove('modal-open');
+    };
+
+    hamburgerBtn?.addEventListener('click', () => {
+      if (drawer?.classList.contains('active')) {
+        closeDrawer();
+      } else {
+        openDrawer();
+      }
+    });
+
+    closeBtn?.addEventListener('click', () => {
+      closeDrawer();
+      soundSynth.playClick();
+    });
+
+    backdrop?.addEventListener('click', () => {
+      closeDrawer();
+    });
+
+    // Close drawer on nav item tap and scroll smoothly
+    navItems.forEach(item => {
+      item.addEventListener('click', (e) => {
+        const targetId = item.getAttribute('data-target');
+        closeDrawer();
+        soundSynth.playClick();
+        if (targetId) {
+          const targetEl = document.getElementById(targetId);
+          if (targetEl) {
+            e.preventDefault();
+            targetEl.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+
+    // Mobile CV Dossier trigger
+    mobileCvBtn?.addEventListener('click', () => {
+      closeDrawer();
+      soundSynth.playWarp();
+      const modal = document.getElementById('cv-modal');
+      if (modal) {
+        modal.classList.add('active');
+        document.body.classList.add('modal-open');
+      }
+    });
+
+    // Mobile Presubmit Audit trigger
+    mobilePresubmitChip?.addEventListener('click', () => {
+      closeDrawer();
+      HolodeckSandboxes.open('presubmit-runner');
+    });
+
+    // Mobile Audio trigger
+    mobileAudioBtn?.addEventListener('click', () => {
+      soundSynth.toggle();
+      const isEnabled = soundSynth.isEnabled;
+      mobileAudioBtn.classList.toggle('active', isEnabled);
+      mobileAudioBtn.querySelector('.audio-label').textContent = isEnabled ? 'AUDIO ON' : 'AUDIO OFF';
+      if (mobileAudioBars) mobileAudioBars.classList.toggle('animating', isEnabled);
+
+      const desktopAudioBtn = document.getElementById('btn-audio-toggle');
+      const desktopAudioBars = document.getElementById('hud-audio-bars');
+      if (desktopAudioBtn) {
+        desktopAudioBtn.classList.toggle('active', isEnabled);
+        desktopAudioBtn.querySelector('.audio-label').textContent = isEnabled ? 'AUDIO ON' : 'AUDIO OFF';
+      }
+      if (desktopAudioBars) desktopAudioBars.classList.toggle('animating', isEnabled);
+    });
+  }
+
+  // Active section indicator on scroll (Desktop HUD)
+  initScrollSpy() {
+    const navLinks = document.querySelectorAll('.hud-nav-link');
+    if (!navLinks.length) return;
+
+    const sections = ['hero-section', 'git-stream-section', 'projects-section', 'explorer-section', 'timeline-section', 'skills-section', 'terminal-section'];
+
+    window.addEventListener('scroll', () => {
+      const scrollPos = window.scrollY + 120;
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const sec = document.getElementById(sections[i]);
+        if (sec && sec.offsetTop <= scrollPos) {
+          const targetHash = `#${sections[i]}`;
+          navLinks.forEach(link => {
+            link.classList.toggle('active', link.getAttribute('href') === targetHash);
+          });
+          break;
+        }
+      }
+    }, { passive: true });
+  }
+
+  // Asynchronous background update for live telemetry
+  updateLiveGitTelemetry() {
+    const branchEl = document.getElementById('hud-branch');
+    const commitEl = document.getElementById('hud-commit');
+    const mobileBranchEl = document.getElementById('mobile-hud-branch');
+    const mobileCommitEl = document.getElementById('mobile-hud-commit');
+    const badge = document.getElementById('git-live-badge');
+
+    if (branchEl) branchEl.textContent = this.gitData.activeBranch;
+    if (commitEl) commitEl.textContent = this.gitData.headCommit;
+    if (mobileBranchEl) mobileBranchEl.textContent = this.gitData.activeBranch;
+    if (mobileCommitEl) mobileCommitEl.textContent = this.gitData.headCommit;
+
+    if (badge) {
+      badge.textContent = this.gitData.source;
+      badge.classList.toggle('live', !!this.gitData.isLive);
+    }
+  }
+
   // 2. Hero Section
   renderHeroSection() {
-    // Subtitle typewriter rotation
     const subtitles = [
       "Lead Backend & AI/ML Engineer | Solutions Architect",
       "12 Years Hands-on Experience • Persistent Systems & Cybage Software",
@@ -99,9 +261,9 @@ class NexusPrimeApp {
     ];
 
     let subIndex = 0;
-    let charIndex = 0;
-    let isDeleting = false;
     const subEl = document.getElementById('hero-typewriter');
+    let charIndex = subtitles[0].length;
+    let isDeleting = true;
 
     const typeWriter = () => {
       if (!subEl) return;
@@ -115,21 +277,22 @@ class NexusPrimeApp {
         charIndex++;
       }
 
-      let speed = isDeleting ? 30 : 60;
+      let speed = isDeleting ? 25 : 45;
 
       if (!isDeleting && charIndex === currentText.length) {
-        speed = 2200; // Hold at end
+        speed = 2800; // Hold at full text
         isDeleting = true;
       } else if (isDeleting && charIndex === 0) {
         isDeleting = false;
         subIndex = (subIndex + 1) % subtitles.length;
-        speed = 400;
+        speed = 350;
       }
 
       setTimeout(typeWriter, speed);
     };
 
-    typeWriter();
+    // Hold the full initial subtitle so the user can read it immediately, then rotate
+    setTimeout(typeWriter, 3200);
 
     // Stats counter
     const statsContainer = document.getElementById('hero-stats-grid');
@@ -474,6 +637,11 @@ class NexusPrimeApp {
         HolodeckSandboxes.close();
         document.getElementById('design-modal')?.classList.remove('active');
         document.getElementById('cv-modal')?.classList.remove('active');
+        document.getElementById('mobile-nav-drawer')?.classList.remove('active');
+        document.getElementById('mobile-drawer-backdrop')?.classList.remove('active');
+        const hamburgerBtn = document.getElementById('btn-hamburger-toggle');
+        hamburgerBtn?.classList.remove('active');
+        hamburgerBtn?.setAttribute('aria-expanded', 'false');
         document.body.classList.remove('modal-open');
       } else if (e.key === '`' || e.key === '~') {
         const termInput = document.getElementById('term-input');

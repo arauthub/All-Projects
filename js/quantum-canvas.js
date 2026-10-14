@@ -36,13 +36,13 @@ export class QuantumCanvas {
     this.canvas.style.height = `${height}px`;
     this.ctx.scale(this.dpr, this.dpr);
 
-    // Adjust particle density based on screen size
+    // Adjust particle density based on screen size for high-fps performance
     if (width < 768) {
-      this.particleCount = 40;
-      this.maxDistance = 100;
+      this.particleCount = 24;
+      this.maxDistance = 90;
     } else {
-      this.particleCount = 75;
-      this.maxDistance = 140;
+      this.particleCount = 45;
+      this.maxDistance = 130;
     }
   }
 
@@ -180,8 +180,6 @@ export class QuantumCanvas {
       this.ctx.beginPath();
       this.ctx.arc(p.x, p.y, currentRadius, 0, Math.PI * 2);
       this.ctx.fillStyle = `${p.color}${p.alpha})`;
-      this.ctx.shadowBlur = 10;
-      this.ctx.shadowColor = p.glowColor;
       this.ctx.fill();
 
       // Connect lines
