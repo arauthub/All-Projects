@@ -85,6 +85,21 @@ export class CommandPalette {
     });
 
     this.items.push({
+      type: 'Action',
+      title: 'Share Executive Dossier & Social Card',
+      subtitle: 'Open professional card view & 1-click share',
+      icon: '🪪',
+      action: () => {
+        soundSynth.playWarp();
+        const shareModal = document.getElementById('share-card-modal');
+        if (shareModal) {
+          shareModal.classList.add('active');
+          document.body.classList.add('modal-open');
+        }
+      }
+    });
+
+    this.items.push({
       type: 'Link',
       title: 'View GitHub Monorepo (arauthub/portfolio)',
       subtitle: 'Open repository in a new tab',

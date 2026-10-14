@@ -42,10 +42,15 @@ assert(fs.existsSync(path.join(APP_ROOT, '.env.example')), '.env.example exists'
 assert(fs.existsSync(path.join(APP_ROOT, 'assets/profile-photo.png')), 'assets/profile-photo.png exists');
 assert(fs.existsSync(path.join(APP_ROOT, 'assets/og-image.png')), 'assets/og-image.png exists');
 
-// Verify social meta & CV intro in index.html
+// Verify social meta, professional card preview & CV intro in index.html
 const indexHtmlContent = fs.readFileSync(path.join(APP_ROOT, 'index.html'), 'utf-8');
 assert(indexHtmlContent.includes('Abhijeet Raut — Lead Backend & AI/ML Engineer | Solutions Architect'), 'index.html title matches CV');
 assert(indexHtmlContent.includes('property="og:image" content="https://arauthub.github.io/portfolio/assets/og-image.png"'), 'index.html has og:image social card');
+assert(indexHtmlContent.includes('name="twitter:card" content="summary_large_image"'), 'index.html has summary_large_image Twitter card');
+assert(indexHtmlContent.includes('application/ld+json'), 'index.html has Schema.org JSON-LD rich card structured data');
+assert(indexHtmlContent.includes('id="share-card-modal"'), 'index.html contains Executive Share & Professional Card View modal');
+assert(indexHtmlContent.includes('class="hud-search-box"'), 'index.html contains adjusted Header Spotlight Search Box');
+assert(indexHtmlContent.includes('id="btn-open-share"'), 'index.html contains Header Share Card button');
 
 // 2. Data Integrity Tests
 console.log('\n📊 2. Projects & Profile Data Integrity:');
