@@ -41,7 +41,7 @@ jobs:
           branch: gh-pages
 
       - name: Upload Pages Artifact (for GitHub Actions Mode)
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         continue-on-error: true
         with:
           path: 'apps/jamstack-frontend'
