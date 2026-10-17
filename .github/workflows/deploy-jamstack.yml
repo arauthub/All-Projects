@@ -48,5 +48,5 @@ jobs:
 
       - name: Deploy to GitHub Pages (for GitHub Actions Mode)
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
         continue-on-error: true
